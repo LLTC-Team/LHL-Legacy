@@ -20,8 +20,9 @@ namespace LVM
 {
 	class LVMVirtualMechine;
 	class CommandTypeManager;
+	struct Command;
 
-	using CommandFunctionType = std::function<void(LVMVirtualMechine &)>;
+	using CommandFunctionType = std::function<void(const Command&,LVMVirtualMechine &)>;
 
 	using ArgumentModeType = unsigned int;
 	
@@ -52,7 +53,7 @@ namespace LVM
 	*/
 	struct CommandType
 	{
-		CommandType(const std::string &type_name = "NullCommandType", Byte index = 0, ArgumentModeType argument_mode = 0, const CommandFunctionType &func = [&](LVMVirtualMechine &) -> void {});
+		CommandType(const std::string &type_name = "NullCommandType", Byte index = 0, ArgumentModeType argument_mode = 0, const CommandFunctionType &func = [&](const Command&,LVMVirtualMechine &) -> void {});
 		std::string m_Name;
 		Byte m_Index;
 		ArgumentModeType m_ArgumentMode;
@@ -80,15 +81,8 @@ namespace LVM
 			std::array<const CommandType*,MaxCommandTypeIndex> m_IndexList;
 	};
 
-	Byte GetCommandTypeCount();
-
-	/*
-	与前一个NewCommandType不同，这个NewCommand会自动获取命令类型的index。
-	*/
-	void NewCommandType(const std::string& name,ArgumentModeType argument_mode,CommandFunctionType func);
-
 	struct DefineCommandType
 	{
-		DefineCommandType(const std::string& name,ArgumentModeType argument_mode,CommandFunctionType func = [&](LVMVirtualMechine &) -> void {});
+		DefineCommandType(Byte index, const std::string& name, ArgumentModeType argument_mode, CommandFunctionType func = [&](const Command&, LVMVirtualMechine &) -> void {});
 	};
 }

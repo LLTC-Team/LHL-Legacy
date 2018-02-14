@@ -69,18 +69,7 @@ LVM::CommandTypeManager::CommandTypeManager()
 	memset(m_IndexList.data(),0,sizeof(m_IndexList));
 }
 
-LVM::Byte LVM::GetCommandTypeCount()
+LVM::DefineCommandType::DefineCommandType(Byte index, const std::string& name, ArgumentModeType argument_mode, CommandFunctionType func)
 {
-	static Byte command_type_count = 0;
-	return command_type_count++;
-}
-
-void LVM::NewCommandType(const std::string& name,ArgumentModeType argument_mode,CommandFunctionType func)
-{
-	GetCommandTypeManager().InsertCommandType(CommandType(name, GetCommandTypeCount(), argument_mode, func));
-}
-
-LVM::DefineCommandType::DefineCommandType(const std::string& name,ArgumentModeType argument_mode,CommandFunctionType func)
-{
-	NewCommandType(name,argument_mode,func);
+	GetCommandTypeManager().InsertCommandType(CommandType(name, index, argument_mode, func));
 }

@@ -23,5 +23,6 @@ using namespace LVM;
 int main()
 {
 	cout << GetCommandTypeManager().GetCommandTypeByIndex(0)->m_Name << endl;
+	system("pause");
 	return 0;
 }

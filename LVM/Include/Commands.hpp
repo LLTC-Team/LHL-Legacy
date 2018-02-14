@@ -17,4 +17,4 @@ limitations under the License.
 #include "stdafx.h"
 #include "Command.h"
 
-LVM::DefineCommandType NullCommand("null",0);
+LVM::DefineCommandType NullCommand(0,"null",0);
