@@ -1,9 +1,12 @@
-# Project LML
+# Project LHL
 
 <!-- TOC -->
 
-- [Project LML](#project-lml)
+- [Project LHL](#project-lhl)
     - [Overview](#overview)
+        - [LHL](#lhl)
+        - [LML](#lml)
+        - [LVM](#lvm)
     - [Build](#build)
         - [前置要求](#前置要求)
         - [构建方法](#构建方法)
@@ -13,21 +16,33 @@
         - [Level 1](#level-1)
         - [Level 2](#level-2)
         - [Level 3](#level-3)
-- [Author](#author)
+    - [Author](#author)
 
 <!-- /TOC -->
 
 ## Overview
 
+### LHL
+
+LHL项目由两个子项目构成。它们分别是LML和LVM。
+
+LHL项目旨在创造一种Lisp方言，但是提供给使用者一种高效优雅的方式扩展语言特性。
+
+### LML
+
 LML是一个编译器开发工具。它提供了类似**“通用编译器”**的工具，以便使用者可以快速地构建自己的编程语言的编译器。
 
 LML提供主要的词法分析和中间代码生成工具，同时也预留了语法分析的接口以便于快速扩展。
 
-LML所接受的语言需要是一种**Lisp**方言，输出是**LVM**的字节码。**LHL**项目将会提供一个LML的示例。
+LML所接受的语言需要是一种**Lisp**方言，输出是**LVM**的字节码。
+
+### LVM
+
+LVM是一个字节码虚拟机，为LHL提供语言运行时环境，并且提供灵活的标准库扩展。
 
 ## Build
 
-LML使用CMake为构建系统以实现跨平台编译。您可以在使用任何CMake支持的平台上使用您喜爱的IDE\Editor进行开发。
+LHL使用CMake为构建系统以实现跨平台编译。您可以在使用任何CMake支持的平台上使用您喜爱的IDE\Editor进行开发。
 
 ### 前置要求
 
@@ -44,7 +59,7 @@ LML使用CMake为构建系统以实现跨平台编译。您可以在使用任何
 
 #### Windows（Visual Studio 2017）
 
-1. 使用Visual Studio 2017直接打开`CMakeLists.txt`即可
+1. 使用Visual Studio 2017的“文件->打开->文件夹”打开项目根目录即可，CMake支持将会自动加载
 
 #### 其他环境
 
@@ -111,7 +126,7 @@ _以下目标随时可能变动，请以最新文档为准。_
   - CAS垃圾回收
   - JVM G1垃圾回收实验
 
-# Author
+## Author
 
-- lxd
-- xsun2001
+- [creatorlxd](https://github.com/creatorlxd)
+- [xsun2001](https://github.com/xsun2001)
