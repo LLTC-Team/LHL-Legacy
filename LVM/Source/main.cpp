@@ -13,9 +13,9 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-#include "stdafx.h"
-#include "Command.h"
-#include "Commands.hpp"
+#include "LVM\stdafx.h"
+#include "LVM\Command.h"
+#include "LVM\Commands.hpp"
 
 using namespace std;
 using namespace LVM;
