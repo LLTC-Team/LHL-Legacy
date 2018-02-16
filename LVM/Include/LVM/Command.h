@@ -39,17 +39,17 @@ namespace LVM
 		return re;
 	}
 
-	/*·µ»ØÖµÊ¹ÓÃÀ´ÃèÊöÒ»¸öÃüÁîµÄµÚn¸ö²ÎÊıÊÇ·ñÊÇµØÖ·*/
+	/*è¿”å›å€¼ä½¿ç”¨æ¥æè¿°ä¸€ä¸ªå‘½ä»¤çš„ç¬¬nä¸ªå‚æ•°æ˜¯å¦æ˜¯åœ°å€*/
 	constexpr ArgumentModeType GetArgumentMode(const std::initializer_list<bool> content)
 	{
 	    return GetBoolNumber(content);
 	}
 
 	/*
-	type_nameÊÇÕâ¸öÃüÁîÀàĞÍµÄÀàĞÍÃû
-	indexÊÇÕâ¸öÃüÁîÀàĞÍµÄĞòºÅ
-	argument_modeÊ¹ÓÃÀ´ÃèÊöÕâ¸öÃüÁîÀàĞÍµÄµÚn¸ö²ÎÊıÊÇ·ñÊÇµØÖ·
-	funcÊÇÕâÖÖÃüÁîÀàĞÍÔËĞĞµÄº¯Êı
+	type_nameæ˜¯è¿™ä¸ªå‘½ä»¤ç±»å‹çš„ç±»å‹å
+	indexæ˜¯è¿™ä¸ªå‘½ä»¤ç±»å‹çš„åºå·
+	argument_modeä½¿ç”¨æ¥æè¿°è¿™ä¸ªå‘½ä»¤ç±»å‹çš„ç¬¬nä¸ªå‚æ•°æ˜¯å¦æ˜¯åœ°å€
+	funcæ˜¯è¿™ç§å‘½ä»¤ç±»å‹è¿è¡Œçš„å‡½æ•°
 	*/
 	struct CommandType
 	{
