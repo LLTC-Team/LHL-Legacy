@@ -39,17 +39,17 @@ namespace LVM
 		return re;
 	}
 
-	/*è¿”å›å€¼ä½¿ç”¨æ¥æè¿°ä¸€ä¸ªå‘½ä»¤çš„ç¬¬nä¸ªå‚æ•°æ˜¯å¦æ˜¯åœ°å€*/
+	/*·µ»ØÖµÊ¹ÓÃÀ´ÃèÊöÒ»¸öÃüÁîµÄµÚn¸ö²ÎÊıÊÇ·ñÊÇµØÖ·*/
 	constexpr ArgumentModeType GetArgumentMode(const std::initializer_list<bool> content)
 	{
 	    return GetBoolNumber(content);
 	}
 
 	/*
-	type_nameæ˜¯è¿™ä¸ªå‘½ä»¤ç±»å‹çš„ç±»å‹å
-	indexæ˜¯è¿™ä¸ªå‘½ä»¤ç±»å‹çš„åºå·
-	argument_modeä½¿ç”¨æ¥æè¿°è¿™ä¸ªå‘½ä»¤ç±»å‹çš„ç¬¬nä¸ªå‚æ•°æ˜¯å¦æ˜¯åœ°å€
-	funcæ˜¯è¿™ç§å‘½ä»¤ç±»å‹è¿è¡Œçš„å‡½æ•°
+	type_nameÊÇÕâ¸öÃüÁîÀàĞÍµÄÀàĞÍÃû
+	indexÊÇÕâ¸öÃüÁîÀàĞÍµÄĞòºÅ
+	argument_modeÊ¹ÓÃÀ´ÃèÊöÕâ¸öÃüÁîÀàĞÍµÄµÚn¸ö²ÎÊıÊÇ·ñÊÇµØÖ·
+	funcÊÇÕâÖÖÃüÁîÀàĞÍÔËĞĞµÄº¯Êı
 	*/
 	struct CommandType
 	{
@@ -84,5 +84,33 @@ namespace LVM
 	struct DefineCommandType
 	{
 		DefineCommandType(Byte index, const std::string& name, ArgumentModeType argument_mode, CommandFunctionType func = [&](const Command&, LVMVirtualMechine &) -> void {});
+	};
+
+	/*
+	Argument Ö¸ÁîµÄ²ÎÊı
+	*/
+	struct Argument
+	{
+		Byte* m_pContent;
+		size_t m_Size;
+
+		Argument() = delete;
+		Argument(void* pointer, size_t size);
+		Argument(const Argument& arg);
+		~Argument();
+
+		Argument& operator = (const Argument& arg);
+	};
+
+	/*
+	Command Ö¸Áî
+	*/
+	struct Command
+	{
+		const CommandType& m_Type;
+		std::vector<Argument> m_Argument;
+		
+		Command() = delete;
+		Command(const CommandType& type, std::initializer_list<std::pair<void*, size_t>> args);
 	};
 }

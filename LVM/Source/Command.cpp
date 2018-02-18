@@ -73,3 +73,46 @@ LVM::DefineCommandType::DefineCommandType(Byte index, const std::string& name, A
 {
 	GetCommandTypeManager().InsertCommandType(CommandType(name, index, argument_mode, func));
 }
+
+LVM::Argument::Argument(void * pointer, size_t size)
+{
+	if (!pointer)
+	{
+		ThrowError("can not make nullptr as a argument");
+	}
+	m_pContent = new Byte[size];
+	m_Size = size;
+	memcpy(m_pContent, pointer, size);
+}
+
+LVM::Argument::Argument(const Argument& arg)
+{
+	m_Size = arg.m_Size;
+	delete[] m_pContent;
+	m_pContent = new Byte[m_Size];
+	memcpy(m_pContent, arg.m_pContent, m_Size);
+}
+
+LVM::Argument::~Argument()
+{
+	delete[] m_pContent;
+}
+
+LVM::Argument & LVM::Argument::operator=(const Argument & arg)
+{
+	m_Size = arg.m_Size;
+	delete[] m_pContent;
+	m_pContent = new Byte[m_Size];
+	memcpy(m_pContent, arg.m_pContent, m_Size);
+	return *this;
+}
+
+LVM::Command::Command(const CommandType & type, std::initializer_list<std::pair<void*, size_t>> args)
+	:
+	m_Type(type)
+{
+	for (auto i : args)
+	{
+		m_Argument.emplace_back(i.first, i.second);
+	}
+}
