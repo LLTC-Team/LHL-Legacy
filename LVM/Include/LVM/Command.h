@@ -18,11 +18,11 @@ limitations under the License.
 
 namespace LVM
 {
-	class LVMVirtualMechine;
+	class VirtualMechine;
 	class CommandTypeManager;
 	struct Command;
 
-	using CommandFunctionType = std::function<void(const Command&,LVMVirtualMechine &)>;
+	using CommandFunctionType = std::function<void(const Command&,VirtualMechine &)>;
 
 	using ArgumentModeType = unsigned int;
 	
@@ -53,7 +53,7 @@ namespace LVM
 	*/
 	struct CommandType
 	{
-		CommandType(const std::string &type_name = "NullCommandType", Byte index = 0, ArgumentModeType argument_mode = 0, const CommandFunctionType &func = [&](const Command&,LVMVirtualMechine &) -> void {});
+		CommandType(const std::string &type_name = "NullCommandType", Byte index = 0, ArgumentModeType argument_mode = 0, const CommandFunctionType &func = [&](const Command&, VirtualMechine &) -> void {});
 		std::string m_Name;
 		Byte m_Index;
 		ArgumentModeType m_ArgumentMode;
@@ -83,7 +83,7 @@ namespace LVM
 
 	struct DefineCommandType
 	{
-		DefineCommandType(Byte index, const std::string& name, ArgumentModeType argument_mode, CommandFunctionType func = [&](const Command&, LVMVirtualMechine &) -> void {});
+		DefineCommandType(Byte index, const std::string& name, ArgumentModeType argument_mode, CommandFunctionType func = [&](const Command&, VirtualMechine &) -> void {});
 	};
 
 	/*
