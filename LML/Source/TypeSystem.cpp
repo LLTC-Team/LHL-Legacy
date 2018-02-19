@@ -65,7 +65,7 @@ string LML::TypeId::GetClassName() const
 		ThrowError("This type is not class");
 	string name;
 	bool if_record = false;
-	for (int i = 1; i < m_Content.size(); i++)
+	for (auto i = 1; i < m_Content.size(); i++)
 	{
 		if (m_Content[i] == '[')
 			if_record = true;

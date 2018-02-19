@@ -1,5 +1,5 @@
-#include "LVM/stdafx.h"
-#include "LVM/Memory.h"
+#include "../Include/LVM/stdafx.h"
+#include "../Include/LVM/Memory.h"
 
 LVM::MemoryPage::MemoryPage()
 {
@@ -38,4 +38,9 @@ void LVM::MemoryPage::Release()
 LVM::AddressType LVM::MemoryPage::GetSize()
 {
 	return m_Size;
+}
+
+LVM::MemoryManager::MemoryManager(AddressType size)
+{
+	m_PageSize = size;
 }

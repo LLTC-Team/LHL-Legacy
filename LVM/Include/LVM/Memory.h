@@ -18,4 +18,13 @@ namespace LVM
 		Byte* m_pContent;
 		AddressType m_Size;
 	};
+
+	class MemoryManager
+	{
+	public:
+		MemoryManager(AddressType size = MemoryPage::MemoryPageDefaultSize);
+	private:
+		AddressType m_PageSize;
+		std::vector<MemoryPage> m_Pages;
+	};
 }
