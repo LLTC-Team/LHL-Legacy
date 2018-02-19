@@ -1,6 +1,5 @@
-#include "stdafx.h"
-#include "Memory.h"
-#include "..\Include\LVM\Memory.h"
+#include "LVM/stdafx.h"
+#include "LVM/Memory.h"
 
 LVM::MemoryPage::MemoryPage()
 {
