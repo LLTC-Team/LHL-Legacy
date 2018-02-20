@@ -44,3 +44,8 @@ LVM::MemoryManager::MemoryManager(AddressType size)
 {
 	m_PageSize = size;
 }
+
+LVM::Byte& LVM::MemoryManager::operator [] (AddressType address)
+{
+
+}

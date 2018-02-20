@@ -37,6 +37,8 @@ namespace LVM
 	{
 	public:
 		MemoryManager(AddressType size = MemoryPage::MemoryPageDefaultSize);
+
+		Byte& operator [] (AddressType address);
 	private:
 		AddressType m_PageSize;
 		std::vector<MemoryPage> m_Pages;
