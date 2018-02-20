@@ -14,6 +14,20 @@ namespace LVM
 		void Allocate(AddressType size = MemoryPageDefaultSize);
 		void Release();
 		AddressType GetSize();
+
+		template<typename T>
+		T& GetContent(AddressType address)
+		{
+			if (m_pContent)
+			{
+				return *(reinterpret_cast<T*>(m_pContent + address));
+			}
+			else
+			{
+				ThrowError("can not get content from a null memory page");
+				return T();
+			}
+		}
 	private:
 		Byte* m_pContent;
 		AddressType m_Size;

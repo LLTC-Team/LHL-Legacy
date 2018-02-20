@@ -100,6 +100,12 @@ namespace LVM
 		~Argument();
 
 		Argument& operator = (const Argument& arg);
+
+		template<typename T>
+		T& As()
+		{
+			return *(reinterpret_cast<T*>(m_pContent));
+		}
 	};
 
 	/*
