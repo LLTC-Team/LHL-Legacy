@@ -47,5 +47,14 @@ LVM::MemoryManager::MemoryManager(AddressType size)
 
 LVM::Byte& LVM::MemoryManager::operator [] (AddressType address)
 {
-
+	uint32_t index = address / m_PageSize;
+	if (m_Pages[index].m_pContent)
+	{
+		//do no thing
+	}
+	else
+	{
+		m_Pages[index].Allocate(m_PageSize);
+	}
+	return m_Pages[index].m_pContent[address%m_PageSize];
 }

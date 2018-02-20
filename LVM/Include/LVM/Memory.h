@@ -3,10 +3,13 @@
 namespace LVM
 {
 	typedef uint64_t AddressType;
+	class MemoryManager;
 
 	class MemoryPage
 	{
 	public:
+		friend class MemoryManager;
+
 		static const AddressType MemoryPageDefaultSize = 0XFFFFF;
 
 		MemoryPage();
