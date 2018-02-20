@@ -89,6 +89,12 @@ namespace LML
 		uint32_t m_ArgumentSize = 0;
 	};
 
+	namespace TypeManagerAction
+	{
+		template<typename T>
+		struct QueryTypeInformation;
+	}
+
 	class TypeManager
 	{
 	public:
@@ -99,37 +105,58 @@ namespace LML
 		void InsertType(const FunctionTypeInformation& type);
 
 		template<typename T>
+		friend struct TypeManagerAction::QueryTypeInformation;
+
+		template<typename T>
 		T GetTypeInformation(const TypeId& type_id)
 		{
-			ThrowError("can only get type information by typeinformation or functiontypeinformation");
+			TypeManagerAction::QueryTypeInformation<T>(*this, type_id);
 		}
 
-		template<>
-		TypeInformation GetTypeInformation(const TypeId& type_id)
-		{
-			auto iter = m_TypeInformation.find(type_id);
-			if (iter==m_TypeInformation.end())
-			{
-				ThrowError("do not find this typeinformation");
-				return TypeInformation();
-			}
-			return iter->second;
-		}
-
-		template<>
-		FunctionTypeInformation GetTypeInformation(const TypeId& type_id)
-		{
-			auto iter = m_FunctionTypeInformation.find(type_id);
-			if (iter == m_FunctionTypeInformation.end())
-			{
-				ThrowError("do not find this functiontypeinformation");
-				return FunctionTypeInformation();
-			}
-			return iter->second;
-		}
 	private:
 		std::map<TypeId, TypeInformation> m_TypeInformation;
 		std::map<TypeId, FunctionTypeInformation> m_FunctionTypeInformation;
 	};
+	namespace TypeManagerAction
+	{
+		template<typename T>
+		struct QueryTypeInformation
+		{
+			T operator () (TypeManager& manager, const TypeId& type_id)
+			{
+				ThrowError("can only get type information by typeinformation or functiontypeinformation");
+			}
+		};
+
+		template<>
+		struct QueryTypeInformation<TypeInformation>
+		{
+			TypeInformation operator () (TypeManager& manager, const TypeId& type_id)
+			{
+				auto iter = manager.m_TypeInformation.find(type_id);
+				if (iter == manager.m_TypeInformation.end())
+				{
+					ThrowError("do not find this typeinformation");
+					return TypeInformation();
+				}
+				return iter->second;
+			}
+		};
+
+		template<>
+		struct QueryTypeInformation<FunctionTypeInformation>
+		{
+			FunctionTypeInformation operator () (TypeManager& manager, const TypeId& type_id)
+			{
+				auto iter = manager.m_FunctionTypeInformation.find(type_id);
+				if (iter == manager.m_FunctionTypeInformation.end())
+				{
+					ThrowError("do not find this functiontypeinformation");
+					return FunctionTypeInformation();
+				}
+				return iter->second;
+			}
+		};
+	}
 
 }
