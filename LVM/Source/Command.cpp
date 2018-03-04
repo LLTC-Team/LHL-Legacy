@@ -25,6 +25,18 @@ LVM::CommandType::CommandType(const std::string& type_name,Byte index,ArgumentMo
 	
 }
 
+std::vector<bool> LVM::GetBoolByNumber(ArgumentModeType number,size_t size)
+{
+	std::vector<bool> re;
+	while (size)
+	{
+		re.push_back(number & 1);
+		number /= 2;
+		size--;
+	}
+	return re;
+}
+
 void LVM::NewCommandType(const CommandType& command_type)
 {
 	GetCommandTypeManager().InsertCommandType(command_type);

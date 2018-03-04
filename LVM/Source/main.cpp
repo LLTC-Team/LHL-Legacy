@@ -22,7 +22,8 @@ using namespace LVM;
 
 int main()
 {
-	cout << GetCommandTypeManager().GetCommandTypeByIndex(0)->m_Name << endl;
+	auto num = GetArgumentMode({true,false,false});
+	auto state = GetBoolByNumber(num, 3);
 	system("pause");
 	return 0;
 }

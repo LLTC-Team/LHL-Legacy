@@ -39,6 +39,8 @@ namespace LVM
 		return re;
 	}
 
+	std::vector<bool> GetBoolByNumber(ArgumentModeType number,size_t size);
+
 	/*返回值使用来描述一个命令的第n个参数是否是地址*/
 	constexpr ArgumentModeType GetArgumentMode(const std::initializer_list<bool> content)
 	{
