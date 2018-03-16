@@ -16,10 +16,11 @@ limitations under the License.
 #include "LVM/stdafx.h"
 #include "LVM/Command.h"
 
-LVM::CommandType::CommandType(const std::string& type_name,Byte index,ArgumentModeType argument_mode,const CommandFunctionType& func)
+LVM::CommandType::CommandType(const std::string& type_name, Byte index, ArgumentModeType argument_mode, size_t argument_size, const CommandFunctionType& func)
 :m_Name(type_name),
  m_Index(index),
  m_ArgumentMode(argument_mode),
+ m_ArgumentSize(argument_size),
  m_RunFunction(func)
 {
 	
@@ -81,9 +82,9 @@ LVM::CommandTypeManager::CommandTypeManager()
 	memset(m_IndexList.data(),0,sizeof(m_IndexList));
 }
 
-LVM::DefineCommandType::DefineCommandType(Byte index, const std::string& name, ArgumentModeType argument_mode, CommandFunctionType func)
+LVM::DefineCommandType::DefineCommandType(Byte index, const std::string& name, ArgumentModeType argument_mode, size_t argument_size, CommandFunctionType func)
 {
-	GetCommandTypeManager().InsertCommandType(CommandType(name, index, argument_mode, func));
+	GetCommandTypeManager().InsertCommandType(CommandType(name, index, argument_mode, argument_size, func));
 }
 
 LVM::Argument::Argument(void * pointer, size_t size)

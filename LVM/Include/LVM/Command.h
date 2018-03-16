@@ -55,10 +55,11 @@ namespace LVM
 	*/
 	struct CommandType
 	{
-		CommandType(const std::string &type_name = "NullCommandType", Byte index = 0, ArgumentModeType argument_mode = 0, const CommandFunctionType &func = [](const Command&, VirtualMechine &) -> void {});
+		CommandType(const std::string &type_name = "NullCommandType", Byte index = 0, ArgumentModeType argument_mode = 0, size_t argument_size = 0, const CommandFunctionType &func = [](const Command&, VirtualMechine &) -> void {});
 		std::string m_Name;
 		Byte m_Index;
 		ArgumentModeType m_ArgumentMode;
+		size_t m_ArgumentSize;
 		CommandFunctionType m_RunFunction;
 	};
 
@@ -85,7 +86,7 @@ namespace LVM
 
 	struct DefineCommandType
 	{
-		DefineCommandType(Byte index, const std::string& name, ArgumentModeType argument_mode, CommandFunctionType func = [](const Command&, VirtualMechine &) -> void {});
+		DefineCommandType(Byte index, const std::string& name, ArgumentModeType argument_mode = 0, size_t argument_size = 0, CommandFunctionType func = [](const Command&, VirtualMechine &) -> void {});
 	};
 
 	/*
