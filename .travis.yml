@@ -1,13 +1,28 @@
 language: cpp
 sudo: required
 
-os:
-  - linux
-  - osx
-
-compiler:
-  - gcc
-  - clang
+martix:
+  include:
+    - os: linux
+       addons:
+         apt:
+           sources:
+            - ubuntu-toolchain-r-test
+           packages:
+            - g++-7
+       before_install:
+         - eval "CC=gcc-7 && CXX=g++-7"
+    - os: linux
+        compiler: clang
+    - os: osx
+        osx_image: xcode8
+        before_install:
+          - brew update
+          - brew upgrade
+          - brew install gcc
+          - eval "CC=gcc-7 && CXX=g++-7"
+    - os: osx
+        compiler: clang
 
 script:
     - mkdir build
