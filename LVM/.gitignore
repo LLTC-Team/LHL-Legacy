@@ -3,6 +3,7 @@
 !Document/
 !Include/
 !Source/
+!Tests/
 !.gitattributes
 !.gitignore
 !CMakeLists.txt
