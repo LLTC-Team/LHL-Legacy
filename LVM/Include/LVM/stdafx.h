@@ -22,6 +22,7 @@ limitations under the License.
 #include <map>
 #include <array>
 #include <cstring>
+#include <fstream>
 
 namespace LVM
 {

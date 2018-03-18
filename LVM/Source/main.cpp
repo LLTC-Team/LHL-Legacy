@@ -20,10 +20,19 @@ limitations under the License.
 using namespace std;
 using namespace LVM;
 
+void TestFileIO()
+{
+	fstream file("test.lll", ios::in | ios::out | ios::binary);
+	Command c(*GetCommandTypeManager().GetCommandTypeByName("null"), {});
+	SaveCommandToFile(file, c);
+	file.close();
+	file.open("test.lll", ios::in | ios::out | ios::binary);
+	Command c2 = LoadCommandFromFile(file);
+	file.close();
+}
+
 int main()
 {
-	auto num = GetArgumentMode({true,false,false});
-	auto state = GetBoolByNumber(num, 3);
 	system("pause");
 	return 0;
 }

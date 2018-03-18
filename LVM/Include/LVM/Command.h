@@ -1,4 +1,4 @@
-/*
+﻿/*
 Copyright 2018 creatorlxd
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -112,6 +112,17 @@ namespace LVM
 	};
 
 	/*
+	Load Argument From File.
+	file must open by std::ios::in|std::ios::binary
+	*/
+	Argument LoadArgumentFromFile(std::fstream& file);
+	/*
+	Save Argument To File
+	file must open by std::ios::out|std::ios::binary
+	*/
+	void SaveArgumentToFile(std::fstream & file, const Argument& arg);
+
+	/*
 	Command 指令
 	*/
 	struct Command
@@ -121,5 +132,16 @@ namespace LVM
 		
 		Command() = delete;
 		Command(const CommandType& type, std::initializer_list<std::pair<void*, size_t>> args);
+		Command(const CommandType& type, std::vector<Argument> args);
 	};
+	/*
+	Load Command From File.
+	file must open by std::ios::in|std::ios::binary
+	*/
+	Command LoadCommandFromFile(std::fstream& file);
+	/*
+	Save Command To File
+	file must open by std::ios::out|std::ios::binary
+	*/
+	void SaveCommandToFile(std::fstream & file, const Command& cmd);
 }

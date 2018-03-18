@@ -93,15 +93,13 @@ LVM::Argument::Argument(void * pointer, size_t size)
 	{
 		ThrowError("can not make nullptr as a argument");
 	}
-	m_pContent = new Byte[size];
+	m_pContent = reinterpret_cast<Byte*>(pointer);
 	m_Size = size;
-	memcpy(m_pContent, pointer, size);
 }
 
 LVM::Argument::Argument(const Argument& arg)
 {
 	m_Size = arg.m_Size;
-	delete[] m_pContent;
 	m_pContent = new Byte[m_Size];
 	memcpy(m_pContent, arg.m_pContent, m_Size);
 }
@@ -120,6 +118,30 @@ LVM::Argument & LVM::Argument::operator=(const Argument & arg)
 	return *this;
 }
 
+LVM::Argument LVM::LoadArgumentFromFile(std::fstream & file)
+{
+	size_t size;
+	void* pc;
+	file.read((char*)&size, sizeof(size));
+	if (size > 0)
+	{
+		pc = new Byte[size];
+		file.read((char*)pc, size);
+		return Argument(pc, size);
+	}
+	else
+	{
+		ThrowError("read argument error");
+		return Argument(new char, 1);
+	}
+}
+
+void LVM::SaveArgumentToFile(std::fstream & file, const Argument & arg)
+{
+	file.write((char*)&arg.m_Size, sizeof(arg.m_Size));
+	file.write((char*)arg.m_pContent, arg.m_Size);
+}
+
 LVM::Command::Command(const CommandType & type, std::initializer_list<std::pair<void*, size_t>> args)
 	:
 	m_Type(type)
@@ -127,5 +149,38 @@ LVM::Command::Command(const CommandType & type, std::initializer_list<std::pair<
 	for (auto i : args)
 	{
 		m_Argument.emplace_back(i.first, i.second);
+	}
+}
+
+LVM::Command::Command(const CommandType & type, std::vector<Argument> args)
+	:
+	m_Type(type)
+{
+	for (Argument& i : args)
+	{
+		m_Argument.emplace_back(i);
+	}
+}
+
+LVM::Command LVM::LoadCommandFromFile(std::fstream & file)
+{
+	Byte index;
+	file.read((char*)&index, sizeof(index));
+	auto commandtype = GetCommandTypeManager().GetCommandTypeByIndex(index);
+	std::vector<Argument> args;
+	auto size = commandtype->m_ArgumentSize;
+	for (auto i = 0; i < size; i++)
+	{
+		args.emplace_back(LoadArgumentFromFile(file));
+	}
+	return Command(*commandtype, args);
+}
+
+void LVM::SaveCommandToFile(std::fstream & file, const Command & cmd)
+{
+	file.write((char*)&cmd.m_Type.m_Index, sizeof(cmd.m_Type.m_Index));
+	for (auto i = 0; i < cmd.m_Type.m_ArgumentSize; i++)
+	{
+		SaveArgumentToFile(file, cmd.m_Argument[i]);
 	}
 }
