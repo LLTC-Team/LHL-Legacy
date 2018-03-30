@@ -13,5 +13,7 @@ include_directories(Include)
 #Useless for develop environment
 add_executable(LML ${MAIN_SRC_LIST})
 
+add_library(LML_lib STATIC ${MAIN_SRC_LIST})
+
 add_executable(LMLTest Tests/Tests.cpp)
-target_link_libraries(LMLTest CATCH)
+target_link_libraries(LMLTest CATCH LML_lib)

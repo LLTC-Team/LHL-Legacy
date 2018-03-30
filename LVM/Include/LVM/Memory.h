@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include "Command.h"
 
 namespace LVM
 {
@@ -41,9 +42,27 @@ namespace LVM
 	public:
 		MemoryManager(AddressType size = MemoryPage::MemoryPageDefaultSize);
 
-		Byte& operator [] (AddressType address);
+		Byte* operator [] (AddressType address);
+
+		template<typename T>
+		T& GetContentByAddress(AddressType address)
+		{
+			return *(reinterpret_cast<T*>((*this)[address]));
+		}
+		AddressType GetPageSize();
 	private:
 		AddressType m_PageSize;
 		std::vector<MemoryPage> m_Pages;
 	};
+
+	/*
+	for test to use
+	*/
+	Argument SetMemoryAddress(const std::vector<AddressType>& addrs);
+	
+	/*
+	Get Memory Address From Argument.
+	Include Memory Address Jumping
+	*/
+	AddressType GetMemoryAddress(Argument& arg,MemoryManager& memory_manager);
 }

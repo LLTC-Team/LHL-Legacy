@@ -13,5 +13,7 @@ include_directories(Include)
 #Useless for develop environment
 add_executable(LVM ${MAIN_SRC_LIST})
 
+add_library(LVM_lib STATIC ${MAIN_SRC_LIST})
+
 add_executable(LVMTest Tests/Tests.cpp)
-target_link_libraries(LVMTest CATCH)
+target_link_libraries(LVMTest CATCH LVM_lib)
