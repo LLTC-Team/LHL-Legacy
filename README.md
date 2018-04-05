@@ -1,4 +1,4 @@
-# Project LHL
+# Project LHL [![Build Status](https://travis-ci.org/ChinaCreators/LHL.svg?branch=master)](https://travis-ci.org/ChinaCreators/LHL) [![Build status](https://ci.appveyor.com/api/projects/status/t401c73375kssesx?svg=true)](https://ci.appveyor.com/project/xsun2001/lhl)
 
 <!-- TOC -->
 
