@@ -1,31 +1,41 @@
 language: cpp
-sudo: required
 
-martix:
+matrix:
   include:
     - os: linux
-       addons:
-         apt:
-           sources:
+      addons:
+        apt:
+          sources:
             - ubuntu-toolchain-r-test
-           packages:
+          packages:
             - g++-7
-       before_install:
-         - eval "CC=gcc-7 && CXX=g++-7"
+      env:
+        - MATRIX_EVAL="CC=gcc-7 && CXX=g++-7"
     - os: linux
-        compiler: clang
+      addons:
+        apt:
+          sources:
+            - llvm-toolchain-trusty-5.0
+          packages:
+            - clang-5.0
+      env:
+        - MATRIX_EVAL="CC=clang-5.0 && CXX=clang++-5.0"
     - os: osx
-        osx_image: xcode8
-        before_install:
-          - brew update
-          - brew upgrade
-          - brew install gcc
-          - eval "CC=gcc-7 && CXX=g++-7"
+      osx_image: xcode9.2
+      env:
+        - MATRIX_EVAL="brew update && brew install gcc && CC=gcc-7 && CXX=g++-7"
     - os: osx
-        compiler: clang
+      osx_image: xcode9.2
+      env:
+        - MATRIX_EVAL="brew update"
+
+before_install:
+    - eval "${MATRIX_EVAL}"
 
 script:
     - mkdir build
     - cd build
     - cmake ..
     - make
+    - ./LML/LMLTest
+    - ./LVM/LVMTest
