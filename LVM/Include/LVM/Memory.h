@@ -1,4 +1,4 @@
-#include "stdafx.h"
+﻿#include "stdafx.h"
 #include "Command.h"
 
 namespace LVM
@@ -33,7 +33,7 @@ namespace LVM
 			}
 		}
 	private:
-		Byte* m_pContent;
+		Byte * m_pContent;
 		AddressType m_Size;
 	};
 
@@ -56,13 +56,13 @@ namespace LVM
 	};
 
 	/*
-	for test to use
+	get argument from memory address vector
 	*/
-	Argument SetMemoryAddress(const std::vector<AddressType>& addrs);
-	
+	Argument SetMemoryAddress(const std::vector<AddressType>& addrs, bool if_last_jump = false);
+
 	/*
 	Get Memory Address From Argument.
 	Include Memory Address Jumping
 	*/
-	AddressType GetMemoryAddress(Argument& arg,MemoryManager& memory_manager);
+	AddressType GetMemoryAddress(Argument& arg, MemoryManager& memory_manager);
 }

@@ -1,4 +1,4 @@
-#define CATCH_CONFIG_MAIN
+﻿#define CATCH_CONFIG_MAIN
 
 #include <iostream>
 #include "catch.hpp"
@@ -26,10 +26,16 @@ TEST_CASE("Hello Catch2", "[hello]")
 	REQUIRE(true);
 }
 
-TEST_CASE("Test MemoryManager","[LVMTest][MemoryManager]")
+TEST_CASE("Test MemoryManager", "[LVMTest][MemoryManager]")
 {
 	MemoryManager mm;
-	*mm[4] = 4;
+	//*mm[8] = 4;
+	auto& test = mm.GetContentByAddress<AddressType>(1 << 30);
+	test = 4;
+	auto ptr = &test;
+	AddressType t;
+	memcpy(&t, ptr, sizeof(AddressType));
+	REQUIRE(t == test);
 }
 
 TEST_CASE("Test MemoryAddress In Argument", "[LVMTest][Argument][MemoryManager]")
@@ -37,14 +43,14 @@ TEST_CASE("Test MemoryAddress In Argument", "[LVMTest][Argument][MemoryManager]"
 	SECTION("memory address without jumping ")
 	{
 		MemoryManager mm_1;
-		Argument arg1 = SetMemoryAddress({0});
+		Argument arg1 = SetMemoryAddress({ 0 });
 		SECTION("save to argument")
 		{
 			REQUIRE(arg1.As<AddressType>() == 0);
 		}
 		SECTION("read from argument")
 		{
-			auto memory_address1 = GetMemoryAddress(arg1,mm_1);
+			auto memory_address1 = GetMemoryAddress(arg1, mm_1);
 			REQUIRE(memory_address1 == 0);
 		}
 	}
@@ -52,12 +58,14 @@ TEST_CASE("Test MemoryAddress In Argument", "[LVMTest][Argument][MemoryManager]"
 	SECTION("memory address with jumping")
 	{
 		MemoryManager mm_2;
-		Argument arg2 = SetMemoryAddress({0, 4});
-		//mm_2.GetContentByAddress<AddressType>(4) = 4;
-		std::cout<<*(AddressType*)mm_2[4];
+		Argument arg2 = SetMemoryAddress({ 0, 8 });
 
 		auto memory_address2 = GetMemoryAddress(arg2, mm_2);
-		// //test
-		std::cout << memory_address2 << std::endl;
+		REQUIRE(memory_address2 == 8);
+
+		Argument arg3 = SetMemoryAddress({ 0, 16 }, true);
+
+		auto memory_address3 = GetMemoryAddress(arg3, mm_2);
+		REQUIRE(memory_address3 == 0);
 	}
 }

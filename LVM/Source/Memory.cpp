@@ -1,4 +1,4 @@
-#include "../Include/LVM/stdafx.h"
+﻿#include "../Include/LVM/stdafx.h"
 #include "../Include/LVM/Memory.h"
 
 LVM::MemoryPage::MemoryPage()
@@ -49,7 +49,7 @@ LVM::MemoryManager::MemoryManager(AddressType size)
 LVM::Byte* LVM::MemoryManager::operator[](AddressType address)
 {
 	uint32_t index = address / m_PageSize;
-	if(m_Pages.size()>index)
+	if (m_Pages.size() > index)
 	{
 		//do no thing
 	}
@@ -76,11 +76,11 @@ LVM::AddressType LVM::MemoryManager::GetPageSize()
 	return m_PageSize;
 }
 
-LVM::Argument LVM::SetMemoryAddress(const std::vector<AddressType> &addrs)
+LVM::Argument LVM::SetMemoryAddress(const std::vector<AddressType> &addrs, bool if_last_jump)
 {
-	if(addrs.size())
+	if (addrs.size())
 	{
-		size_t size = addrs.size() * (sizeof(AddressType) + 1);
+		size_t size = addrs.size() * (sizeof(AddressType) + 1) - (!if_last_jump ? 1 : 0);
 		Byte *ptr = new Byte[size];
 		for (size_t i = 0; i < addrs.size(); i++)
 		{
@@ -91,11 +91,11 @@ LVM::Argument LVM::SetMemoryAddress(const std::vector<AddressType> &addrs)
 	else
 	{
 		ThrowError("addrs can not be empty");
-		return Argument(new char,1);
+		return Argument(new char, 1);
 	}
 }
 
-LVM::AddressType LVM::GetMemoryAddress(Argument &arg,MemoryManager& memory_manager)
+LVM::AddressType LVM::GetMemoryAddress(Argument &arg, MemoryManager& memory_manager)
 {
 	size_t i = 0;
 	AddressType re = 0;
@@ -109,11 +109,11 @@ LVM::AddressType LVM::GetMemoryAddress(Argument &arg,MemoryManager& memory_manag
 		}
 		if (i % (sizeof(AddressType) + 1) == sizeof(AddressType))
 		{
-			re = *reinterpret_cast<AddressType *>(memory_manager[re]);
+			re = memory_manager.GetContentByAddress<AddressType>(re);
 			i += 1;
 			continue;
 		}
-		
+
 	}
 	return re;
 }
