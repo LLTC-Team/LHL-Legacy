@@ -162,6 +162,11 @@ LVM::Command::Command(const CommandType & type, std::vector<Argument> args)
 	}
 }
 
+LVM::Command::Command(const Command& c):m_Type(c.m_Type),m_Argument(c.m_Argument)
+{
+
+}
+
 LVM::Command LVM::LoadCommandFromFile(std::fstream & file)
 {
 	Byte index;

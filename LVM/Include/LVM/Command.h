@@ -18,11 +18,11 @@ limitations under the License.
 
 namespace LVM
 {
-	class VirtualMechine;
+	class VirtualMachine;
 	class CommandTypeManager;
 	struct Command;
 
-	using CommandFunctionType = std::function<void(const Command&,VirtualMechine &)>;
+	using CommandFunctionType = std::function<void(const Command&,VirtualMachine &)>;
 
 	using ArgumentModeType = unsigned int;
 	
@@ -55,7 +55,7 @@ namespace LVM
 	*/
 	struct CommandType
 	{
-		CommandType(const std::string &type_name = "NullCommandType", Byte index = 0, ArgumentModeType argument_mode = 0, size_t argument_size = 0, const CommandFunctionType &func = [](const Command&, VirtualMechine &) -> void {});
+		CommandType(const std::string &type_name = "NullCommandType", Byte index = 0, ArgumentModeType argument_mode = 0, size_t argument_size = 0, const CommandFunctionType &func = [](const Command&, VirtualMachine &) -> void {});
 		std::string m_Name;
 		Byte m_Index;
 		ArgumentModeType m_ArgumentMode;
@@ -86,7 +86,7 @@ namespace LVM
 
 	struct DefineCommandType
 	{
-		DefineCommandType(Byte index, const std::string& name, ArgumentModeType argument_mode = 0, size_t argument_size = 0, CommandFunctionType func = [](const Command&, VirtualMechine &) -> void {});
+		DefineCommandType(Byte index, const std::string& name, ArgumentModeType argument_mode = 0, size_t argument_size = 0, CommandFunctionType func = [](const Command&, VirtualMachine &) -> void {});
 	};
 
 	/*
@@ -133,6 +133,7 @@ namespace LVM
 		Command() = delete;
 		Command(const CommandType& type, std::initializer_list<std::pair<void*, size_t>> args);
 		Command(const CommandType& type, std::vector<Argument> args);
+		Command(const Command& c);
 	};
 	/*
 	Load Command From File.
