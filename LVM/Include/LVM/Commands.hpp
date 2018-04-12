@@ -19,7 +19,7 @@ limitations under the License.
 
 const LVM::DefineCommandType NullCommand(0,"null",0,0);
 
-const LVM::DefineCommandType TestCommand(255,"test",0,0,[&](const LVM::Command& command,LVM::VirtualMachine& vm)-> void
+const LVM::DefineCommandType TestCommand(255,"test",0,0,[](const LVM::Command& command,LVM::VirtualMachine& vm)-> void
 {
     std::cout<<"test command"<<std::endl;
 }
