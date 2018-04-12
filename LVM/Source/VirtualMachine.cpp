@@ -18,7 +18,7 @@ limitations under the License.
 
 LVM::VirtualMachine::VirtualMachine()
 {
-
+    m_CommandRunIndex=0;
 }
 
 LVM::VirtualMachine::~VirtualMachine()
@@ -28,9 +28,10 @@ LVM::VirtualMachine::~VirtualMachine()
 
 void LVM::VirtualMachine::Run(const std::vector<Command> &commands)
 {
-    for(auto i:m_CommandContainer)
+    while(m_CommandRunIndex<commands.size())
     {
-
+        commands[m_CommandRunIndex].m_Type.m_RunFunction(commands[m_CommandRunIndex],*this);
+        m_CommandRunIndex+=1;
     }
 }
 
@@ -43,8 +44,7 @@ void LVM::VirtualMachine::RunFromFile(const std::string &filename)
     */
     std::fstream file;
     file.open(filename,std::ios::in|std::ios::binary);
-    int64_t CommandSize;
-    file.read((char*)&CommandSize,sizeof(CommandSize));
-    
+    m_CommandContainer=LoadCommandsFromFile(file);
     file.close();
+    Run(m_CommandContainer);
 }

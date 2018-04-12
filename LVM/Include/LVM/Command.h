@@ -87,6 +87,7 @@ namespace LVM
 	struct DefineCommandType
 	{
 		DefineCommandType(Byte index, const std::string& name, ArgumentModeType argument_mode = 0, size_t argument_size = 0, CommandFunctionType func = [](const Command&, VirtualMachine &) -> void {});
+        CommandType* m_pCommandType;
 	};
 
 	/*
@@ -131,7 +132,6 @@ namespace LVM
 		std::vector<Argument> m_Argument;
 		
 		Command() = delete;
-		Command(const CommandType& type, std::initializer_list<std::pair<void*, size_t>> args);
 		Command(const CommandType& type, std::vector<Argument> args);
 		Command(const Command& c);
 	};
@@ -145,4 +145,8 @@ namespace LVM
 	file must open by std::ios::out|std::ios::binary
 	*/
 	void SaveCommandToFile(std::fstream & file, const Command& cmd);
+
+    std::vector<Command> LoadCommandsFromFile(std::fstream& file);
+
+	void SaveCommandsToFile(std::fstream& file,const std::vector<Command>& commands);
 }

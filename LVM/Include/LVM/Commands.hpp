@@ -15,6 +15,12 @@ limitations under the License.
 */
 #pragma once
 #include "stdafx.h"
-#include "Command.h"
+#include "VirtualMachine.h"
 
-LVM::DefineCommandType NullCommand(0,"null",0,0);
+const LVM::DefineCommandType NullCommand(0,"null",0,0);
+
+const LVM::DefineCommandType TestCommand(255,"test",0,0,[&](const LVM::Command& command,LVM::VirtualMachine& vm)-> void
+{
+    std::cout<<"test command"<<std::endl;
+}
+);

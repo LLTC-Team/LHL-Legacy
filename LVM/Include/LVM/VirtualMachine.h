@@ -23,6 +23,8 @@ namespace LVM
     class VirtualMachine
     {
     public:
+        friend struct CommandType;
+
         VirtualMachine();
         ~VirtualMachine();
 
@@ -31,5 +33,6 @@ namespace LVM
     private:
         std::vector<Command> m_CommandContainer;
         MemoryManager m_MemoryManager;
+        uint64_t m_CommandRunIndex;
     };
 }

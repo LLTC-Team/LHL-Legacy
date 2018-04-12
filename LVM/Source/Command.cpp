@@ -56,7 +56,7 @@ void LVM::CommandTypeManager::InsertCommandType(const LVM::CommandType& command_
 		ThrowError("can not insert the same command type twice");
 		return;
 	}
-	m_Content.insert(make_pair(command_type.m_Name,command_type));
+	m_Content.insert(std::make_pair(command_type.m_Name,command_type));
 	m_IndexList[command_type.m_Index]=&m_Content[command_type.m_Name];
 }
 
@@ -85,6 +85,7 @@ LVM::CommandTypeManager::CommandTypeManager()
 LVM::DefineCommandType::DefineCommandType(Byte index, const std::string& name, ArgumentModeType argument_mode, size_t argument_size, CommandFunctionType func)
 {
 	GetCommandTypeManager().InsertCommandType(CommandType(name, index, argument_mode, argument_size, func));
+    m_pCommandType= const_cast<CommandType*>(GetCommandTypeManager().GetCommandTypeByIndex(index));
 }
 
 LVM::Argument::Argument(void * pointer, size_t size)
@@ -142,16 +143,6 @@ void LVM::SaveArgumentToFile(std::fstream & file, const Argument & arg)
 	file.write((char*)arg.m_pContent, arg.m_Size);
 }
 
-LVM::Command::Command(const CommandType & type, std::initializer_list<std::pair<void*, size_t>> args)
-	:
-	m_Type(type)
-{
-	for (auto i : args)
-	{
-		m_Argument.emplace_back(i.first, i.second);
-	}
-}
-
 LVM::Command::Command(const CommandType & type, std::vector<Argument> args)
 	:
 	m_Type(type)
@@ -187,5 +178,27 @@ void LVM::SaveCommandToFile(std::fstream & file, const Command & cmd)
 	for (auto i = 0; i < cmd.m_Type.m_ArgumentSize; i++)
 	{
 		SaveArgumentToFile(file, cmd.m_Argument[i]);
+	}
+}
+
+std::vector<LVM::Command> LVM::LoadCommandsFromFile(std::fstream& file)
+{
+	uint64_t commandsize;
+	std::vector<Command> re;
+	file.read((char*)&commandsize,sizeof(commandsize));
+	for(uint64_t i=0;i<commandsize;i++)
+	{
+		re.emplace_back(LoadCommandFromFile(file));
+	}
+	return re;
+}
+
+void LVM::SaveCommandsToFile(std::fstream& file,const std::vector<Command>& commands)
+{
+	uint64_t commandsize=commands.size();
+	file.write((char*)&commandsize,sizeof(commandsize));
+	for(auto& i:commands)
+	{
+		SaveCommandToFile(file,i);
 	}
 }

@@ -20,19 +20,15 @@ limitations under the License.
 using namespace std;
 using namespace LVM;
 
-void TestFileIO()
+void TestVM()
 {
-	fstream file("test.lll", ios::in | ios::out | ios::binary);
-	Command c(*GetCommandTypeManager().GetCommandTypeByName("null"), {});
-	SaveCommandToFile(file, c);
-	file.close();
-	file.open("test.lll", ios::in | ios::out | ios::binary);
-	Command c2 = LoadCommandFromFile(file);
+	fstream file("test.lll", ios::out | ios::binary);
+	std::vector<Command> commands{Command(*TestCommand.m_pCommandType,{})};
+    SaveCommandsToFile(file,commands);
 	file.close();
 }
 
 int main()
 {
-	system("pause");
 	return 0;
 }
