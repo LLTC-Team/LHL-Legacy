@@ -26,9 +26,12 @@ void TestVM()
 	std::vector<Command> commands{Command(*TestCommand.m_pCommandType,{})};
     SaveCommandsToFile(file,commands);
 	file.close();
+	VirtualMachine vm;
+	vm.RunFromFile("test.lll");
 }
 
 int main()
 {
+	TestVM();
 	return 0;
 }
