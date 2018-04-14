@@ -70,7 +70,7 @@ namespace LVM
 	class CommandTypeManager
 	{
 		public:
-			static const Byte MaxCommandTypeIndex=255;
+			static const unsigned short MaxCommandTypeIndex=256;
 
 			friend CommandTypeManager& GetCommandTypeManager();
 			
