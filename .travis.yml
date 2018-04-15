@@ -31,6 +31,10 @@ matrix:
 
 before_install:
     - eval "${MATRIX_EVAL}"
+    - curl -o cmake-3.11.0.tar.gz https://cmake.org/files/v3.11/cmake-3.11.0.tar.gz
+    - tar -zxf cmake-3.11.0.tar.gz
+    - cd cmake-3.11.0
+    - ./bootstrap && make && make install
 
 script:
     - mkdir build
