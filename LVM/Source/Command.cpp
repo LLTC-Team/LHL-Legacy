@@ -1,4 +1,4 @@
-/*
+﻿/*
 Copyright 2018 creatorlxd
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,26 +16,13 @@ limitations under the License.
 #include "LVM/stdafx.h"
 #include "LVM/Command.h"
 
-LVM::CommandType::CommandType(const std::string& type_name, Byte index, ArgumentModeType argument_mode, size_t argument_size, const CommandFunctionType& func)
+LVM::CommandType::CommandType(const std::string& type_name, Byte index,const std::vector<ArgumentModeType>& argument_mode,const CommandFunctionType& func)
 :m_Name(type_name),
  m_Index(index),
  m_ArgumentMode(argument_mode),
- m_ArgumentSize(argument_size),
  m_RunFunction(func)
 {
 	
-}
-
-std::vector<bool> LVM::GetBoolByNumber(ArgumentModeType number,size_t size)
-{
-	std::vector<bool> re;
-	while (size)
-	{
-		re.push_back(number & 1);
-		number /= 2;
-		size--;
-	}
-	return re;
 }
 
 void LVM::NewCommandType(const CommandType& command_type)
@@ -82,9 +69,9 @@ LVM::CommandTypeManager::CommandTypeManager()
 	memset(m_IndexList.data(),0,sizeof(m_IndexList));
 }
 
-LVM::DefineCommandType::DefineCommandType(Byte index, const std::string& name, ArgumentModeType argument_mode, size_t argument_size, CommandFunctionType func)
+LVM::DefineCommandType::DefineCommandType(Byte index, const std::string& name, const std::vector<ArgumentModeType>& argument_mode, CommandFunctionType func)
 {
-	GetCommandTypeManager().InsertCommandType(CommandType(name, index, argument_mode, argument_size, func));
+	GetCommandTypeManager().InsertCommandType(CommandType(name, index, argument_mode, func));
     m_pCommandType= const_cast<CommandType*>(GetCommandTypeManager().GetCommandTypeByIndex(index));
 }
 
@@ -164,7 +151,7 @@ LVM::Command LVM::LoadCommandFromFile(std::fstream & file)
 	file.read((char*)&index, sizeof(index));
 	auto commandtype = GetCommandTypeManager().GetCommandTypeByIndex(index);
 	std::vector<Argument> args;
-	auto size = commandtype->m_ArgumentSize;
+	auto size = commandtype->m_ArgumentMode.size();
 	for (auto i = 0; i < size; i++)
 	{
 		args.emplace_back(LoadArgumentFromFile(file));
@@ -175,7 +162,7 @@ LVM::Command LVM::LoadCommandFromFile(std::fstream & file)
 void LVM::SaveCommandToFile(std::fstream & file, const Command & cmd)
 {
 	file.write((char*)&cmd.m_Type.m_Index, sizeof(cmd.m_Type.m_Index));
-	for (auto i = 0; i < cmd.m_Type.m_ArgumentSize; i++)
+	for (auto i = 0; i < cmd.m_Type.m_ArgumentMode.size(); i++)
 	{
 		SaveArgumentToFile(file, cmd.m_Argument[i]);
 	}

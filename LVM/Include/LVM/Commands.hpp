@@ -1,4 +1,4 @@
-/*
+﻿/*
 Copyright 2018 creatorlxd
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,9 +17,9 @@ limitations under the License.
 #include "stdafx.h"
 #include "VirtualMachine.h"
 
-const LVM::DefineCommandType NullCommand(0,"null",0,0);
+const LVM::DefineCommandType NullCommand(0, "null", {});
 
-const LVM::DefineCommandType TestCommand(255,"test",0,0,[](const LVM::Command& command,LVM::VirtualMachine& vm)-> void
+const LVM::DefineCommandType TestCommand(255, "test", {}, [](const LVM::Command& command, LVM::VirtualMachine& vm)-> void
 {
     std::cout<<"test command"<<std::endl;
 }

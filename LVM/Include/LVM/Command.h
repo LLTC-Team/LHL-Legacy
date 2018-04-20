@@ -5,7 +5,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+	http://www.apache.org/licenses/LICENSE-2.0
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
@@ -22,30 +22,9 @@ namespace LVM
 	class CommandTypeManager;
 	struct Command;
 
-	using CommandFunctionType = std::function<void(const Command&,VirtualMachine &)>;
+	using CommandFunctionType = std::function<void(const Command&, VirtualMachine &)>;
 
-	using ArgumentModeType = unsigned int;
-	
-	constexpr ArgumentModeType GetBoolNumber(const std::initializer_list<bool> content)
-	{
-	    ArgumentModeType re = 0;
-	    ArgumentModeType cot = 0;
-	    for (auto i : content)
-	    {
-	        if (i)
-	            re |= 1 << cot;
-	        cot += 1;
-	    }
-		return re;
-	}
-
-	std::vector<bool> GetBoolByNumber(ArgumentModeType number,size_t size);
-
-	/*返回值使用来描述一个命令的第n个参数是否是地址*/
-	constexpr ArgumentModeType GetArgumentMode(const std::initializer_list<bool> content)
-	{
-	    return GetBoolNumber(content);
-	}
+	using ArgumentModeType = bool;
 
 	/*
 	type_name是这个命令类型的类型名
@@ -55,11 +34,10 @@ namespace LVM
 	*/
 	struct CommandType
 	{
-		CommandType(const std::string &type_name = "NullCommandType", Byte index = 0, ArgumentModeType argument_mode = 0, size_t argument_size = 0, const CommandFunctionType &func = [](const Command&, VirtualMachine &) -> void {});
+		CommandType(const std::string &type_name = "NullCommandType", Byte index = 0, const std::vector<ArgumentModeType>& argument_mode = {}, const CommandFunctionType &func = [](const Command&, VirtualMachine &) -> void {});
 		std::string m_Name;
 		Byte m_Index;
-		ArgumentModeType m_ArgumentMode;
-		size_t m_ArgumentSize;
+		std::vector<ArgumentModeType> m_ArgumentMode;
 		CommandFunctionType m_RunFunction;
 	};
 
@@ -69,25 +47,25 @@ namespace LVM
 
 	class CommandTypeManager
 	{
-		public:
-			static const unsigned short MaxCommandTypeIndex=256;
+	public:
+		static const unsigned short MaxCommandTypeIndex = 256;
 
-			friend CommandTypeManager& GetCommandTypeManager();
-			
-			void InsertCommandType(const CommandType& command_type);
-			const CommandType* GetCommandTypeByName(const std::string& name);
-			const CommandType* GetCommandTypeByIndex(Byte index);
-		private:
-			CommandTypeManager();
+		friend CommandTypeManager& GetCommandTypeManager();
 
-			std::map<std::string,CommandType> m_Content;
-			std::array<const CommandType*,MaxCommandTypeIndex> m_IndexList;
+		void InsertCommandType(const CommandType& command_type);
+		const CommandType* GetCommandTypeByName(const std::string& name);
+		const CommandType* GetCommandTypeByIndex(Byte index);
+	private:
+		CommandTypeManager();
+
+		std::map<std::string, CommandType> m_Content;
+		std::array<const CommandType*, MaxCommandTypeIndex> m_IndexList;
 	};
 
 	struct DefineCommandType
 	{
-		DefineCommandType(Byte index, const std::string& name, ArgumentModeType argument_mode = 0, size_t argument_size = 0, CommandFunctionType func = [](const Command&, VirtualMachine &) -> void {});
-        CommandType* m_pCommandType;
+		DefineCommandType(Byte index, const std::string& name, const std::vector<ArgumentModeType>& argument_mode = {}, CommandFunctionType func = [](const Command&, VirtualMachine &) -> void {});
+		CommandType* m_pCommandType;
 	};
 
 	/*
@@ -130,7 +108,7 @@ namespace LVM
 	{
 		const CommandType& m_Type;
 		std::vector<Argument> m_Argument;
-		
+
 		Command() = delete;
 		Command(const CommandType& type, std::vector<Argument> args);
 		Command(const Command& c);
@@ -146,7 +124,7 @@ namespace LVM
 	*/
 	void SaveCommandToFile(std::fstream & file, const Command& cmd);
 
-    std::vector<Command> LoadCommandsFromFile(std::fstream& file);
+	std::vector<Command> LoadCommandsFromFile(std::fstream& file);
 
-	void SaveCommandsToFile(std::fstream& file,const std::vector<Command>& commands);
+	void SaveCommandsToFile(std::fstream& file, const std::vector<Command>& commands);
 }
