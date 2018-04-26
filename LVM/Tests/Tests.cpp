@@ -3,8 +3,10 @@
 #include <iostream>
 #include "catch.hpp"
 #include "LVM/Memory.h"
+#include "LVM/Commands.hpp"
 
 using namespace LVM;
+using namespace std;
 
 unsigned int Factorial(unsigned int number)
 {
@@ -30,7 +32,7 @@ TEST_CASE("Test MemoryManager", "[LVMTest][MemoryManager]")
 {
 	MemoryManager mm;
 	//*mm[8] = 4;
-	auto& test = mm.GetContentByAddress<AddressType>(1 << 30);
+	auto& test = mm.GetContent<AddressType>(1 << 30);
 	test = 4;
 	auto ptr = &test;
 	AddressType t;
@@ -68,4 +70,23 @@ TEST_CASE("Test MemoryAddress In Argument", "[LVMTest][Argument][MemoryManager]"
 		auto memory_address3 = GetMemoryAddress(arg3, mm_2);
 		REQUIRE(memory_address3 == 0);
 	}
+}
+TEST_CASE("Test Command","[LVMTest][Command]")
+{
+	fstream file("test_cmd.lll", ios::out | ios::binary);
+	std::vector<Command> commands{Command(*TestCommand.m_pCommandType,{})};
+	SaveCommandsToFile(file,commands);
+	file.close();
+	VirtualMachine vm;
+	vm.RunFromFile("test_cmd.lll");
+}
+TEST_CASE("Test Assign Command","[LVMTest][Command]")
+{
+	fstream file("test_assign.lll", ios::out | ios::binary);
+	std::vector<Command> commands{Command(*AssignCommand.m_pCommandType,{SetMemoryAddress({0}),Argument(new int(1),1)})};
+	SaveCommandsToFile(file,commands);
+	file.close();
+	VirtualMachine vm;
+	vm.RunFromFile("test_assign.lll");
+	REQUIRE(vm.GetMemoryManager().GetContent<int>(0)==1);
 }

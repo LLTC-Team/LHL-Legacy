@@ -72,7 +72,7 @@ LVM::CommandTypeManager::CommandTypeManager()
 LVM::DefineCommandType::DefineCommandType(Byte index, const std::string& name, const std::vector<ArgumentModeType>& argument_mode, CommandFunctionType func)
 {
 	GetCommandTypeManager().InsertCommandType(CommandType(name, index, argument_mode, func));
-    m_pCommandType= const_cast<CommandType*>(GetCommandTypeManager().GetCommandTypeByIndex(index));
+    m_pCommandType= GetCommandTypeManager().GetCommandTypeByIndex(index);
 }
 
 LVM::Argument::Argument(void * pointer, size_t size)
@@ -130,14 +130,10 @@ void LVM::SaveArgumentToFile(std::fstream & file, const Argument & arg)
 	file.write((char*)arg.m_pContent, arg.m_Size);
 }
 
-LVM::Command::Command(const CommandType & type, std::vector<Argument> args)
+LVM::Command::Command(const CommandType &type, const std::vector<Argument> &args)
 	:
-	m_Type(type)
+	m_Type(type),m_Argument(args)
 {
-	for (Argument& i : args)
-	{
-		m_Argument.emplace_back(i);
-	}
 }
 
 LVM::Command::Command(const Command& c):m_Type(c.m_Type),m_Argument(c.m_Argument)

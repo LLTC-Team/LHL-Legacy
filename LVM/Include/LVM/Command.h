@@ -65,7 +65,7 @@ namespace LVM
 	struct DefineCommandType
 	{
 		DefineCommandType(Byte index, const std::string& name, const std::vector<ArgumentModeType>& argument_mode = {}, CommandFunctionType func = [](const Command&, VirtualMachine &) -> void {});
-		CommandType* m_pCommandType;
+		const CommandType* m_pCommandType;
 	};
 
 	/*
@@ -110,7 +110,7 @@ namespace LVM
 		std::vector<Argument> m_Argument;
 
 		Command() = delete;
-		Command(const CommandType& type, std::vector<Argument> args);
+		Command(const CommandType &type, const std::vector<Argument> &args);
 		Command(const Command& c);
 	};
 	/*

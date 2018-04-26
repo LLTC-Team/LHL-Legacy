@@ -30,6 +30,7 @@ namespace LVM
 
         void RunFromFile(const std::string& filename);
         void Run(const std::vector<Command>& commands);
+        MemoryManager& GetMemoryManager();
     private:
         std::vector<Command> m_CommandContainer;
         MemoryManager m_MemoryManager;

@@ -20,18 +20,7 @@ limitations under the License.
 using namespace std;
 using namespace LVM;
 
-void TestVM()
-{
-	fstream file("test.lll", ios::out | ios::binary);
-	std::vector<Command> commands{Command(*TestCommand.m_pCommandType,{})};
-    SaveCommandsToFile(file,commands);
-	file.close();
-	VirtualMachine vm;
-	vm.RunFromFile("test.lll");
-}
-
 int main()
 {
-	TestVM();
 	return 0;
 }

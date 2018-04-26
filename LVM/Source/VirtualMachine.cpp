@@ -26,6 +26,11 @@ LVM::VirtualMachine::~VirtualMachine()
 
 }
 
+LVM::MemoryManager& LVM::VirtualMachine::GetMemoryManager()
+{
+    return m_MemoryManager;
+}
+
 void LVM::VirtualMachine::Run(const std::vector<Command> &commands)
 {
     while(m_CommandRunIndex<commands.size())

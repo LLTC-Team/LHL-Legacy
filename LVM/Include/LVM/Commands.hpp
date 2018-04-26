@@ -24,3 +24,12 @@ const LVM::DefineCommandType TestCommand(255, "test", {}, [](const LVM::Command&
     std::cout<<"test command"<<std::endl;
 }
 );
+
+/*
+copy argument2's content to the memory address which equal to argument1
+*/
+const LVM::DefineCommandType AssignCommand(1,"assign",{true,false},
+[](const LVM::Command& command, LVM::VirtualMachine& vm)
+{
+    memcpy(vm.GetMemoryManager().GetContent(LVM::GetMemoryAddress(command.m_Argument[0],vm.GetMemoryManager())),command.m_Argument[1].m_pContent,command.m_Argument[1].m_Size);
+});
