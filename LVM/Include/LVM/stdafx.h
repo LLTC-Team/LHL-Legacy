@@ -1,4 +1,4 @@
-/*
+﻿/*
 Copyright 2018 creatorlxd
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,6 +23,7 @@ limitations under the License.
 #include <array>
 #include <cstring>
 #include <fstream>
+#include <thread>
 
 namespace LVM
 {

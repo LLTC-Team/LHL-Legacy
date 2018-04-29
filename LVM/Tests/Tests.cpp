@@ -71,22 +71,41 @@ TEST_CASE("Test MemoryAddress In Argument", "[LVMTest][Argument][MemoryManager]"
 		REQUIRE(memory_address3 == 0);
 	}
 }
-TEST_CASE("Test Command","[LVMTest][Command]")
+TEST_CASE("Test Command", "[LVMTest][Command]")
 {
 	fstream file("test_cmd.lll", ios::out | ios::binary);
-	std::vector<Command> commands{Command(*TestCommand.m_pCommandType,{})};
-	SaveCommandsToFile(file,commands);
+	std::vector<Command> commands{ Command(*TestCommand.m_pCommandType,{}) };
+	SaveCommandsToFile(file, commands);
 	file.close();
 	VirtualMachine vm;
 	vm.RunFromFile("test_cmd.lll");
 }
-TEST_CASE("Test Assign Command","[LVMTest][Command]")
+TEST_CASE("Test Assign Command", "[LVMTest][Command]")
 {
 	fstream file("test_assign.lll", ios::out | ios::binary);
-	std::vector<Command> commands{Command(*AssignCommand.m_pCommandType,{SetMemoryAddress({0}),Argument(new int(1),1)})};
-	SaveCommandsToFile(file,commands);
+	std::vector<Command> commands{ Command(*AssignCommand.m_pCommandType,{SetMemoryAddress({0}),Argument(new int(1),1)}) };
+	SaveCommandsToFile(file, commands);
 	file.close();
 	VirtualMachine vm;
 	vm.RunFromFile("test_assign.lll");
-	REQUIRE(vm.GetMemoryManager().GetContent<int>(0)==1);
+	REQUIRE(vm.GetMemoryManager().GetContent<int>(0) == 1);
+}
+TEST_CASE("Test Copy Move Goto Jump_If", "[LVMTest][Command]")
+{
+	fstream file("test_cmgj.lll", ios::out | ios::binary);
+	std::vector<Command> commands
+	{
+		Command(*AssignCommand.m_pCommandType,{ SetMemoryAddress({ 0 }),Argument(new bool(true)) }),
+		Command(*CopyCommand.m_pCommandType,{SetMemoryAddress({4}),SetMemoryAddress({0}),Argument(new uint64_t(sizeof(bool)))}),
+		Command(*MoveCommand.m_pCommandType,{ SetMemoryAddress({ 8 }),SetMemoryAddress({ 0 }),Argument(new uint64_t(sizeof(bool))) }),
+		Command(*JumpIfCommand.m_pCommandType,{Argument(new uint64_t(5)),SetMemoryAddress({4})}),
+		Command(*GotoCommand.m_pCommandType,{Argument(new uint64_t(0))})
+	};
+	SaveCommandsToFile(file, commands);
+	file.close();
+	VirtualMachine vm;
+	vm.RunFromFile("test_cmgj.lll");
+	REQUIRE(vm.GetMemoryManager().GetContent<bool>(4) == true);
+	REQUIRE(vm.GetMemoryManager().GetContent<bool>(8) == true);
+	REQUIRE(vm.GetMemoryManager().GetContent<bool>(0) == false);
 }

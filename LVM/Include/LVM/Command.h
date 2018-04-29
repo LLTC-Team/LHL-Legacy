@@ -78,13 +78,24 @@ namespace LVM
 
 		Argument() = delete;
 		Argument(void* pointer, size_t size);
+		template<typename T>
+		Argument(T* ptr)
+		{
+			if (ptr)
+			{
+				m_pContent = reinterpret_cast<Byte*>(ptr);
+				m_Size = sizeof(T);
+			}
+			else
+				ThrowError("the ptr can not be nullptr");
+		}
 		Argument(const Argument& arg);
 		~Argument();
 
 		Argument& operator = (const Argument& arg);
 
 		template<typename T>
-		T& As()
+		T& As()const
 		{
 			return *(reinterpret_cast<T*>(m_pContent));
 		}

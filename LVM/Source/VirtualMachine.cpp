@@ -1,4 +1,4 @@
-/*
+﻿/*
 Copyright 2018 creatorlxd
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -52,4 +52,9 @@ void LVM::VirtualMachine::RunFromFile(const std::string &filename)
     m_CommandContainer=LoadCommandsFromFile(file);
     file.close();
     Run(m_CommandContainer);
+}
+
+void LVM::VirtualMachine::SetCommandRunIndex(uint64_t index)
+{
+	m_CommandRunIndex = index;
 }
