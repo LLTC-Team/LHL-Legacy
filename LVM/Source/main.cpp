@@ -20,12 +20,12 @@ limitations under the License.
 using namespace std;
 using namespace LVM;
 
-int main(int argv,char** argc)
+int main(int argc,char** argv)
 {
 	std::vector<std::string> args;
 	std::vector<std::pair<std::thread,bool>> threads;		//thread if_joined
-	for (int i = 1; i < argv; i++)
-		args.emplace_back(argc[i]);
+	for (int i = 1; i < argc; i++)
+		args.emplace_back(argv[i]);
 	for (int i = 0; i < args.size(); i++)
 	{
 		threads.emplace_back(std::make_pair([=](){
