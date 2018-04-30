@@ -24,6 +24,7 @@ matrix:
 before_install:
     - cd ./ci-script
     - eval "${MATRIX_EVAL}"
+    - cd ..
 
 script:
     - mkdir build
