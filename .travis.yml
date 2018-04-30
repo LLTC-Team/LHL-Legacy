@@ -6,22 +6,23 @@ matrix:
       dist: trusty
       sudo: required
       env:
-        - MATRIX_EVAL="chmod +x ./ci-script/linux-gcc.sh && ./ci-script/linux-gcc.sh"
+        - MATRIX_EVAL="chmod +x ./linux-gcc.sh && ./linux-gcc.sh"
     - os: linux
       dist: trusty
       sudo: required
       env:
-        - MATRIX_EVAL="chmod +x ./ci-script/linux-clang.sh && ./ci-script/linux-clang.sh"
+        - MATRIX_EVAL="chmod +x ./linux-clang.sh && ./linux-clang.sh"
     - os: osx
       osx_image: xcode9.2
       env:
-        - MATRIX_EVAL="chmod +x ./ci-script/darwin-gcc.sh && ./ci-script/darwin-gcc.sh"
+        - MATRIX_EVAL="chmod +x ./darwin-gcc.sh && ./darwin-gcc.sh"
     - os: osx
       osx_image: xcode9.2
       env:
-        - MATRIX_EVAL="chmod +x ./ci-script/darwin-clang.sh && ./ci-script/darwin-clang.sh"
+        - MATRIX_EVAL="chmod +x ./darwin-clang.sh && ./darwin-clang.sh"
 
 before_install:
+    - cd ./ci-script
     - eval "${MATRIX_EVAL}"
 
 script:
