@@ -8,14 +8,15 @@ curl -o clang+llvm-6.0.0-x86_64-linux-gnu-ubuntu-16.04.tar.xz http://releases.ll
 tar xf clang+llvm-6.0.0-x86_64-linux-gnu-ubuntu-16.04.tar.xz
 mv clang+llvm-6.0.0-x86_64-linux-gnu-ubuntu-16.04/ /usr/local/clang_6.0.0
 
-export PATH=/usr/local/clang_6.0.0/bin:$PATH
-export LD_LIBRARY_PATH=/usr/local/clang_6.0.0/lib:$LD_LIBRARY_PATH
+sudo echo "export PATH=/usr/local/clang_6.0.0/bin:\$PATH" >> ~/.profile
+sudo echo "export LD_LIBRARY_PATH=/usr/local/clang_6.0.0/lib:\$LD_LIBRARY_PATH" >> ~/.profile
+sudo echo "export CC=clang-6" >> ~/.profile
+sudo echo "export CXX=clang-6" >> ~/.profile
+
+source ~/.profile
 
 clang -v
 clang++ -v
 
-CC=clang
-CXX=clang++
-
 chmod +x ./install-cmake.sh
-./install-cmake.sh
+sudo ./install-cmake.sh
