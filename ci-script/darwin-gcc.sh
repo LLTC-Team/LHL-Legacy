@@ -3,5 +3,5 @@
 brew update
 rm '/usr/local/include/c++'
 brew install gcc
-export CC=gcc-7
-export CXX=g++-7
+CC=gcc-7
+CXX=g++-7
