@@ -3,29 +3,26 @@ language: cpp
 matrix:
   include:
     - os: linux
-      addons:
-        apt:
-          sources:
-            - ubuntu-toolchain-r-test
-          packages:
-            - g++-7
+      dist: trusty
+      sudo: required
       env:
-        - MATRIX_EVAL="CC=gcc-7 && CXX=g++-7"
+        - MATRIX_EVAL="chmod +x ./linux-gcc.sh && ./linux-gcc.sh"
     - os: linux
+      dist: trusty
+      sudo: required
       env:
-        - MATRIX_EVAL="chmod +x linux-ci-clang.sh && ./linux-ci-clang.sh && CC=clang-5.0 && CXX=clang++-5.0"
+        - MATRIX_EVAL="chmod +x ./linux-clang.sh && ./linux-clang.sh"
     - os: osx
       osx_image: xcode9.2
       env:
-        - MATRIX_EVAL="brew update && rm '/usr/local/include/c++' && brew install gcc && CC=gcc-7 && CXX=g++-7"
+        - MATRIX_EVAL="chmod +x ./darwin-gcc.sh && ./darwin-gcc.sh"
     - os: osx
       osx_image: xcode9.2
       env:
-        - MATRIX_EVAL="brew update"
+        - MATRIX_EVAL="chmod +x ./darwin-clang.sh && ./darwin-clang.sh"
 
 before_install:
     - eval "${MATRIX_EVAL}"
-    - chmod +x install-cmake.sh && ./install-cmake.sh
 
 script:
     - mkdir build
