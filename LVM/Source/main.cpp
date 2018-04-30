@@ -1,4 +1,4 @@
-/*
+﻿/*
 Copyright 2018 creatorlxd
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,15 +20,33 @@ limitations under the License.
 using namespace std;
 using namespace LVM;
 
-void TestVM()
+int main(int argc,char** argv)
 {
-	fstream file("test.lll", ios::out | ios::binary);
-	std::vector<Command> commands{Command(*TestCommand.m_pCommandType,{})};
-    SaveCommandsToFile(file,commands);
-	file.close();
-}
+	std::vector<std::string> args;
+	std::vector<std::pair<std::thread,bool>> threads;		//thread if_joined
+	for (int i = 1; i < argc; i++)
+		args.emplace_back(argv[i]);
+	for (int i = 0; i < args.size(); i++)
+	{
+		threads.emplace_back(std::make_pair([=](){
+			VirtualMachine vm;
+			vm.RunFromFile(args[i]);
+		},false));
+	}
 
-int main()
-{
+	//wait for join
+	int thread_join_cot = threads.size();
+	do
+	{
+		for (auto& i : threads)
+		{
+			if (!i.second&&i.first.joinable())
+			{
+				i.first.join();
+				i.second = true;
+				thread_join_cot -= 1;
+			}
+		}
+	} while (thread_join_cot != 0);
 	return 0;
 }

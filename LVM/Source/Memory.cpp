@@ -1,4 +1,19 @@
-﻿#include "../Include/LVM/stdafx.h"
+﻿/*
+Copyright 2018 creatorlxd
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+	http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+#include "../Include/LVM/stdafx.h"
 #include "../Include/LVM/Memory.h"
 
 LVM::MemoryPage::MemoryPage()
@@ -46,15 +61,20 @@ LVM::MemoryManager::MemoryManager(AddressType size)
 	m_PageSize = size;
 }
 
-LVM::Byte* LVM::MemoryManager::operator[](AddressType address)
+LVM::Byte* LVM::MemoryManager::GetContent(AddressType address,size_t size)
 {
 	uint32_t index = address / m_PageSize;
+    if ((address + size - 1) / m_PageSize != index)		//size safe check
+    {
+        ThrowError("the size is larger that the memory left in the memory page");
+        return nullptr;
+    }
 	if (m_Pages.size() > index)
 	{
 		//do no thing
 	}
 	else
-	{
+ 	{
 		for (size_t i = m_Pages.size(); i <= index; i++)
 		{
 			m_Pages.emplace_back();
@@ -95,7 +115,7 @@ LVM::Argument LVM::SetMemoryAddress(const std::vector<AddressType> &addrs, bool 
 	}
 }
 
-LVM::AddressType LVM::GetMemoryAddress(Argument &arg, MemoryManager& memory_manager)
+LVM::AddressType LVM::GetMemoryAddress(const Argument &arg, MemoryManager &memory_manager)
 {
 	size_t i = 0;
 	AddressType re = 0;
@@ -109,7 +129,7 @@ LVM::AddressType LVM::GetMemoryAddress(Argument &arg, MemoryManager& memory_mana
 		}
 		if (i % (sizeof(AddressType) + 1) == sizeof(AddressType))
 		{
-			re = memory_manager.GetContentByAddress<AddressType>(re);
+			re = memory_manager.GetContent<AddressType>(re);
 			i += 1;
 			continue;
 		}

@@ -1,4 +1,4 @@
-/*
+﻿/*
 Copyright 2018 creatorlxd
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -26,6 +26,11 @@ LVM::VirtualMachine::~VirtualMachine()
 
 }
 
+LVM::MemoryManager& LVM::VirtualMachine::GetMemoryManager()
+{
+    return m_MemoryManager;
+}
+
 void LVM::VirtualMachine::Run(const std::vector<Command> &commands)
 {
     while(m_CommandRunIndex<commands.size())
@@ -47,4 +52,9 @@ void LVM::VirtualMachine::RunFromFile(const std::string &filename)
     m_CommandContainer=LoadCommandsFromFile(file);
     file.close();
     Run(m_CommandContainer);
+}
+
+void LVM::VirtualMachine::SetCommandRunIndex(uint64_t index)
+{
+	m_CommandRunIndex = index;
 }

@@ -1,4 +1,4 @@
-/*
+﻿/*
 Copyright 2018 creatorlxd
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -30,6 +30,8 @@ namespace LVM
 
         void RunFromFile(const std::string& filename);
         void Run(const std::vector<Command>& commands);
+        MemoryManager& GetMemoryManager();
+		void SetCommandRunIndex(uint64_t index);
     private:
         std::vector<Command> m_CommandContainer;
         MemoryManager m_MemoryManager;
