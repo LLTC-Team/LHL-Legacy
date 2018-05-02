@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 
 sudo apt-get update
-sudo apt-get upgrade
 sudo apt-get install xz-utils build-essential
 
 curl -o clang+llvm-6.0.0-x86_64-linux-gnu-ubuntu-16.04.tar.xz http://releases.llvm.org/6.0.0/clang+llvm-6.0.0-x86_64-linux-gnu-ubuntu-14.04.tar.xz
