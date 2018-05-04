@@ -4,7 +4,11 @@ brew update
 rm '/usr/local/include/c++'
 brew install gcc
 
-sudo echo "export CC=gcc-7" >> ~/.profile
-sudo echo "export CXX=g++-7" >> ~/.profile
+sudo mv /usr/bin/gcc /usr/bin/gcc-old
+sudo mv /usr/bin/g++ /usr/bin/g++-old
 
-source ~/.profile
+sudo ln -s /usr/local/Cellar/gcc/7.3.0_1/bin/gcc-7 /usr/bin/gcc
+sudo ln -s /usr/local/Cellar/gcc/7.3.0_1/bin/g++-7 /usr/bin/g++
+
+gcc -v
+g++ -v
