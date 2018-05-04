@@ -7,17 +7,15 @@ if(COMPILER_MSVC)
     add_definitions(-DUNICODE -D_UNICODE)
 endif()
 
-set(LinuxLinkLibraryOption "-lpthread")
-
-if(CMAKE_SYSTEM_NAME MATCHES "Linux")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${LinuxLinkLirbraryOption}")
-endif()
-
 aux_source_directory(Source MAIN_SRC_LIST)
 include_directories(Include)
 #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O2")
 #Useless for develop environment
 add_executable(LML ${MAIN_SRC_LIST})
+
+if(CMAKE_SYSTEM_NAME MATCHES "Linux")
+    target_link_libraries(LML pthread)
+endif()
 
 add_library(LML_lib STATIC ${MAIN_SRC_LIST})
 

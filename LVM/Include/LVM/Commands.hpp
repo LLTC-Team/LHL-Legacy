@@ -17,9 +17,9 @@ limitations under the License.
 #include "stdafx.h"
 #include "VirtualMachine.h"
 
-inline const LVM::DefineCommandType NullCommand(0, "null", {});
+const LVM::DefineCommandType NullCommand(0, "null", {});
 
-inline const LVM::DefineCommandType TestCommand(255, "test", {}, [](const LVM::Command& command, LVM::VirtualMachine& vm)-> void
+const LVM::DefineCommandType TestCommand(255, "test", {}, [](const LVM::Command& command, LVM::VirtualMachine& vm)-> void
 {
 	std::cout << "test command" << std::endl;
 }
@@ -28,7 +28,7 @@ inline const LVM::DefineCommandType TestCommand(255, "test", {}, [](const LVM::C
 /*
 copy argument2's content to the memory address which equal to argument1
 */
-inline const LVM::DefineCommandType AssignCommand(1, "assign", { true,false },
+const LVM::DefineCommandType AssignCommand(1, "assign", { true,false },
 	[](const LVM::Command& command, LVM::VirtualMachine& vm)
 {
 	memcpy(vm.GetMemoryManager().GetContent(LVM::GetMemoryAddress(command.m_Argument[0], vm.GetMemoryManager()), command.m_Argument[1].m_Size), command.m_Argument[1].m_pContent, command.m_Argument[1].m_Size);
@@ -37,7 +37,7 @@ inline const LVM::DefineCommandType AssignCommand(1, "assign", { true,false },
 /*
 copy(dst,src,size:uint64_t)
 */
-inline const LVM::DefineCommandType CopyCommand(2, "copy", { true,true,false },
+const LVM::DefineCommandType CopyCommand(2, "copy", { true,true,false },
 	[](const LVM::Command& command, LVM::VirtualMachine& vm)
 {
 	memcpy(vm.GetMemoryManager().GetContent(LVM::GetMemoryAddress(command.m_Argument[0], vm.GetMemoryManager()), command.m_Argument[2].As<uint64_t>()), vm.GetMemoryManager().GetContent(LVM::GetMemoryAddress(command.m_Argument[1], vm.GetMemoryManager()), command.m_Argument[2].As<uint64_t>()), command.m_Argument[2].As<uint64_t>());
@@ -47,7 +47,7 @@ inline const LVM::DefineCommandType CopyCommand(2, "copy", { true,true,false },
 /*
 move(dst,src,size:uint64_t)
 */
-inline const LVM::DefineCommandType MoveCommand(3, "move", { true,true,false },
+const LVM::DefineCommandType MoveCommand(3, "move", { true,true,false },
 	[](const LVM::Command& command, LVM::VirtualMachine& vm)
 {
 	memcpy(vm.GetMemoryManager().GetContent(LVM::GetMemoryAddress(command.m_Argument[0], vm.GetMemoryManager()), command.m_Argument[2].As<uint64_t>()), vm.GetMemoryManager().GetContent(LVM::GetMemoryAddress(command.m_Argument[1], vm.GetMemoryManager()), command.m_Argument[2].As<uint64_t>()), command.m_Argument[2].As<uint64_t>());
@@ -58,7 +58,7 @@ inline const LVM::DefineCommandType MoveCommand(3, "move", { true,true,false },
 /*
 goto code line:uint64_t
 */
-inline const LVM::DefineCommandType GotoCommand(4, "goto", { false },
+const LVM::DefineCommandType GotoCommand(4, "goto", { false },
 	[](const LVM::Command& command, LVM::VirtualMachine& vm)
 {
 	vm.SetCommandRunIndex(command.m_Argument[0].As<uint64_t>() - 1);
@@ -68,7 +68,7 @@ inline const LVM::DefineCommandType GotoCommand(4, "goto", { false },
 /*
 jump if the value equal to true
 */
-inline const LVM::DefineCommandType JumpIfCommand(5, "jump_if", { false,true },
+const LVM::DefineCommandType JumpIfCommand(5, "jump_if", { false,true },
 	[](const LVM::Command& command, LVM::VirtualMachine& vm)
 {
 	if (vm.GetMemoryManager().GetContent<bool>(GetMemoryAddress(command.m_Argument[1], vm.GetMemoryManager())))
