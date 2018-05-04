@@ -13,6 +13,10 @@ include_directories(Include)
 #Useless for develop environment
 add_executable(LVM ${MAIN_SRC_LIST})
 
+if(CMAKE_SYSTEM_NAME MATCHES "Linux")
+    target_link_libraries(LVM pthread)
+endif()
+
 add_library(LVM_lib STATIC ${MAIN_SRC_LIST})
 
 add_executable(LVMTest Tests/Tests.cpp)
