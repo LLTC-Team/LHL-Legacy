@@ -9,8 +9,8 @@ sudo mv clang+llvm-6.0.0-x86_64-linux-gnu-ubuntu-14.04/ /usr/local/clang_6.0.0
 
 sudo echo "export PATH=/usr/local/clang_6.0.0/bin:\$PATH" >> ~/.profile
 sudo echo "export LD_LIBRARY_PATH=/usr/local/clang_6.0.0/lib:\$LD_LIBRARY_PATH" >> ~/.profile
-sudo echo "export CC=clang-6" >> ~/.profile
-sudo echo "export CXX=clang-6" >> ~/.profile
+sudo echo "export CC=clang-6.0" >> ~/.profile
+sudo echo "export CXX=clang-6.0" >> ~/.profile
 
 source ~/.profile
 
