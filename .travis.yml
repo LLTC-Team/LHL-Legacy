@@ -7,19 +7,23 @@ matrix:
       sudo: required
       env:
         - MATRIX_EVAL="chmod +x ./linux-gcc.sh && ./linux-gcc.sh"
+        - TOOLCHAIN="CC=gcc-7 CXX=g++-7"
     - os: linux
       dist: trusty
       sudo: required
       env:
         - MATRIX_EVAL="chmod +x ./linux-clang.sh && ./linux-clang.sh"
+        - TOOLCHAIN="CC=/usr/local/clang_6.0.0/bin/clang CXX=/usr/local/clang_6.0.0/bin/clang++"
     - os: osx
       osx_image: xcode9.2
       env:
         - MATRIX_EVAL="chmod +x ./darwin-gcc.sh && ./darwin-gcc.sh"
+        - TOOLCHAIN="CC=gcc-7 CXX=g++-7"
     - os: osx
       osx_image: xcode9.2
       env:
         - MATRIX_EVAL="chmod +x ./darwin-clang.sh && ./darwin-clang.sh"
+        - TOOLCHAIN="CC=clang CXX=clang++"
 
 before_install:
     - cd ./ci-script
@@ -29,7 +33,7 @@ before_install:
 script:
     - mkdir build
     - cd build
-    - cmake ..
+    - eval "${TOOLCHAIN} cmake .."
     - make
     - ./LML/LMLTest
     - ./LVM/LVMTest
