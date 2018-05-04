@@ -7,15 +7,14 @@ wget http://releases.llvm.org/6.0.0/clang+llvm-6.0.0-x86_64-linux-gnu-ubuntu-14.
 tar xf clang+llvm-6.0.0-x86_64-linux-gnu-ubuntu-14.04.tar.xz
 sudo mv clang+llvm-6.0.0-x86_64-linux-gnu-ubuntu-14.04/ /usr/local/clang_6.0.0
 
-sudo echo "export PATH=/usr/local/clang_6.0.0/bin:\$PATH" >> ~/.profile
-sudo echo "export LD_LIBRARY_PATH=/usr/local/clang_6.0.0/lib:\$LD_LIBRARY_PATH" >> ~/.profile
-sudo echo "export CC=clang-6.0" >> ~/.profile
-sudo echo "export CXX=clang-6.0" >> ~/.profile
+sudo echo "export PATH=/usr/local/clang_6.0.0/bin:\$PATH" >> /etc/profile
+sudo echo "export LD_LIBRARY_PATH=/usr/local/clang_6.0.0/lib:\$LD_LIBRARY_PATH" >> /etc/profile
+sudo echo "export CC=clang-6.0" >> /etc/profile
+sudo echo "export CXX=clang-6.0" >> /etc/profile
 
-source ~/.profile
+source /etc/profile
 
-clang -v
-clang++ -v
+clang-6.0 -v
 
 chmod +x ./install-cmake.sh
 sudo ./install-cmake.sh
