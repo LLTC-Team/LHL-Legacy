@@ -44,3 +44,19 @@ LVM浮点数的实现需要遵守IEEE 754标准的所有规定，包括存储方
 - [维基百科上的IEEE 754描述](https://zh.wikipedia.org/wiki/IEEE_754)
 - [IEEE 754标准参考文献](https://web.archive.org/web/20070505021348/http://babbage.cs.qc.edu/courses/cs341/IEEE-754references.html)
 - [IEEE 754标准中的详尽的数学原理与某些实现方式](https://docs.oracle.com/cd/E19957-01/806-3568/ncg_goldberg.html)
+
+## 布尔类型
+
+布尔类型（`boolean`）是一种特殊的整数类型，它仅用于储存`1`或`0`（`true`或`false`）。
+
+在LVM中，boolean类型将被当作integer类型实现，boolean类型的数组将被当作byte类型实现，LVM不会提供任何boolean类型专用的字节码指令。
+
+## 引用类型
+
+引用类型（`reference`）表示*堆内存*中的某个位置。reference类型仅存在于LVM内部，不应在上层语言中出现直接的数据类型映射。reference类型与上层语言中可能出现的指针或引用类型没有任何直接联系。
+
+reference将会被实现为一个64位无符号整数，用以支持足够大的堆内存空间的检索。
+
+`null`为reference类型的默认值，在内部以无符号数`0`表示，代表此引用不指向任何实际的内存空间。
+
+LVM对数组的访问，结构体的访问，常量的访问等都将使用reference实现，具体操作将会在LVM字节码指令集中描述。
