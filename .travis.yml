@@ -2,39 +2,39 @@ language: cpp
 
 matrix:
   include:
-	- os: linux
-	  dist: trusty
-	  sudo: required
-	  env:
-		- MATRIX_EVAL="chmod +x ./linux-gcc.sh && ./linux-gcc.sh"
-		- TOOLCHAIN="CC=gcc-7 CXX=g++-7"
-	- os: linux
-	  dist: trusty
-	  sudo: required
-	  env:
-		- MATRIX_EVAL="chmod +x ./linux-clang.sh && ./linux-clang.sh"
-		- TOOLCHAIN="LD_LIBRARY_PATH=/usr/local/clang_6.0.0/lib/ CC=/usr/local/clang_6.0.0/bin/clang CXX=/usr/local/clang_6.0.0/bin/clang++"
-		- LD_LIBRARY_PATH=/usr/local/clang_6.0.0/lib/
-	- os: osx
-	  osx_image: xcode9.2
-	  env:
-		- MATRIX_EVAL="chmod +x ./darwin-gcc.sh && ./darwin-gcc.sh"
-		- TOOLCHAIN="CC=gcc-8 CXX=g++-8"
-	- os: osx
-	  osx_image: xcode9.2
-	  env:
-		- MATRIX_EVAL="chmod +x ./darwin-clang.sh && ./darwin-clang.sh"
-		- TOOLCHAIN="CC=clang CXX=clang++"
+    - os: linux
+      dist: trusty
+      sudo: required
+      env:
+        - MATRIX_EVAL="chmod +x ./linux-gcc.sh && ./linux-gcc.sh"
+        - TOOLCHAIN="CC=gcc-7 CXX=g++-7"
+    - os: linux
+      dist: trusty
+      sudo: required
+      env:
+        - MATRIX_EVAL="chmod +x ./linux-clang.sh && ./linux-clang.sh"
+        - TOOLCHAIN="LD_LIBRARY_PATH=/usr/local/clang_6.0.0/lib/ CC=/usr/local/clang_6.0.0/bin/clang CXX=/usr/local/clang_6.0.0/bin/clang++"
+        - LD_LIBRARY_PATH=/usr/local/clang_6.0.0/lib/
+    - os: osx
+      osx_image: xcode9.2
+      env:
+        - MATRIX_EVAL="chmod +x ./darwin-gcc.sh && ./darwin-gcc.sh"
+        - TOOLCHAIN="CC=gcc-8 CXX=g++-8"
+    - os: osx
+      osx_image: xcode9.2
+      env:
+        - MATRIX_EVAL="chmod +x ./darwin-clang.sh && ./darwin-clang.sh"
+        - TOOLCHAIN="CC=clang CXX=clang++"
 
 before_install:
-	- cd ./ci-script
-	- eval "${MATRIX_EVAL}"
-	- cd ..
+    - cd ./ci-script
+    - eval "${MATRIX_EVAL}"
+    - cd ..
 
 script:
-	- mkdir build
-	- cd build
-	- eval "${TOOLCHAIN} cmake .."
-	- make
-	- ./LML/LMLTest
-	- ./LVM/LVMTest
+    - mkdir build
+    - cd build
+    - eval "${TOOLCHAIN} cmake .."
+    - make
+    - ./LML/LMLTest
+- ./LVM/LVMTest
