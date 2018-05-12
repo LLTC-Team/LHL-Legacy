@@ -64,11 +64,11 @@ LVM::MemoryManager::MemoryManager(AddressType size)
 LVM::Byte* LVM::MemoryManager::GetContent(AddressType address,size_t size)
 {
 	uint32_t index = address / m_PageSize;
-    if ((address + size - 1) / m_PageSize != index)		//size safe check
-    {
-        ThrowError("the size is larger that the memory left in the memory page");
-        return nullptr;
-    }
+	if ((address + size - 1) / m_PageSize != index)		//size safe check
+	{
+		ThrowError("the size is larger that the memory left in the memory page");
+		return nullptr;
+	}
 	if (m_Pages.size() > index)
 	{
 		//do no thing
