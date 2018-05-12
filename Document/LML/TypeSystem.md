@@ -18,7 +18,7 @@ void | v
 ```c++
 int aplusb(int a,int n)
 {
-	return a+b;
+    return a+b;
 }
 ```
 
@@ -62,9 +62,9 @@ TypeId::SetAsClass(const string& name);
 ```c++
 enum class TypeConcept
 {
-	VariableConcept,
-	FunctionConcept,
-	ClassConcept
+    VariableConcept,
+    FunctionConcept,
+    ClassConcept
 };
 
 ```

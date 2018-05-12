@@ -9,7 +9,11 @@ configuration:
   - Release
 
 before_build:
+<<<<<<< HEAD
   - cmake -G "Visual Studio 15 2017 Win64" .
+=======
+    - cmake -G "Visual Studio 15 2017 Win64" .
+>>>>>>> parent of 50e87a1... change 4 space to tab
 
 build:
   project: $(APPVEYOR_BUILD_FOLDER)\$(APPVEYOR_PROJECT_NAME).sln

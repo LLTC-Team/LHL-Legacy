@@ -4,7 +4,7 @@ set(CMAKE_CXX_STANDARD 17)
 
 # force Unicode over Multi-byte
 if(COMPILER_MSVC)
-	add_definitions(-DUNICODE -D_UNICODE)
+    add_definitions(-DUNICODE -D_UNICODE)
 endif()
 
 aux_source_directory(Source MAIN_SRC_LIST)
@@ -14,7 +14,7 @@ include_directories(Include)
 add_executable(LVM ${MAIN_SRC_LIST})
 
 if(CMAKE_SYSTEM_NAME MATCHES "Linux")
-	target_link_libraries(LVM pthread)
+    target_link_libraries(LVM pthread)
 endif()
 
 add_library(LVM_lib STATIC ${MAIN_SRC_LIST})

@@ -37,4 +37,8 @@ script:
     - eval "${TOOLCHAIN} cmake .."
     - make
     - ./LML/LMLTest
+<<<<<<< HEAD
 - ./LVM/LVMTest
+=======
+    - ./LVM/LVMTest
+>>>>>>> parent of 50e87a1... change 4 space to tab

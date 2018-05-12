@@ -3,16 +3,16 @@
 <!-- TOC -->
 
 - [Project LML](#project-lml)
-	- [Overview](#overview)
-	- [Build](#build)
-		- [前置要求](#前置要求)
-		- [构建方法](#构建方法)
-			- [Windows（Visual Studio 2017）](#windowsvisual-studio-2017)
-			- [其他环境](#其他环境)
-	- [Goals](#goals)
-		- [Level 1](#level-1)
-		- [Level 2](#level-2)
-		- [Level 3](#level-3)
+    - [Overview](#overview)
+    - [Build](#build)
+        - [前置要求](#前置要求)
+        - [构建方法](#构建方法)
+            - [Windows（Visual Studio 2017）](#windowsvisual-studio-2017)
+            - [其他环境](#其他环境)
+    - [Goals](#goals)
+        - [Level 1](#level-1)
+        - [Level 2](#level-2)
+        - [Level 3](#level-3)
 - [Author](#author)
 
 <!-- /TOC -->
@@ -64,8 +64,8 @@ _以下目标随时可能变动，请以最新文档为准。_
 - 跨平台
   - 使用CMake为构建系统
   - 跨平台标准库支持
-	- 代码库函数定义接口
-	- 本地代码库动态加载
+    - 代码库函数定义接口
+    - 本地代码库动态加载
   - 跨平台编译
 - 基础目标
   - 词法分析器
@@ -97,15 +97,15 @@ _以下目标随时可能变动，请以最新文档为准。_
 
 - 高级标准库
   - 并发
-	- 线程操控
-	- 原子操作
-	- 并发实用工具
-	- 协程支持
+    - 线程操控
+    - 原子操作
+    - 并发实用工具
+    - 协程支持
   - 跨平台GUI库
-	- Qt封装
+    - Qt封装
   - 3D图形库
-	- OpenGL封装
-	- Vulkan封装
+    - OpenGL封装
+    - Vulkan封装
 - 高级垃圾回收
   - 并发垃圾回收
   - CAS垃圾回收
