@@ -5,7 +5,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+	http://www.apache.org/licenses/LICENSE-2.0
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
@@ -72,7 +72,7 @@ LVM::CommandTypeManager::CommandTypeManager()
 LVM::DefineCommandType::DefineCommandType(Byte index, const std::string& name, const std::vector<ArgumentModeType>& argument_mode, CommandFunctionType func)
 {
 	GetCommandTypeManager().InsertCommandType(CommandType(name, index, argument_mode, func));
-    m_pCommandType= GetCommandTypeManager().GetCommandTypeByIndex(index);
+	m_pCommandType= GetCommandTypeManager().GetCommandTypeByIndex(index);
 }
 
 LVM::Argument::Argument(void * pointer, size_t size)
