@@ -27,6 +27,7 @@ namespace LVM
 		{
 		public:
 			void Run(uint64_t start_command_index,VirtualMachine& vm);
+			void WaitUntilEnd();
 			~Thread();
 			uint64_t m_CommandRunIndex;
 		private:

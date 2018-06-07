@@ -26,13 +26,18 @@ void LVM::VirtualMachine::Thread::Run(uint64_t start_command_index, VirtualMachi
 			m_CommandRunIndex += 1;
 		}
 	});
+}
+
+void LVM::VirtualMachine::Thread::WaitUntilEnd()
+{
 	if (m_Thread.joinable())
 		m_Thread.join();
 }
 
 LVM::VirtualMachine::Thread::~Thread()
 {
-
+	if (m_Thread.joinable())
+		m_Thread.join();
 }
 
 LVM::VirtualMachine::VirtualMachine()
@@ -52,6 +57,7 @@ LVM::MemoryManager& LVM::VirtualMachine::GetMemoryManager()
 void LVM::VirtualMachine::Run()
 {
 	m_Threads[std::this_thread::get_id()].Run(0, *this);
+	m_Threads[std::this_thread::get_id()].WaitUntilEnd();
 }
 
 void LVM::VirtualMachine::RunFromFile(const std::string &filename)
