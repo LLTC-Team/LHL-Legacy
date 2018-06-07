@@ -23,18 +23,34 @@ namespace LVM
 	class VirtualMachine
 	{
 	public:
+		struct Thread
+		{
+		public:
+			void Run(uint64_t start_command_index,VirtualMachine& vm);
+			~Thread();
+			uint64_t m_CommandRunIndex;
+		private:
+			std::thread m_Thread;
+		};
+		friend struct Thread;
+	public:
 		friend struct CommandType;
 
 		VirtualMachine();
 		~VirtualMachine();
 
 		void RunFromFile(const std::string& filename);
-		void Run(const std::vector<Command>& commands);
+		/*
+		before call Run()
+		m_CommandContainer must have commands
+		*/
+		void Run();
 		MemoryManager& GetMemoryManager();
 		void SetCommandRunIndex(uint64_t index);
 	private:
 		std::vector<Command> m_CommandContainer;
 		MemoryManager m_MemoryManager;
-		uint64_t m_CommandRunIndex;
+		std::map<std::thread::id, Thread> m_Threads;
+		std::mutex m_Mutex;
 	};
 }

@@ -16,9 +16,26 @@ limitations under the License.
 #include "LVM/stdafx.h"
 #include "LVM/VirtualMachine.h"
 
+void LVM::VirtualMachine::Thread::Run(uint64_t start_command_index, VirtualMachine& vm)
+{
+	m_CommandRunIndex = start_command_index;
+	m_Thread = std::thread([this, &vm]() {
+		while (m_CommandRunIndex < vm.m_CommandContainer.size())
+		{
+			vm.m_CommandContainer[m_CommandRunIndex].m_Type.m_RunFunction(vm.m_CommandContainer[m_CommandRunIndex], vm);
+			m_CommandRunIndex += 1;
+		}
+	});
+}
+
+LVM::VirtualMachine::Thread::~Thread()
+{
+	if (m_Thread.joinable())
+		m_Thread.join();
+}
+
 LVM::VirtualMachine::VirtualMachine()
 {
-	m_CommandRunIndex=0;
 }
 
 LVM::VirtualMachine::~VirtualMachine()
@@ -31,13 +48,9 @@ LVM::MemoryManager& LVM::VirtualMachine::GetMemoryManager()
 	return m_MemoryManager;
 }
 
-void LVM::VirtualMachine::Run(const std::vector<Command> &commands)
+void LVM::VirtualMachine::Run()
 {
-	while(m_CommandRunIndex<commands.size())
-	{
-		commands[m_CommandRunIndex].m_Type.m_RunFunction(commands[m_CommandRunIndex],*this);
-		m_CommandRunIndex+=1;
-	}
+	m_Threads[std::this_thread::get_id()].Run(0, *this);
 }
 
 void LVM::VirtualMachine::RunFromFile(const std::string &filename)
@@ -49,12 +62,13 @@ void LVM::VirtualMachine::RunFromFile(const std::string &filename)
 	*/
 	std::fstream file;
 	file.open(filename,std::ios::in|std::ios::binary);
-	m_CommandContainer=LoadCommandsFromFile(file);
+	m_CommandContainer = LoadCommandsFromFile(file);
 	file.close();
-	Run(m_CommandContainer);
+	Run();
 }
 
 void LVM::VirtualMachine::SetCommandRunIndex(uint64_t index)
 {
-	m_CommandRunIndex = index;
+	std::lock_guard<std::mutex> locker(m_Mutex);
+	m_Threads[std::this_thread::get_id()].m_CommandRunIndex = index;
 }

@@ -24,6 +24,7 @@ limitations under the License.
 #include <cstring>
 #include <fstream>
 #include <thread>
+#include <mutex>
 
 namespace LVM
 {
