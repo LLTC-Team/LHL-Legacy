@@ -26,12 +26,13 @@ void LVM::VirtualMachine::Thread::Run(uint64_t start_command_index, VirtualMachi
 			m_CommandRunIndex += 1;
 		}
 	});
+	if (m_Thread.joinable())
+		m_Thread.join();
 }
 
 LVM::VirtualMachine::Thread::~Thread()
 {
-	if (m_Thread.joinable())
-		m_Thread.join();
+
 }
 
 LVM::VirtualMachine::VirtualMachine()
