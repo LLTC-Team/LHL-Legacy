@@ -41,14 +41,16 @@ namespace LVM
 		~VirtualMachine();
 
 		void RunFromFile(const std::string& filename);
+		void RunFromMemory(const std::vector<Command> commands);
+		void WaitUntilAllThreadEnd();
+		MemoryManager& GetMemoryManager();
+		void SetCommandRunIndex(uint64_t index);
+	private:
 		/*
 		before call Run()
 		m_CommandContainer must have commands
 		*/
 		void Run();
-		void WaitUntilAllThreadEnd();
-		MemoryManager& GetMemoryManager();
-		void SetCommandRunIndex(uint64_t index);
 	private:
 		std::vector<Command> m_CommandContainer;
 		MemoryManager m_MemoryManager;

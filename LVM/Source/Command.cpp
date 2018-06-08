@@ -131,12 +131,12 @@ void LVM::SaveArgumentToFile(std::fstream & file, const Argument & arg)
 }
 
 LVM::Command::Command(const CommandType &type, const std::vector<Argument> &args)
-	:
-	m_Type(type),m_Argument(args)
+	:m_pType(&type),m_Argument(args)
 {
 }
 
-LVM::Command::Command(const Command& c):m_Type(c.m_Type),m_Argument(c.m_Argument)
+LVM::Command::Command(const Command& c)
+	:m_pType(c.m_pType),m_Argument(c.m_Argument)
 {
 
 }
@@ -157,8 +157,8 @@ LVM::Command LVM::LoadCommandFromFile(std::fstream & file)
 
 void LVM::SaveCommandToFile(std::fstream & file, const Command & cmd)
 {
-	file.write((char*)&cmd.m_Type.m_Index, sizeof(cmd.m_Type.m_Index));
-	for (auto i = 0; i < cmd.m_Type.m_ArgumentMode.size(); i++)
+	file.write((char*)&cmd.m_pType->m_Index, sizeof(cmd.m_pType->m_Index));
+	for (auto i = 0; i < cmd.m_pType->m_ArgumentMode.size(); i++)
 	{
 		SaveArgumentToFile(file, cmd.m_Argument[i]);
 	}

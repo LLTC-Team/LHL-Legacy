@@ -117,7 +117,7 @@ namespace LVM
 	*/
 	struct Command
 	{
-		const CommandType& m_Type;
+		const CommandType* m_pType;
 		std::vector<Argument> m_Argument;
 
 		Command() = delete;

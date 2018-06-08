@@ -22,7 +22,7 @@ void LVM::VirtualMachine::Thread::Run(uint64_t start_command_index, VirtualMachi
 	m_Thread = std::thread([this, &vm]() {
 		while (m_CommandRunIndex < vm.m_CommandContainer.size())
 		{
-			vm.m_CommandContainer[m_CommandRunIndex].m_Type.m_RunFunction(vm.m_CommandContainer[m_CommandRunIndex], vm);
+			vm.m_CommandContainer[m_CommandRunIndex].m_pType->m_RunFunction(vm.m_CommandContainer[m_CommandRunIndex], vm);
 			m_CommandRunIndex += 1;
 		}
 	});
@@ -52,6 +52,12 @@ LVM::VirtualMachine::~VirtualMachine()
 LVM::MemoryManager& LVM::VirtualMachine::GetMemoryManager()
 {
 	return m_MemoryManager;
+}
+
+void LVM::VirtualMachine::RunFromMemory(const std::vector<Command> commands)
+{
+	m_CommandContainer = commands;
+	Run();
 }
 
 void LVM::VirtualMachine::Run()
