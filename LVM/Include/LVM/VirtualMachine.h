@@ -46,6 +46,7 @@ namespace LVM
 		m_CommandContainer must have commands
 		*/
 		void Run();
+		void WaitUntilAllThreadEnd();
 		MemoryManager& GetMemoryManager();
 		void SetCommandRunIndex(uint64_t index);
 	private:

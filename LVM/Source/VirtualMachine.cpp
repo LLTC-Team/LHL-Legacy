@@ -56,6 +56,10 @@ LVM::MemoryManager& LVM::VirtualMachine::GetMemoryManager()
 
 void LVM::VirtualMachine::Run()
 {
+	/*
+	add main thread
+	wait for main thread end
+	*/
 	m_Threads[std::this_thread::get_id()].Run(0, *this);
 	m_Threads[std::this_thread::get_id()].WaitUntilEnd();
 }
@@ -72,6 +76,14 @@ void LVM::VirtualMachine::RunFromFile(const std::string &filename)
 	m_CommandContainer = LoadCommandsFromFile(file);
 	file.close();
 	Run();
+}
+
+void LVM::VirtualMachine::WaitUntilAllThreadEnd()
+{
+	for (auto& i : m_Threads)
+	{
+		i.second.WaitUntilEnd();
+	}
 }
 
 void LVM::VirtualMachine::SetCommandRunIndex(uint64_t index)
