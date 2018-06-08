@@ -13,11 +13,9 @@ include_directories(Include)
 #Useless for develop environment
 add_executable(LML ${MAIN_SRC_LIST})
 
-if(CMAKE_SYSTEM_NAME MATCHES "Linux")
-    target_link_libraries(LML pthread)
-endif()
-
 add_library(LML_lib STATIC ${MAIN_SRC_LIST})
+
+target_link_libraries(LML_lib Threads::Threads)
 
 add_executable(LMLTest Tests/Tests.cpp)
 target_link_libraries(LMLTest CATCH LML_lib)
