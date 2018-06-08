@@ -13,6 +13,8 @@ include_directories(Include)
 #Useless for develop environment
 add_executable(LVM ${MAIN_SRC_LIST})
 
+target_link_libraries(LVM Threads::Threads)
+
 add_library(LVM_lib STATIC ${MAIN_SRC_LIST})
 
 target_link_libraries(LVM_lib Threads::Threads)

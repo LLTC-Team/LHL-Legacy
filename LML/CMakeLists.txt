@@ -13,6 +13,8 @@ include_directories(Include)
 #Useless for develop environment
 add_executable(LML ${MAIN_SRC_LIST})
 
+target_link_libraries(LML Threads::Threads)
+
 add_library(LML_lib STATIC ${MAIN_SRC_LIST})
 
 target_link_libraries(LML_lib Threads::Threads)
