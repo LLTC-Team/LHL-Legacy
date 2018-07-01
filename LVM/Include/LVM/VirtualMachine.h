@@ -40,6 +40,7 @@ namespace LVM
 			uint64_t m_CommandRunIndex;
 		private:
 			Thread() = default;
+
 			std::thread m_Thread;
 			std::thread::id m_Id;
 		};

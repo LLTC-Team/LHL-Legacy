@@ -98,7 +98,9 @@ TEST_CASE("Test Copy Move Goto Jump_If", "[LVMTest][Command]")
 		Command(*AssignCommand.m_pCommandType,{ SetMemoryAddress({ 0 }),Argument(new bool(true)) }),
 		Command(*CopyCommand.m_pCommandType,{SetMemoryAddress({4}),SetMemoryAddress({0}),Argument(new uint64_t(sizeof(bool)))}),
 		Command(*MoveCommand.m_pCommandType,{ SetMemoryAddress({ 8 }),SetMemoryAddress({ 0 }),Argument(new uint64_t(sizeof(bool))) }),
-		Command(*JumpIfCommand.m_pCommandType,{Argument(new uint64_t(5)),SetMemoryAddress({4})}),
+		Command(*AssignCommand.m_pCommandType,{ SetMemoryAddress({ 12 }),Argument(new int32_t(0)) }),
+		Command(*JumpIfCommand.m_pCommandType,{Argument(new uint64_t(7)),SetMemoryAddress({4})}),
+		Command(*AssignCommand.m_pCommandType,{SetMemoryAddress({12}),Argument(new int32_t(1))}),
 		Command(*GotoCommand.m_pCommandType,{Argument(new uint64_t(0))})
 	};
 	SaveCommandsToFile(file, commands);
@@ -108,4 +110,5 @@ TEST_CASE("Test Copy Move Goto Jump_If", "[LVMTest][Command]")
 	REQUIRE(vm.GetMemoryManager().GetContent<bool>(4) == true);
 	REQUIRE(vm.GetMemoryManager().GetContent<bool>(8) == true);
 	REQUIRE(vm.GetMemoryManager().GetContent<bool>(0) == false);
+	REQUIRE(vm.GetMemoryManager().GetContent<int32_t>(12) == 0);
 }
