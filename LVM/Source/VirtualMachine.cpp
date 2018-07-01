@@ -20,6 +20,10 @@ void LVM::VirtualMachine::Thread::Run(uint64_t start_command_index, VirtualMachi
 {
 	m_CommandRunIndex = start_command_index;
 	m_Thread = std::thread([this, &vm]() {
+		m_Id = std::this_thread::get_id();
+		vm.m_Mutex.lock();
+		vm.m_Thread[m_Id] = this;
+		vm.m_Mutex.unlock();
 		while (m_CommandRunIndex < vm.m_CommandContainer.size())
 		{
 			vm.m_CommandContainer[m_CommandRunIndex].m_pType->m_RunFunction(vm.m_CommandContainer[m_CommandRunIndex], vm);
@@ -34,6 +38,15 @@ void LVM::VirtualMachine::Thread::WaitUntilEnd()
 		m_Thread.join();
 }
 
+unsigned int LVM::VirtualMachine::Thread::GetId()
+{
+	unsigned int re = 0;
+	std::stringstream ss;
+	ss << m_Id;
+	ss >> re;
+	return re;
+}
+
 LVM::VirtualMachine::Thread::~Thread()
 {
 	if (m_Thread.joinable())
@@ -46,7 +59,11 @@ LVM::VirtualMachine::VirtualMachine()
 
 LVM::VirtualMachine::~VirtualMachine()
 {
-
+	for (auto i : m_Thread)
+	{
+		if(i.second)
+			delete i.second;
+	}
 }
 
 LVM::MemoryManager& LVM::VirtualMachine::GetMemoryManager()
@@ -66,8 +83,9 @@ void LVM::VirtualMachine::Run()
 	add main thread
 	wait for main thread end
 	*/
-	m_Threads[std::this_thread::get_id()].Run(0, *this);
-	m_Threads[std::this_thread::get_id()].WaitUntilEnd();
+	Thread* main_thread = new Thread();
+	main_thread->Run(0, *this);
+	main_thread->WaitUntilEnd();
 }
 
 void LVM::VirtualMachine::RunFromFile(const std::string &filename)
@@ -86,14 +104,20 @@ void LVM::VirtualMachine::RunFromFile(const std::string &filename)
 
 void LVM::VirtualMachine::WaitUntilAllThreadEnd()
 {
-	for (auto& i : m_Threads)
+	for (auto i : m_Thread)
 	{
-		i.second.WaitUntilEnd();
+		i.second->WaitUntilEnd();
 	}
+}
+
+void LVM::VirtualMachine::AddThread(uint64_t start_command_index)
+{
+	Thread* thread = new Thread();
+	thread->Run(start_command_index, *this);
 }
 
 void LVM::VirtualMachine::SetCommandRunIndex(uint64_t index)
 {
 	std::lock_guard<std::mutex> locker(m_Mutex);
-	m_Threads[std::this_thread::get_id()].m_CommandRunIndex = index;
+	m_Thread[std::this_thread::get_id()]->m_CommandRunIndex = index;
 }
