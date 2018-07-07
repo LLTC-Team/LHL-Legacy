@@ -17,6 +17,7 @@ limitations under the License.
 #include "stdafx.h"
 #include "VirtualMachine.h"
 #include "LVMSDK.h"
+#include "DLL.h"
 
 const LVM::DefineCommandType NullCommand(0, "null", {});
 
