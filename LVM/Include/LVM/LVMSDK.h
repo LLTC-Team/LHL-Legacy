@@ -3,6 +3,7 @@
 #include <map>
 #include <functional>
 #include <iostream>
+#include <cassert>
 
 namespace LVM
 {
