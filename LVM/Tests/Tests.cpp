@@ -112,3 +112,16 @@ TEST_CASE("Test Copy Move Goto Jump_If", "[LVMTest][Command]")
 	REQUIRE(vm.GetMemoryManager().GetContent<bool>(0) == false);
 	REQUIRE(vm.GetMemoryManager().GetContent<int32_t>(12) == 0);
 }
+
+void TestFunc1(int a, int b)
+{
+	std::cout << a + b << std::endl;
+}
+
+TEST_CASE("Test LVMSDK", "[LVMTest][LVMSDK]")
+{
+	auto test_func = GetLibraryFunction(TestFunc1);
+	auto test_pair = LVM_LIBRARY_FUNCTION(TestFunc1);
+	int a = 1, b = 2;
+	test_func({ {&a,4} ,{&b,4} });
+}
