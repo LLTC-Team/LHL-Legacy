@@ -71,12 +71,12 @@ namespace LVM
 	template<typename T>
 	inline T GetLibraryFunctionArgument(size_t cot, std::vector<std::pair<void*, size_t>> args)
 	{
+		using decay_type = typename std::decay<T>::type;
 		if (sizeof(T) == args[cot].second)
-			return (*(T*)(args[cot].first));
+			return (*(decay_type*)(args[cot].first));
 		else
 		{
 			abort();
-			return T();
 		}
 	}
 
