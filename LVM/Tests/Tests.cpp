@@ -62,14 +62,14 @@ TEST_CASE("Test MemoryAddress In Argument", "[LVMTest][Argument][MemoryManager]"
 		MemoryManager mm_2;
 		Argument arg2 = SetMemoryAddress({ 0, 8 });
 
-		auto memory_address2 = GetMemoryAddress(arg2, mm_2);
-		REQUIRE(memory_address2 == 8);
+        auto memory_address2 = GetMemoryAddress(arg2, mm_2);
+        REQUIRE(memory_address2 == 8);
 
-		Argument arg3 = SetMemoryAddress({ 0, 16 }, true);
+        Argument arg3 = SetMemoryAddress({0, 16}, true);
 
-		auto memory_address3 = GetMemoryAddress(arg3, mm_2);
-		REQUIRE(memory_address3 == 0);
-	}
+        auto memory_address3 = GetMemoryAddress(arg3, mm_2);
+        REQUIRE(memory_address3 == 0);
+    }
 }
 TEST_CASE("Test Command", "[LVMTest][Command]")
 {
@@ -118,22 +118,20 @@ void TestFunc1(int a, int b)
 	std::cout << a + b << std::endl;
 }
 
-TEST_CASE("Test LVMSDK", "[LVMTest][LVMSDK]")
-{
-	auto test_func = GetLibraryFunction(TestFunc1);
-	auto test_pair = LVM_LIBRARY_FUNCTION(TestFunc1);
-	int a = 1, b = 2;
-	test_func({ {&a,4} ,{&b,4} });
-}
-
-TEST_CASE("Test DLL", "[LVMTest][LVMSDK]")
-{
+TEST_CASE("Test DLL", "[LVMTest][LVMSDK]") {
 #ifdef _WIN32
-	DLL test_dll("../TestData/LVMDLL.dll");
-	using TestDLLFunctionType = void(*)();
-	TestDLLFunctionType test_func= (TestDLLFunctionType)test_dll.GetAddress("TestDLL");
-	test_func();
-#else
-
+    DLL test_dll("./TestLib/libTestLib.dll");
 #endif
+
+#ifdef __APPLE__
+    DLL test_dll("./TestLib/libTestLib.dylib");
+#endif
+
+#ifdef __linux__
+    DLL test_dell("./TestLib/libTestLib.so");
+#endif
+
+    using TestDLLFunctionType = void (*)();
+    TestDLLFunctionType test_func = (TestDLLFunctionType) test_dll.GetAddress("greet");
+    test_func();
 }
