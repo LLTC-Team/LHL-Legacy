@@ -45,7 +45,7 @@ namespace LVM
 
 	}
 
-	inline const LVMSDKFunction & Library::GetFunction(const std::string & name)
+	inline const LVMSDKFunction & Library::GetFunction(const std::string & name)const
 	{
 		auto iter = m_Function.find(name);
 		if (iter == m_Function.end())
@@ -60,7 +60,7 @@ namespace LVM
 #define LVM_LIBRARY_IMPLEMENT(lib_name,author_name,version,lvm_version,...) \
 	const LVM::Library& GetLibrary() \
 	{ \
-		static LVM::Library g_Library(lib_name,author_name,version,lvm_verion,##__VA_ARGS__);\
+		static LVM::Library g_Library(lib_name,author_name,version,lvm_version,##__VA_ARGS__);\
 		return g_Library;\
 	}
 #define LVM_LIBRARY_FUNCTION(func) std::make_pair(#func,LVM::GetLibraryFunction(func))
