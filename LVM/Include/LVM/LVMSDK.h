@@ -29,7 +29,7 @@ namespace LVM
 	{
 	public:
 		Library(const std::string& name, const std::string& author_name, const std::string& version, const std::string& lvm_version, const std::map<std::string, LVMSDKFunction>& functions);
-		const LVMSDKFunction& GetFunction(const std::string& name);
+		const LVMSDKFunction& GetFunction(const std::string& name)const;
 	public:
 		std::string m_Name;
 		std::string m_AuthorName;
