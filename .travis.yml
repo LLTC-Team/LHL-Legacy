@@ -36,5 +36,5 @@ script:
     - cd build
     - eval "${TOOLCHAIN} cmake .."
     - make
-    - ./LML/LMLTest
-    - ./LVM/LVMTest
+    - add LML && ./LMLTest && add ..
+    - add LVM && ./LVMTest && add ..
