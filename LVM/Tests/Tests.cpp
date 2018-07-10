@@ -128,7 +128,7 @@ TEST_CASE("Test DLL", "[LVMTest][LVMSDK]") {
 #endif
 
 #ifdef __linux__
-    DLL test_dell("./TestLib/libTestLib.so");
+    DLL test_dll("./TestLib/libTestLib.so");
 #endif
 
     using TestDLLFunctionType = void (*)();
