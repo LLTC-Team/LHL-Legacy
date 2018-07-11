@@ -4,6 +4,7 @@
 !Include/
 !Source/
 !Tests/
+!TestLib/
 !.gitattributes
 !.gitignore
 !CMakeLists.txt
