@@ -120,7 +120,7 @@ void TestFunc1(int a, int b)
 
 TEST_CASE("Test DLL", "[LVMTest][LVMSDK]") {
 #ifdef _WIN32
-    DLL test_dll("./TestLib/Release/TestLib.dll");
+    DLL test_dll("./TestLib/TestLib.dll");
 #endif
 
 #ifdef __APPLE__

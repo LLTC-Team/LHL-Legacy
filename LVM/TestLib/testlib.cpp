@@ -1,9 +1,15 @@
 #include "LVM/LVMSDK.h"
 
-extern "C" {
-LVM_LIBRARY_DECLARE
+#ifdef _WIN32
+#define TEST_DLL_EXPORT __declspec(dllexport)
+#else
+#define TEST_DLL_EXPORT
+#endif
 
-void greet() {
+extern "C" {
+TEST_DLL_EXPORT LVM_LIBRARY_DECLARE
+
+TEST_DLL_EXPORT void greet() {
     std::cout << "hello world" << std::endl;
 }
 
