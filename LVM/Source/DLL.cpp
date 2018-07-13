@@ -20,7 +20,7 @@ LVM::DLL::DLL(const std::string & filename)
 {
 
 #ifdef _WIN32
-	m_Content = LoadLibraryA(filename.c_str());
+	m_pContent = LoadLibraryA(filename.c_str());
 #else
 	m_pContent = dlopen(filename.c_str(), RTLD_NOW);
 #endif
@@ -34,7 +34,7 @@ LVM::DLL::~DLL()
 	if (m_pContent)
 	{
 #ifdef _WIN32
-		FreeLibrary(m_Content);
+		FreeLibrary(m_pContent);
 #else
 		dlclose(m_pContent);
 #endif
@@ -45,7 +45,7 @@ void * LVM::DLL::GetAddress(const std::string & name)
 {
 
 #ifdef _WIN32
-	void* re = GetProcAddress(m_Content, name.c_str());
+	void* re = GetProcAddress(m_pContent, name.c_str());
 #else
 	void* re = dlsym(m_pContent, name.c_str());
 #endif

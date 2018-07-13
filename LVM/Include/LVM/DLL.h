@@ -31,7 +31,7 @@ namespace LVM
 		void* GetAddress(const std::string& name);
 	private:
 #ifdef _WIN32
-		HMODULE m_Content;
+		HMODULE m_pContent;
 #else
 		void* m_pContent;
 #endif
