@@ -16,35 +16,15 @@ limitations under the License.
 #include "LVM/stdafx.h"
 #include "LVM/DLL.h"
 
+LVM::DLL::DLL(const std::string & filename)
+{
+
 #ifdef _WIN32
-LVM::DLL::DLL(const std::string & filename)
-{
 	m_Content = LoadLibraryA(filename.c_str());
-	if (!m_Content)
-		ThrowError("DLL " + filename + " Failed");
-}
-
-LVM::DLL::~DLL()
-{
-	if(m_Content)
-		FreeLibrary(m_Content);
-}
-
-void * LVM::DLL::GetAddress(const std::string & name)
-{
-	void* re = GetProcAddress(m_Content, name.c_str());
-	if (re)
-		return re;
-	else
-	{
-		ThrowError("can not find " + name + " in dll");
-		return nullptr;
-	}
-}
 #else
-LVM::DLL::DLL(const std::string & filename)
-{
 	m_pContent = dlopen(filename.c_str(), RTLD_NOW);
+#endif
+
 	if(!m_pContent)
 		ThrowError("DLL " + filename + " Failed");
 }
@@ -52,12 +32,24 @@ LVM::DLL::DLL(const std::string & filename)
 LVM::DLL::~DLL()
 {
 	if (m_pContent)
+	{
+#ifdef _WIN32
+		FreeLibrary(m_Content);
+#else
 		dlclose(m_pContent);
+#endif
+	}
 }
 
 void * LVM::DLL::GetAddress(const std::string & name)
 {
+
+#ifdef _WIN32
+	void* re = GetProcAddress(m_Content, name.c_str());
+#else
 	void* re = dlsym(m_pContent, name.c_str());
+#endif
+
 	if (re)
 		return re;
 	else
@@ -66,4 +58,3 @@ void * LVM::DLL::GetAddress(const std::string & name)
 		return nullptr;
 	}
 }
-#endif

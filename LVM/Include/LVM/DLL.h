@@ -23,25 +23,17 @@ limitations under the License.
 
 namespace LVM
 {
+	class DLL
+	{
+	public:
+		DLL(const std::string& filename);
+		~DLL();
+		void* GetAddress(const std::string& name);
+	private:
 #ifdef _WIN32
-	class DLL
-	{
-	public:
-		DLL(const std::string& filename);
-		~DLL();
-		void* GetAddress(const std::string& name);
-	private:
 		HMODULE m_Content;
-	};
 #else
-	class DLL
-	{
-	public:
-		DLL(const std::string& filename);
-		~DLL();
-		void* GetAddress(const std::string& name);
-	private:
 		void* m_pContent;
-	};
 #endif
+	};
 }
