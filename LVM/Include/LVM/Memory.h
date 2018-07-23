@@ -53,6 +53,8 @@ namespace LVM
 		AddressType m_Size;
 	};
 
+	using MemoryLink = std::function<void*()>;
+
 	class MemoryManager
 	{
 	public:
@@ -68,7 +70,8 @@ namespace LVM
 		AddressType GetPageSize();
 	private:
 		AddressType m_PageSize;
-		std::vector<MemoryPage> m_Pages;
+		std::vector<MemoryPage> m_Page;
+		std::map<AddressType, MemoryLink> m_Link;
 	};
 
 	/*
@@ -81,4 +84,26 @@ namespace LVM
 	Include Memory Address Jumping
 	*/
 	AddressType GetMemoryAddress(const Argument &arg, MemoryManager &memory_manager);
+
+	struct MemoryAddress
+	{
+		AddressType m_Content = 0;
+		bool m_IfLink = false;		//是否是内存链接
+	};
+
+	enum class MemoryAddressArgumentType:Byte
+	{
+		Default = 0,
+		Jump = 1,
+		Link = 2
+	};
+
+	struct MemoryAddressArgument
+	{
+		AddressType m_Content = 0;
+		MemoryAddressArgumentType m_Type = MemoryAddressArgumentType::Default;
+	};
+
+	Argument MemoryAddressArgumentToArgument(const std::vector<MemoryAddressArgument>& maa);
+	std::vector<MemoryAddressArgument> ArgumentToMemoryAddressArgument(const Argument& arg);
 }

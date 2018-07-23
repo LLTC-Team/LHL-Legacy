@@ -69,26 +69,26 @@ LVM::Byte* LVM::MemoryManager::GetContent(AddressType address,size_t size)
 		ThrowError("the size is larger that the memory left in the memory page");
 		return nullptr;
 	}
-	if (m_Pages.size() > index)
+	if (m_Page.size() > index)
 	{
 		//do no thing
 	}
 	else
  	{
-		for (size_t i = m_Pages.size(); i <= index; i++)
+		for (size_t i = m_Page.size(); i <= index; i++)
 		{
-			m_Pages.emplace_back();
+			m_Page.emplace_back();
 		}
 	}
-	if (m_Pages[index].m_pContent)
+	if (m_Page[index].m_pContent)
 	{
 		//do no thing
 	}
 	else
 	{
-		m_Pages[index].Allocate(m_PageSize);
+		m_Page[index].Allocate(m_PageSize);
 	}
-	return &m_Pages[index].m_pContent[address % m_PageSize];
+	return &m_Page[index].m_pContent[address % m_PageSize];
 }
 
 LVM::AddressType LVM::MemoryManager::GetPageSize()
@@ -135,5 +135,21 @@ LVM::AddressType LVM::GetMemoryAddress(const Argument &arg, MemoryManager &memor
 		}
 
 	}
+	return re;
+}
+
+LVM::Argument LVM::MemoryAddressArgumentToArgument(const std::vector<MemoryAddressArgument>& maa)
+{
+	size_t size = maa.size() * sizeof(MemoryAddressArgument);
+	void* ptr = new Byte[size];
+	memcpy(ptr, maa.data(), size);
+	return Argument(ptr, size);
+}
+
+std::vector<LVM::MemoryAddressArgument> LVM::ArgumentToMemoryAddressArgument(const Argument & arg)
+{
+	std::vector<MemoryAddressArgument> re;
+	re.resize(arg.m_Size / sizeof(MemoryAddressArgument));
+	memcpy(re.data(), arg.m_pContent, arg.m_Size);
 	return re;
 }

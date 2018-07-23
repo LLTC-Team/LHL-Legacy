@@ -29,7 +29,7 @@ limitations under the License.
 
 namespace LVM
 {
-	typedef unsigned char Byte;
+	typedef uint8_t Byte;
 
 	void ThrowError(const std::string& str);
 }
