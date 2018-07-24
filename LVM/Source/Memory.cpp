@@ -175,16 +175,24 @@ bool LVM::operator == (const MemoryAddressArgument& maa1, const MemoryAddressArg
 
 LVM::Argument LVM::MemoryAddressArgumentToArgument(const std::vector<MemoryAddressArgument>& maa)
 {
-	SizeType size = maa.size() * sizeof(MemoryAddressArgument);
+	SizeType size = maa.size() * (sizeof(AddressType) + sizeof(MemoryAddressArgumentType));
 	void* ptr = new Byte[size];
-	memcpy(ptr, maa.data(), size);
+	for (size_t i = 0; i < maa.size(); i++)
+	{
+		memcpy((Byte*)ptr + i * (sizeof(AddressType) + sizeof(MemoryAddressArgumentType)), &maa[i].m_Content, sizeof(AddressType));
+		memcpy((Byte*)ptr + i * (sizeof(AddressType) + sizeof(MemoryAddressArgumentType)) + sizeof(AddressType), &maa[i].m_Type, sizeof(MemoryAddressArgumentType));
+	}
 	return Argument(ptr, size);
 }
 
 std::vector<LVM::MemoryAddressArgument> LVM::ArgumentToMemoryAddressArgument(const Argument & arg)
 {
 	std::vector<MemoryAddressArgument> re;
-	re.resize(arg.m_Size / sizeof(MemoryAddressArgument));
-	memcpy(re.data(), arg.m_pContent, arg.m_Size);
+	re.resize(arg.m_Size / (sizeof(AddressType) + sizeof(MemoryAddressArgumentType)));
+	for (size_t i = 0; i < re.size(); i++)
+	{
+		memcpy(&re[i].m_Content, (Byte*)arg.m_pContent + i * (sizeof(AddressType) + sizeof(MemoryAddressArgumentType)), sizeof(AddressType));
+		memcpy(&re[i].m_Type, (Byte*)arg.m_pContent + i * (sizeof(AddressType) + sizeof(MemoryAddressArgumentType)) + sizeof(AddressType), sizeof(MemoryAddressArgumentType));
+	}
 	return re;
 }
