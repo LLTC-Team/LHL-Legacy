@@ -61,7 +61,7 @@ LVM::MemoryManager::MemoryManager(AddressType size)
 	m_PageSize = size;
 }
 
-LVM::Byte* LVM::MemoryManager::GetContent(AddressType address,size_t size)
+LVM::Byte* LVM::MemoryManager::GetContent(AddressType address,SizeType size)
 {
 	uint32_t index = address / m_PageSize;
 	if ((address + size - 1) / m_PageSize != index)		//size safe check
@@ -75,7 +75,7 @@ LVM::Byte* LVM::MemoryManager::GetContent(AddressType address,size_t size)
 	}
 	else
  	{
-		for (size_t i = m_Page.size(); i <= index; i++)
+		for (SizeType i = m_Page.size(); i <= index; i++)
 		{
 			m_Page.emplace_back();
 		}
@@ -105,7 +105,7 @@ LVM::Byte * LVM::MemoryManager::GetLinkContent(AddressType address)
 	}
 }
 
-LVM::Byte * LVM::MemoryManager::GetContent(const std::vector<MemoryAddressArgument>& maa, size_t size)
+LVM::Byte * LVM::MemoryManager::GetContent(const std::vector<MemoryAddressArgument>& maa, SizeType size)
 {
 	Byte* re = nullptr;
 	AddressType address = 0;
@@ -175,16 +175,24 @@ bool LVM::operator == (const MemoryAddressArgument& maa1, const MemoryAddressArg
 
 LVM::Argument LVM::MemoryAddressArgumentToArgument(const std::vector<MemoryAddressArgument>& maa)
 {
-	size_t size = maa.size() * sizeof(MemoryAddressArgument);
+	SizeType size = maa.size() * (sizeof(AddressType) + sizeof(MemoryAddressArgumentType));
 	void* ptr = new Byte[size];
-	memcpy(ptr, maa.data(), size);
+	for (size_t i = 0; i < maa.size(); i++)
+	{
+		memcpy((Byte*)ptr + i * (sizeof(AddressType) + sizeof(MemoryAddressArgumentType)), &maa[i].m_Content, sizeof(AddressType));
+		memcpy((Byte*)ptr + i * (sizeof(AddressType) + sizeof(MemoryAddressArgumentType)) + sizeof(AddressType), &maa[i].m_Type, sizeof(MemoryAddressArgumentType));
+	}
 	return Argument(ptr, size);
 }
 
 std::vector<LVM::MemoryAddressArgument> LVM::ArgumentToMemoryAddressArgument(const Argument & arg)
 {
 	std::vector<MemoryAddressArgument> re;
-	re.resize(arg.m_Size / sizeof(MemoryAddressArgument));
-	memcpy(re.data(), arg.m_pContent, arg.m_Size);
+	re.resize(arg.m_Size / (sizeof(AddressType) + sizeof(MemoryAddressArgumentType)));
+	for (size_t i = 0; i < re.size(); i++)
+	{
+		memcpy(&re[i].m_Content, (Byte*)arg.m_pContent + i * (sizeof(AddressType) + sizeof(MemoryAddressArgumentType)), sizeof(AddressType));
+		memcpy(&re[i].m_Type, (Byte*)arg.m_pContent + i * (sizeof(AddressType) + sizeof(MemoryAddressArgumentType)) + sizeof(AddressType), sizeof(MemoryAddressArgumentType));
+	}
 	return re;
 }

@@ -48,7 +48,7 @@ TEST_CASE("Test Command", "[LVMTest][Command]")
 TEST_CASE("Test Assign Command", "[LVMTest][Command]")
 {
 	fstream file("test_assign.lll", ios::out | ios::binary);
-	std::vector<Command> commands{ Command(*AssignCommand.m_pCommandType,{MemoryAddressArgumentToArgument({MemoryAddressArgument(0)}),Argument(new int(1),1)}) };
+	std::vector<Command> commands{ Command(*AssignCommand.m_pCommandType,{MemoryAddressArgumentToArgument({MemoryAddressArgument(0)}),Argument(new int(1))}) };
 	SaveCommandsToFile(file, commands);
 	file.close();
 	VirtualMachine vm;
