@@ -74,10 +74,10 @@ namespace LVM
 	struct Argument
 	{
 		Byte* m_pContent;
-		size_t m_Size;
+		SizeType m_Size;
 
 		Argument() = delete;
-		Argument(void* pointer, size_t size);
+		Argument(void* pointer, SizeType size);
 		template<typename T>
 		Argument(T* ptr)
 		{

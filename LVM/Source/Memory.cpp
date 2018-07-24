@@ -61,7 +61,7 @@ LVM::MemoryManager::MemoryManager(AddressType size)
 	m_PageSize = size;
 }
 
-LVM::Byte* LVM::MemoryManager::GetContent(AddressType address,size_t size)
+LVM::Byte* LVM::MemoryManager::GetContent(AddressType address,SizeType size)
 {
 	uint32_t index = address / m_PageSize;
 	if ((address + size - 1) / m_PageSize != index)		//size safe check
@@ -75,7 +75,7 @@ LVM::Byte* LVM::MemoryManager::GetContent(AddressType address,size_t size)
 	}
 	else
  	{
-		for (size_t i = m_Page.size(); i <= index; i++)
+		for (SizeType i = m_Page.size(); i <= index; i++)
 		{
 			m_Page.emplace_back();
 		}
@@ -105,7 +105,7 @@ LVM::Byte * LVM::MemoryManager::GetLinkContent(AddressType address)
 	}
 }
 
-LVM::Byte * LVM::MemoryManager::GetContent(const std::vector<MemoryAddressArgument>& maa, size_t size)
+LVM::Byte * LVM::MemoryManager::GetContent(const std::vector<MemoryAddressArgument>& maa, SizeType size)
 {
 	Byte* re = nullptr;
 	AddressType address = 0;
@@ -175,7 +175,7 @@ bool LVM::operator == (const MemoryAddressArgument& maa1, const MemoryAddressArg
 
 LVM::Argument LVM::MemoryAddressArgumentToArgument(const std::vector<MemoryAddressArgument>& maa)
 {
-	size_t size = maa.size() * sizeof(MemoryAddressArgument);
+	SizeType size = maa.size() * sizeof(MemoryAddressArgument);
 	void* ptr = new Byte[size];
 	memcpy(ptr, maa.data(), size);
 	return Argument(ptr, size);

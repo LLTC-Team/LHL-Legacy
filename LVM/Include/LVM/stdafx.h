@@ -30,6 +30,7 @@ limitations under the License.
 namespace LVM
 {
 	typedef uint8_t Byte;
+	typedef uint64_t SizeType;
 
 	void ThrowError(const std::string& str);
 }

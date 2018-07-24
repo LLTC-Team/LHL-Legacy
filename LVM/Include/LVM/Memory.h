@@ -61,7 +61,7 @@ namespace LVM
 	public:
 		MemoryManager(AddressType size = MemoryPage::MemoryPageDefaultSize);
 
-		Byte* GetContent(const std::vector<MemoryAddressArgument>& maa, size_t size = 1);
+		Byte* GetContent(const std::vector<MemoryAddressArgument>& maa, SizeType size = 1);
 
 		template<typename T>
 		T& GetContent(const std::vector<MemoryAddressArgument>& maa)
@@ -73,7 +73,7 @@ namespace LVM
 
 		AddressType GetPageSize();
 	private:
-		Byte * GetContent(AddressType address, size_t size = 1);
+		Byte * GetContent(AddressType address, SizeType size = 1);
 
 		template<typename T>
 		T& GetContent(AddressType address)

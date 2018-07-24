@@ -75,7 +75,7 @@ LVM::DefineCommandType::DefineCommandType(Byte index, const std::string& name, c
 	m_pCommandType= GetCommandTypeManager().GetCommandTypeByIndex(index);
 }
 
-LVM::Argument::Argument(void * pointer, size_t size)
+LVM::Argument::Argument(void * pointer, SizeType size)
 {
 	if (!pointer)
 	{
@@ -108,7 +108,7 @@ LVM::Argument & LVM::Argument::operator=(const Argument & arg)
 
 LVM::Argument LVM::LoadArgumentFromFile(std::fstream & file)
 {
-	size_t size;
+	SizeType size;
 	void* pc;
 	file.read((char*)&size, sizeof(size));
 	if (size > 0)
