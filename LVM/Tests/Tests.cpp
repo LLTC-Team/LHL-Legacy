@@ -8,11 +8,6 @@
 using namespace LVM;
 using namespace std;
 
-unsigned int Factorial(unsigned int number)
-{
-	return number <= 1 ? number : Factorial(number - 1) * number;
-}
-
 TEST_CASE("Test MemoryManager", "[LVMTest][MemoryManager]")
 {
 	MemoryManager mm;
@@ -77,9 +72,9 @@ TEST_CASE("Test Copy Move Goto Jump_If", "[LVMTest][Command]")
 	file.close();
 	VirtualMachine vm;
 	vm.RunFromFile("test_cmgj.lll");
-	REQUIRE(vm.GetMemoryManager().GetContent<bool>({ MemoryAddressArgument(4) }) == true);
-	REQUIRE(vm.GetMemoryManager().GetContent<bool>({ MemoryAddressArgument(8) }) == true);
-	REQUIRE(vm.GetMemoryManager().GetContent<bool>({ MemoryAddressArgument(0) }) == false);
+	REQUIRE(vm.GetMemoryManager().GetContent<bool>({ MemoryAddressArgument(4) }));
+	REQUIRE(vm.GetMemoryManager().GetContent<bool>({ MemoryAddressArgument(8) }));
+	REQUIRE_FALSE(vm.GetMemoryManager().GetContent<bool>({ MemoryAddressArgument(0) }));
 	REQUIRE(vm.GetMemoryManager().GetContent<int32_t>({ MemoryAddressArgument(12) }) == 0);
 }
 
@@ -100,6 +95,7 @@ TEST_CASE("Test MemoryManager Link", "[LVMTest][MemoryManager][Command]")
 	VirtualMachine vm;
 	vm.GetMemoryManager().AddLink(1, [&test_address]() {return &test_address; });
 	vm.RunFromFile("test_link.lll");
+
 	REQUIRE(vm.GetMemoryManager().GetContent<uint64_t>({ MemoryAddressArgument(8) }) == 8);
 }
 
