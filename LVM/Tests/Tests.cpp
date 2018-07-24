@@ -13,25 +13,9 @@ unsigned int Factorial(unsigned int number)
 	return number <= 1 ? number : Factorial(number - 1) * number;
 }
 
-TEST_CASE("Factorials are computed", "[factorial]")
-{
-	REQUIRE(Factorial(1) == 1);
-	REQUIRE(Factorial(2) == 2);
-	REQUIRE(Factorial(3) == 6);
-	REQUIRE(Factorial(10) == 3628800);
-}
-
-TEST_CASE("Hello Catch2", "[hello]")
-{
-	std::cout << "hello catch2" << std::endl;
-	std::cout << "LVM test" << std::endl;
-	REQUIRE(true);
-}
-
 TEST_CASE("Test MemoryManager", "[LVMTest][MemoryManager]")
 {
 	MemoryManager mm;
-	//*mm[8] = 4;
 	auto& test = mm.GetContent<AddressType>({ MemoryAddressArgument(1 << 30) });
 	test = 4;
 	auto ptr = &test;
@@ -99,10 +83,6 @@ TEST_CASE("Test Copy Move Goto Jump_If", "[LVMTest][Command]")
 	REQUIRE(vm.GetMemoryManager().GetContent<int32_t>({ MemoryAddressArgument(12) }) == 0);
 }
 
-void TestFunc1(int a, int b)
-{
-	std::cout << a + b << std::endl;
-}
 
 TEST_CASE("Test MemoryManager Link", "[LVMTest][MemoryManager][Command]")
 {
