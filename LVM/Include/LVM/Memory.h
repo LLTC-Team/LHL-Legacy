@@ -69,6 +69,8 @@ namespace LVM
 			return *(reinterpret_cast<T*>(GetContent(maa, sizeof(T))));
 		}
 
+		void AddLink(AddressType address, const MemoryLink& memory_link);
+
 		AddressType GetPageSize();
 	private:
 		Byte * GetContent(AddressType address, size_t size = 1);

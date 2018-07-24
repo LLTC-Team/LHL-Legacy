@@ -141,6 +141,17 @@ LVM::Byte * LVM::MemoryManager::GetContent(const std::vector<MemoryAddressArgume
 	return re;
 }
 
+void LVM::MemoryManager::AddLink(AddressType address, const MemoryLink & memory_link)
+{
+	auto iter = m_Link.find(address);
+	if (iter != m_Link.end())
+	{
+		ThrowError("can not add the same address's link twice");
+		return;
+	}
+	m_Link[address] = memory_link;
+}
+
 LVM::AddressType LVM::MemoryManager::GetPageSize()
 {
 	return m_PageSize;
