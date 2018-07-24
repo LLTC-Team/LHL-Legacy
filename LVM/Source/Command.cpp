@@ -120,7 +120,7 @@ LVM::Argument LVM::LoadArgumentFromFile(std::fstream & file)
 	else
 	{
 		ThrowError("read argument error");
-		return Argument(new char, 1);
+		return Argument(new Byte, 1);
 	}
 }
 

@@ -21,6 +21,7 @@ namespace LVM
 {
 	typedef uint64_t AddressType;
 	class MemoryManager;
+	struct MemoryAddressArgument;
 
 	class MemoryPage
 	{
@@ -60,49 +61,54 @@ namespace LVM
 	public:
 		MemoryManager(AddressType size = MemoryPage::MemoryPageDefaultSize);
 
-		Byte* GetContent (AddressType address,size_t size = 1);
+		Byte* GetContent(const std::vector<MemoryAddressArgument>& maa, size_t size = 1);
+
+		template<typename T>
+		T& GetContent(const std::vector<MemoryAddressArgument>& maa)
+		{
+			return *(reinterpret_cast<T*>(GetContent(maa, sizeof(T))));
+		}
+
+		AddressType GetPageSize();
+	private:
+		Byte * GetContent(AddressType address, size_t size = 1);
 
 		template<typename T>
 		T& GetContent(AddressType address)
 		{
-			return *(reinterpret_cast<T*>(GetContent(address,sizeof(T))));
+			return *(reinterpret_cast<T*>(GetContent(address, sizeof(T))));
 		}
-		AddressType GetPageSize();
+
+		Byte* GetLinkContent(AddressType address);
+		template<typename T>
+		T& GetLinkContent(AddressType address)
+		{
+			return *(reinterpret_cast<T*>(GetLinkContent(address)));
+		}
 	private:
 		AddressType m_PageSize;
 		std::vector<MemoryPage> m_Page;
 		std::map<AddressType, MemoryLink> m_Link;
 	};
 
-	/*
-	get argument from memory address vector
-	*/
-	Argument SetMemoryAddress(const std::vector<AddressType>& addrs, bool if_last_jump = false);
-
-	/*
-	Get Memory Address From Argument.
-	Include Memory Address Jumping
-	*/
-	AddressType GetMemoryAddress(const Argument &arg, MemoryManager &memory_manager);
-
-	struct MemoryAddress
-	{
-		AddressType m_Content = 0;
-		bool m_IfLink = false;		//是否是内存链接
-	};
-
 	enum class MemoryAddressArgumentType:Byte
 	{
 		Default = 0,
 		Jump = 1,
-		Link = 2
+		Memory = 2,
+		Link = 3
 	};
 
 	struct MemoryAddressArgument
 	{
+		MemoryAddressArgument() = default;
+		MemoryAddressArgument(AddressType address);
+		MemoryAddressArgument(AddressType address, MemoryAddressArgumentType type);
 		AddressType m_Content = 0;
 		MemoryAddressArgumentType m_Type = MemoryAddressArgumentType::Default;
 	};
+
+	bool operator == (const MemoryAddressArgument& maa1, const MemoryAddressArgument& maa2);
 
 	Argument MemoryAddressArgumentToArgument(const std::vector<MemoryAddressArgument>& maa);
 	std::vector<MemoryAddressArgument> ArgumentToMemoryAddressArgument(const Argument& arg);

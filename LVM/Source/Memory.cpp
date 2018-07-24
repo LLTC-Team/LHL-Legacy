@@ -91,51 +91,75 @@ LVM::Byte* LVM::MemoryManager::GetContent(AddressType address,size_t size)
 	return &m_Page[index].m_pContent[address % m_PageSize];
 }
 
+LVM::Byte * LVM::MemoryManager::GetLinkContent(AddressType address)
+{
+	auto iter = m_Link.find(address);
+	if (iter != m_Link.end())
+	{
+		return (Byte*)iter->second();
+	}
+	else
+	{
+		ThrowError("do not find the link which called " + std::to_string(address));
+		return nullptr;
+	}
+}
+
+LVM::Byte * LVM::MemoryManager::GetContent(const std::vector<MemoryAddressArgument>& maa, size_t size)
+{
+	Byte* re = nullptr;
+	AddressType address = 0;
+	bool if_link = false;
+	for (auto& i : maa)
+	{
+		address += i.m_Content;
+		switch (i.m_Type)
+		{
+		case MemoryAddressArgumentType::Default:
+			break;
+		case MemoryAddressArgumentType::Jump:
+			if (if_link)
+				address = GetLinkContent<AddressType>(address);
+			else
+				address = GetContent<AddressType>(address);
+			break;
+		case MemoryAddressArgumentType::Memory:
+			if_link = false;
+			break;
+		case MemoryAddressArgumentType::Link:
+			if_link = true;
+			break;
+		default:
+			ThrowError("unkown MemoryAddressArgumentType");
+			break;
+		}
+	}
+	if (if_link)
+		re = GetLinkContent(address);
+	else
+		re = GetContent(address, size);
+	return re;
+}
+
 LVM::AddressType LVM::MemoryManager::GetPageSize()
 {
 	return m_PageSize;
 }
 
-LVM::Argument LVM::SetMemoryAddress(const std::vector<AddressType> &addrs, bool if_last_jump)
+LVM::MemoryAddressArgument::MemoryAddressArgument(AddressType address)
 {
-	if (addrs.size())
-	{
-		size_t size = addrs.size() * (sizeof(AddressType) + 1) - (!if_last_jump ? 1 : 0);
-		Byte *ptr = new Byte[size];
-		for (size_t i = 0; i < addrs.size(); i++)
-		{
-			*reinterpret_cast<AddressType *>(ptr + i * (sizeof(AddressType) + 1)) = addrs[i];
-		}
-		return Argument(ptr, size);
-	}
-	else
-	{
-		ThrowError("addrs can not be empty");
-		return Argument(new char, 1);
-	}
+	m_Content = address;
 }
 
-LVM::AddressType LVM::GetMemoryAddress(const Argument &arg, MemoryManager &memory_manager)
+LVM::MemoryAddressArgument::MemoryAddressArgument(AddressType address, MemoryAddressArgumentType type)
 {
-	size_t i = 0;
-	AddressType re = 0;
-	while (i < arg.m_Size)
-	{
-		if (i % (sizeof(AddressType) + 1) == 0)
-		{
-			re += *reinterpret_cast<AddressType *>(arg.m_pContent + i);
-			i += sizeof(AddressType);
-			continue;
-		}
-		if (i % (sizeof(AddressType) + 1) == sizeof(AddressType))
-		{
-			re = memory_manager.GetContent<AddressType>(re);
-			i += 1;
-			continue;
-		}
+	m_Content = address;
+	m_Type = type;
+}
 
-	}
-	return re;
+bool LVM::operator == (const MemoryAddressArgument& maa1, const MemoryAddressArgument& maa2)
+{
+	return (maa1.m_Content == maa2.m_Content&&maa1.m_Type == maa2.m_Type);
 }
 
 LVM::Argument LVM::MemoryAddressArgumentToArgument(const std::vector<MemoryAddressArgument>& maa)
