@@ -104,6 +104,25 @@ void TestFunc1(int a, int b)
 	std::cout << a + b << std::endl;
 }
 
+TEST_CASE("Test MemoryManager Link", "[LVMTest][MemoryManager][Command]")
+{
+	AddressType test_address;
+	fstream file("test_link.lll", ios::out | ios::binary);
+	std::vector<Command> commands
+	{
+		Command{*AssignCommand.m_pCommandType,{MemoryAddressArgumentToArgument({MemoryAddressArgument(1,MemoryAddressArgumentType::Link)}),Argument(new AddressType(8))}},
+		Command{*CopyCommand.m_pCommandType,{MemoryAddressArgumentToArgument({MemoryAddressArgument(1,MemoryAddressArgumentType::Link),MemoryAddressArgument(0,MemoryAddressArgumentType::Jump),MemoryAddressArgument(0,MemoryAddressArgumentType::Memory)}),
+											MemoryAddressArgumentToArgument({MemoryAddressArgument(1,MemoryAddressArgumentType::Link)}),
+											Argument(new uint64_t(sizeof(uint64_t)))}}
+	};
+	SaveCommandsToFile(file, commands);
+	file.close();
+	VirtualMachine vm;
+	vm.GetMemoryManager().AddLink(1, [&test_address]() {return &test_address; });
+	vm.RunFromFile("test_link.lll");
+	REQUIRE(vm.GetMemoryManager().GetContent<uint64_t>({ MemoryAddressArgument(8) }) == 8);
+}
+
 TEST_CASE("Test DLL", "[LVMTest][LVMSDK]") {
 #ifdef _WIN32
     DLL test_dll("./TestLib/Release/TestLib.dll");

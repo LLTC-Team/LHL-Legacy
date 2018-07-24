@@ -80,6 +80,12 @@ void LVM::VirtualMachine::RunFromMemory(const std::vector<Command> commands)
 void LVM::VirtualMachine::Run()
 {
 	/*
+	add thread memory link
+	*/
+	m_MemoryManager.AddLink(0, [&,this]()->void* {
+		return &(m_Thread[std::this_thread::get_id()]->m_StackTopAddress);
+	});
+	/*
 	add main thread
 	wait for main thread end
 	*/

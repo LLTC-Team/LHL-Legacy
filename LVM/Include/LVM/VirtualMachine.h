@@ -43,6 +43,7 @@ namespace LVM
 
 			std::thread m_Thread;
 			std::thread::id m_Id;
+			AddressType m_StackTopAddress = 0;
 		};
 		friend struct Thread;
 	public:
