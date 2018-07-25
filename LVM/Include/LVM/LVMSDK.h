@@ -23,7 +23,7 @@ limitations under the License.
 
 namespace LVM
 {
-	using LVMSDKFunction = std::function<void(std::vector<std::pair<void*, size_t>>)>;
+	using LVMSDKFunction = std::function<void(std::vector<std::pair<void*, uint64_t>>)>;
 
 	class Library
 	{
@@ -69,7 +69,7 @@ namespace LVM
 	only use for function wrap
 	*/
 	template<typename T>
-	inline T GetLibraryFunctionArgument(size_t cot, std::vector<std::pair<void*, size_t>> args)
+	inline T GetLibraryFunctionArgument(uint64_t cot, std::vector<std::pair<void*, uint64_t>> args)
 	{
 		using decay_type = typename std::decay<T>::type;
 		if (sizeof(T) == args[cot].second)
@@ -86,10 +86,10 @@ namespace LVM
 	template<typename ReturnType,typename... ArgType>
 	inline LVMSDKFunction GetLibraryFunction(ReturnType(*func)(ArgType...))
 	{
-		return [=](std::vector<std::pair<void*, size_t>> args)
+		return [=](std::vector<std::pair<void*, uint64_t>> args)
 		{
 			assert(sizeof...(ArgType) == args.size());
-			size_t cot = 0;
+			uint64_t cot = 0;
 			func(GetLibraryFunctionArgument<ArgType>(cot++, args)...);
 		};
 	}
