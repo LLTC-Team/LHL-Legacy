@@ -77,3 +77,43 @@ const LVM::DefineCommandType JumpIfCommand(5, "jump_if", { false,true },
 		vm.SetCommandRunIndex(command.m_Argument[0].As<uint64_t>() - 1);
 }
 );
+
+/*
+iadd(dst,arg1,arg2)
+*/
+const LVM::DefineCommandType IntAddCommand(6, "iadd", {true,true,true},
+	[](const LVM::Command& command, LVM::VirtualMachine& vm)
+{
+	vm.GetMemoryManager().GetContent<int32_t>(ArgumentToMemoryAddressArgument(command.m_Argument[0])) = vm.GetMemoryManager().GetContent<int32_t>(ArgumentToMemoryAddressArgument(command.m_Argument[1])) + vm.GetMemoryManager().GetContent<int32_t>(ArgumentToMemoryAddressArgument(command.m_Argument[2]));
+}
+);
+
+/*
+isub(dst,arg1,arg2)
+*/
+const LVM::DefineCommandType IntSubCommand(7, "isub", { true,true,true },
+	[](const LVM::Command& command, LVM::VirtualMachine& vm)
+{
+	vm.GetMemoryManager().GetContent<int32_t>(ArgumentToMemoryAddressArgument(command.m_Argument[0])) = vm.GetMemoryManager().GetContent<int32_t>(ArgumentToMemoryAddressArgument(command.m_Argument[1])) - vm.GetMemoryManager().GetContent<int32_t>(ArgumentToMemoryAddressArgument(command.m_Argument[2]));
+}
+);
+
+/*
+imul(dst,arg1,arg2)
+*/
+const LVM::DefineCommandType IntMulCommand(8, "imul", { true,true,true },
+	[](const LVM::Command& command, LVM::VirtualMachine& vm)
+{
+	vm.GetMemoryManager().GetContent<int32_t>(ArgumentToMemoryAddressArgument(command.m_Argument[0])) = vm.GetMemoryManager().GetContent<int32_t>(ArgumentToMemoryAddressArgument(command.m_Argument[1])) * vm.GetMemoryManager().GetContent<int32_t>(ArgumentToMemoryAddressArgument(command.m_Argument[2]));
+}
+);
+
+/*
+idiv(dst,arg1,arg2)
+*/
+const LVM::DefineCommandType IntDivCommand(9, "idiv", { true,true,true },
+	[](const LVM::Command& command, LVM::VirtualMachine& vm)
+{
+	vm.GetMemoryManager().GetContent<int32_t>(ArgumentToMemoryAddressArgument(command.m_Argument[0])) = vm.GetMemoryManager().GetContent<int32_t>(ArgumentToMemoryAddressArgument(command.m_Argument[1])) / vm.GetMemoryManager().GetContent<int32_t>(ArgumentToMemoryAddressArgument(command.m_Argument[2]));
+}
+);

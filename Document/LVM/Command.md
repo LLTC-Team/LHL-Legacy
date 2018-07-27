@@ -7,6 +7,10 @@
 * [MoveCommand](#MoveCommand)
 * [GotoCommand](#GotoCommand)
 * [JumpIfCommand](#JumpIfCommand)
+* [IntAddCommand](#IntAddCommand)
+* [IntSubCommand](#IntSubCommand)
+* [IntMulCommand](#IntMulCommand)
+* [IntDivCommand](#IntDivCommand)
 
 ## NullCommand
 &emsp;&emsp;空指令  
@@ -68,3 +72,47 @@
 |:-|-|:-|
 |1|`uint64_t`|目标指令的位置(**从0开始计数**)|
 |2|`MemoryAddress`|用于判断的`bool`值的内存地址|
+
+## IntAddCommand
+&emsp;&emsp;整数相加指令  
+&emsp;&emsp;`command name:iadd`  
+&emsp;&emsp;`index:6`
+
+|参数序号|类型|描述|
+|:-|-|:-|
+|1|`MemoryAddress`|存放结果的内存地址|
+|2|`MemoryAddress`|参数1的地址|
+|3|`MemoryAddress`|参数2的地址|
+
+## IntSubCommand
+&emsp;&emsp;整数相减指令  
+&emsp;&emsp;`command name:isub`  
+&emsp;&emsp;`index:7`
+
+|参数序号|类型|描述|
+|:-|-|:-|
+|1|`MemoryAddress`|存放结果的内存地址|
+|2|`MemoryAddress`|参数1的地址|
+|3|`MemoryAddress`|参数2的地址|
+
+## IntMulCommand
+&emsp;&emsp;整数相乘指令  
+&emsp;&emsp;`command name:imul`  
+&emsp;&emsp;`index:8`
+
+|参数序号|类型|描述|
+|:-|-|:-|
+|1|`MemoryAddress`|存放结果的内存地址|
+|2|`MemoryAddress`|参数1的地址|
+|3|`MemoryAddress`|参数2的地址|
+
+## IntDivCommand
+&emsp;&emsp;整数相除指令  
+&emsp;&emsp;`command name:idiv`  
+&emsp;&emsp;`index:9`
+
+|参数序号|类型|描述|
+|:-|-|:-|
+|1|`MemoryAddress`|存放结果的内存地址|
+|2|`MemoryAddress`|参数1的地址|
+|3|`MemoryAddress`|参数2的地址|
