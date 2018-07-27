@@ -105,7 +105,6 @@ TEST_CASE("Test MemoryManager Link", "[LVMTest][MemoryManager][Command]")
 
 TEST_CASE("Test Math Command", "[LVMTest][Command]")
 {
-	AddressType test_address;
 	fstream file("test_math.lll", ios::out | ios::binary);
 	std::vector<Command> commands
 	{
