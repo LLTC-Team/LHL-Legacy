@@ -8,16 +8,9 @@ if(COMPILER_MSVC)
 endif()
 
 aux_source_directory(Source MAIN_SRC_LIST)
-include_directories(Include)
-#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O2")
-#Useless for develop environment
-add_executable(LML ${MAIN_SRC_LIST})
-
+add_library(LML STATIC ${MAIN_SRC_LIST})
+target_include_directories(LML PUBLIC Include)
 target_link_libraries(LML Threads::Threads)
 
-add_library(LML_lib STATIC ${MAIN_SRC_LIST})
-
-target_link_libraries(LML_lib Threads::Threads)
-
-add_executable(LMLTest Tests/Tests.cpp)
-target_link_libraries(LMLTest CATCH LML_lib)
+add_executable(LML_TEST Tests/Tests.cpp)
+target_link_libraries(LML_TEST CATCH LML)

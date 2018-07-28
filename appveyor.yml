@@ -15,5 +15,5 @@ build:
   project: $(APPVEYOR_BUILD_FOLDER)\$(APPVEYOR_PROJECT_NAME).sln
 
 test_script:
-  - cd LML && .\Release\LMLTest.exe && cd ..
-  - cd LVM && .\Release\LVMTest.exe && cd ..
+  - cd LML && .\Release\LML_TEST.exe && cd ..
+  - cd LVM && .\Release\LVM_TEST.exe && cd ..
