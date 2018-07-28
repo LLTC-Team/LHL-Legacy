@@ -6,5 +6,6 @@
 !TestLib/
 !.gitattributes
 !.gitignore
-!main.cpp
+!*.cpp
+!*.py
 !CMakeLists.txt
