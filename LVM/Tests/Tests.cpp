@@ -99,20 +99,42 @@ TEST_CASE("Test MemoryManager Link", "[LVMTest][MemoryManager][Command]")
 	REQUIRE(vm.GetMemoryManager().GetContent<uint64_t>({ MemoryAddressArgument(8) }) == 8);
 }
 
+TEST_CASE("Test Math Command", "[LVMTest][Command]")
+{
+	fstream file("test_math.lll", ios::out | ios::binary);
+	std::vector<Command> commands
+	{
+		Command{ *AssignCommand.m_pCommandType,{ MemoryAddressArgumentToArgument({ MemoryAddressArgument(0) }),Argument(new int32_t(6)) } },
+		Command{ *AssignCommand.m_pCommandType,{ MemoryAddressArgumentToArgument({ MemoryAddressArgument(4) }),Argument(new int32_t(3)) }},
+		Command{ *IntAddCommand.m_pCommandType,{ MemoryAddressArgumentToArgument({ MemoryAddressArgument(8) }),MemoryAddressArgumentToArgument({ MemoryAddressArgument(0) }),MemoryAddressArgumentToArgument({ MemoryAddressArgument(4) }) } },
+		Command{ *IntSubCommand.m_pCommandType,{ MemoryAddressArgumentToArgument({ MemoryAddressArgument(12) }),MemoryAddressArgumentToArgument({ MemoryAddressArgument(0) }),MemoryAddressArgumentToArgument({ MemoryAddressArgument(4) }) } },
+		Command{ *IntMulCommand.m_pCommandType,{ MemoryAddressArgumentToArgument({ MemoryAddressArgument(16) }),MemoryAddressArgumentToArgument({ MemoryAddressArgument(0) }),MemoryAddressArgumentToArgument({ MemoryAddressArgument(4) }) } },
+		Command{ *IntDivCommand.m_pCommandType,{ MemoryAddressArgumentToArgument({ MemoryAddressArgument(20) }),MemoryAddressArgumentToArgument({ MemoryAddressArgument(0) }),MemoryAddressArgumentToArgument({ MemoryAddressArgument(4) }) } }
+	};
+	SaveCommandsToFile(file, commands);
+	file.close();
+	VirtualMachine vm;
+	vm.RunFromFile("test_math.lll");
+	REQUIRE(vm.GetMemoryManager().GetContent<int32_t>({ MemoryAddressArgument(8) }) == 9);
+	REQUIRE(vm.GetMemoryManager().GetContent<int32_t>({ MemoryAddressArgument(12) }) == 3);
+	REQUIRE(vm.GetMemoryManager().GetContent<int32_t>({ MemoryAddressArgument(16) }) == 18);
+	REQUIRE(vm.GetMemoryManager().GetContent<int32_t>({ MemoryAddressArgument(20) }) == 2);
+}
+
 TEST_CASE("Test DLL", "[LVMTest][LVMSDK]") {
 #ifdef _WIN32
-    DLL test_dll("./TestLib/Release/TestLib.dll");
+	DLL test_dll("./TestLib/Release/TestLib.dll");
 #endif
 
 #ifdef __APPLE__
-    DLL test_dll("./TestLib/libTestLib.dylib");
+	DLL test_dll("./TestLib/libTestLib.dylib");
 #endif
 
 #ifdef __linux__
-    DLL test_dll("./TestLib/libTestLib.so");
+	DLL test_dll("./TestLib/libTestLib.so");
 #endif
 
-    using TestDLLFunctionType = void (*)();
-    TestDLLFunctionType test_func = (TestDLLFunctionType) test_dll.GetAddress("greet");
-    test_func();
+	using TestDLLFunctionType = void(*)();
+	TestDLLFunctionType test_func = (TestDLLFunctionType)test_dll.GetAddress("greet");
+	test_func();
 }

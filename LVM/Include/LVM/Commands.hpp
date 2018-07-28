@@ -19,9 +19,9 @@ limitations under the License.
 #include "LVMSDK.h"
 #include "DLL.h"
 
-const LVM::DefineCommandType NullCommand(0, "null", {});
+extern inline const LVM::DefineCommandType NullCommand(0, "null", {});
 
-const LVM::DefineCommandType TestCommand(255, "test", {}, [](const LVM::Command& command, LVM::VirtualMachine& vm)-> void
+extern inline const LVM::DefineCommandType TestCommand(255, "test", {}, [](const LVM::Command& command, LVM::VirtualMachine& vm)-> void
 {
 	std::cout << "test command" << std::endl;
 }
@@ -30,7 +30,7 @@ const LVM::DefineCommandType TestCommand(255, "test", {}, [](const LVM::Command&
 /*
 copy argument2's content to the memory address which equal to argument1
 */
-const LVM::DefineCommandType AssignCommand(1, "assign", { true,false },
+extern inline const LVM::DefineCommandType AssignCommand(1, "assign", { true,false },
 	[](const LVM::Command& command, LVM::VirtualMachine& vm)
 {
 	memcpy(vm.GetMemoryManager().GetContent(LVM::ArgumentToMemoryAddressArgument(command.m_Argument[0]), command.m_Argument[1].m_Size), command.m_Argument[1].m_pContent, command.m_Argument[1].m_Size);
@@ -39,7 +39,7 @@ const LVM::DefineCommandType AssignCommand(1, "assign", { true,false },
 /*
 copy(dst,src,size:uint64_t)
 */
-const LVM::DefineCommandType CopyCommand(2, "copy", { true,true,false },
+extern inline const LVM::DefineCommandType CopyCommand(2, "copy", { true,true,false },
 	[](const LVM::Command& command, LVM::VirtualMachine& vm)
 {
 	memcpy(vm.GetMemoryManager().GetContent(LVM::ArgumentToMemoryAddressArgument(command.m_Argument[0]), command.m_Argument[2].As<uint64_t>()), vm.GetMemoryManager().GetContent(LVM::ArgumentToMemoryAddressArgument(command.m_Argument[1]), command.m_Argument[2].As<uint64_t>()), command.m_Argument[2].As<uint64_t>());
@@ -49,7 +49,7 @@ const LVM::DefineCommandType CopyCommand(2, "copy", { true,true,false },
 /*
 move(dst,src,size:uint64_t)
 */
-const LVM::DefineCommandType MoveCommand(3, "move", { true,true,false },
+extern inline const LVM::DefineCommandType MoveCommand(3, "move", { true,true,false },
 	[](const LVM::Command& command, LVM::VirtualMachine& vm)
 {
 	memcpy(vm.GetMemoryManager().GetContent(LVM::ArgumentToMemoryAddressArgument(command.m_Argument[0]), command.m_Argument[2].As<uint64_t>()), vm.GetMemoryManager().GetContent(LVM::ArgumentToMemoryAddressArgument(command.m_Argument[1]), command.m_Argument[2].As<uint64_t>()), command.m_Argument[2].As<uint64_t>());
@@ -60,7 +60,7 @@ const LVM::DefineCommandType MoveCommand(3, "move", { true,true,false },
 /*
 goto code line:uint64_t
 */
-const LVM::DefineCommandType GotoCommand(4, "goto", { false },
+extern inline const LVM::DefineCommandType GotoCommand(4, "goto", { false },
 	[](const LVM::Command& command, LVM::VirtualMachine& vm)
 {
 	vm.SetCommandRunIndex(command.m_Argument[0].As<uint64_t>() - 1);
@@ -70,10 +70,50 @@ const LVM::DefineCommandType GotoCommand(4, "goto", { false },
 /*
 jump if the value equal to true
 */
-const LVM::DefineCommandType JumpIfCommand(5, "jump_if", { false,true },
+extern inline const LVM::DefineCommandType JumpIfCommand(5, "jump_if", { false,true },
 	[](const LVM::Command& command, LVM::VirtualMachine& vm)
 {
 	if (vm.GetMemoryManager().GetContent<bool>(LVM::ArgumentToMemoryAddressArgument(command.m_Argument[1])))
 		vm.SetCommandRunIndex(command.m_Argument[0].As<uint64_t>() - 1);
+}
+);
+
+/*
+iadd(dst,arg1,arg2)
+*/
+extern inline const LVM::DefineCommandType IntAddCommand(6, "iadd", {true,true,true},
+	[](const LVM::Command& command, LVM::VirtualMachine& vm)
+{
+	vm.GetMemoryManager().GetContent<int32_t>(ArgumentToMemoryAddressArgument(command.m_Argument[0])) = vm.GetMemoryManager().GetContent<int32_t>(ArgumentToMemoryAddressArgument(command.m_Argument[1])) + vm.GetMemoryManager().GetContent<int32_t>(ArgumentToMemoryAddressArgument(command.m_Argument[2]));
+}
+);
+
+/*
+isub(dst,arg1,arg2)
+*/
+extern inline const LVM::DefineCommandType IntSubCommand(7, "isub", { true,true,true },
+	[](const LVM::Command& command, LVM::VirtualMachine& vm)
+{
+	vm.GetMemoryManager().GetContent<int32_t>(ArgumentToMemoryAddressArgument(command.m_Argument[0])) = vm.GetMemoryManager().GetContent<int32_t>(ArgumentToMemoryAddressArgument(command.m_Argument[1])) - vm.GetMemoryManager().GetContent<int32_t>(ArgumentToMemoryAddressArgument(command.m_Argument[2]));
+}
+);
+
+/*
+imul(dst,arg1,arg2)
+*/
+extern inline const LVM::DefineCommandType IntMulCommand(8, "imul", { true,true,true },
+	[](const LVM::Command& command, LVM::VirtualMachine& vm)
+{
+	vm.GetMemoryManager().GetContent<int32_t>(ArgumentToMemoryAddressArgument(command.m_Argument[0])) = vm.GetMemoryManager().GetContent<int32_t>(ArgumentToMemoryAddressArgument(command.m_Argument[1])) * vm.GetMemoryManager().GetContent<int32_t>(ArgumentToMemoryAddressArgument(command.m_Argument[2]));
+}
+);
+
+/*
+idiv(dst,arg1,arg2)
+*/
+extern inline const LVM::DefineCommandType IntDivCommand(9, "idiv", { true,true,true },
+	[](const LVM::Command& command, LVM::VirtualMachine& vm)
+{
+	vm.GetMemoryManager().GetContent<int32_t>(ArgumentToMemoryAddressArgument(command.m_Argument[0])) = vm.GetMemoryManager().GetContent<int32_t>(ArgumentToMemoryAddressArgument(command.m_Argument[1])) / vm.GetMemoryManager().GetContent<int32_t>(ArgumentToMemoryAddressArgument(command.m_Argument[2]));
 }
 );
