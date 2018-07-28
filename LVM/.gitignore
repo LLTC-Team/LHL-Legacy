@@ -6,4 +6,5 @@
 !TestLib/
 !.gitattributes
 !.gitignore
+!main.cpp
 !CMakeLists.txt

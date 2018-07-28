@@ -1,7 +1,7 @@
 ﻿#define CATCH_CONFIG_MAIN
 
-#include <iostream>
 #include "catch.hpp"
+#include <iostream>
 #include "LVM/Memory.h"
 #include "LVM/Commands.hpp"
 
@@ -121,20 +121,9 @@ TEST_CASE("Test Math Command", "[LVMTest][Command]")
 	REQUIRE(vm.GetMemoryManager().GetContent<int32_t>({ MemoryAddressArgument(20) }) == 2);
 }
 
-TEST_CASE("Test DLL", "[LVMTest][LVMSDK]") {
-#ifdef _WIN32
-	DLL test_dll("./TestLib/Release/TestLib.dll");
-#endif
-
-#ifdef __APPLE__
-	DLL test_dll("./TestLib/libTestLib.dylib");
-#endif
-
-#ifdef __linux__
-	DLL test_dll("./TestLib/libTestLib.so");
-#endif
-
-	using TestDLLFunctionType = void(*)();
-	TestDLLFunctionType test_func = (TestDLLFunctionType)test_dll.GetAddress("greet");
+TEST_CASE("Test NativeLibraryManager", "[LVMTest][NativeFunction]") {
+	NativeLibraryManager nativeLibraryManager(".");
+	using TestFunctionType = void(*)();
+	TestFunctionType test_func = (TestFunctionType)nativeLibraryManager.getNativeFunction("TestLib", "greet");
 	test_func();
 }
