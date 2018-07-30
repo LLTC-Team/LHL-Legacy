@@ -16,20 +16,21 @@ limitations under the License.
 #include "LVM/stdafx.h"
 #include "LVM/VirtualMachine.h"
 
-void LVM::VirtualMachine::Thread::Run(uint64_t start_command_index, VirtualMachine& vm)
+void LVM::VirtualMachine::Thread::Run( uint64_t start_command_index, VirtualMachine &vm )
 {
 	m_CommandRunIndex = start_command_index;
-	m_Thread = std::thread([this, &vm]() {
+	m_Thread = std::thread( [this, &vm]() {
 		m_Id = std::this_thread::get_id();
 		vm.m_Mutex.lock();
 		vm.m_Thread[m_Id] = this;
 		vm.m_Mutex.unlock();
 		while (m_CommandRunIndex < vm.m_CommandContainer.size())
 		{
-			vm.m_CommandContainer[m_CommandRunIndex].m_pType->m_RunFunction(vm.m_CommandContainer[m_CommandRunIndex], vm);
+			vm.m_CommandContainer[m_CommandRunIndex].m_pType->m_RunFunction( vm.m_CommandContainer[m_CommandRunIndex],
+																			 vm );
 			m_CommandRunIndex += 1;
 		}
-	});
+	} );
 }
 
 void LVM::VirtualMachine::Thread::WaitUntilEnd()
@@ -61,17 +62,17 @@ LVM::VirtualMachine::~VirtualMachine()
 {
 	for (auto i : m_Thread)
 	{
-		if(i.second)
+		if (i.second)
 			delete i.second;
 	}
 }
 
-LVM::MemoryManager& LVM::VirtualMachine::GetMemoryManager()
+LVM::MemoryManager &LVM::VirtualMachine::GetMemoryManager()
 {
 	return m_MemoryManager;
 }
 
-void LVM::VirtualMachine::RunFromMemory(const std::vector<Command> commands)
+void LVM::VirtualMachine::RunFromMemory( const std::vector<Command> commands )
 {
 	m_CommandContainer = commands;
 	Run();
@@ -82,19 +83,19 @@ void LVM::VirtualMachine::Run()
 	/*
 	add thread memory link
 	*/
-	m_MemoryManager.AddLink(0, [&,this]()->void* {
-		return &(m_Thread[std::this_thread::get_id()]->m_StackTopAddress);
-	});
+	m_MemoryManager.AddLink( 0, [&, this]() -> void * {
+		return &( m_Thread[std::this_thread::get_id()]->m_StackTopAddress );
+	} );
 	/*
 	add main thread
 	wait for main thread end
 	*/
-	Thread* main_thread = new Thread();
-	main_thread->Run(0, *this);
+	Thread *main_thread = new Thread();
+	main_thread->Run( 0, *this );
 	main_thread->WaitUntilEnd();
 }
 
-void LVM::VirtualMachine::RunFromFile(const std::string &filename)
+void LVM::VirtualMachine::RunFromFile( const std::string &filename )
 {
 	/*
 	file struction
@@ -102,8 +103,8 @@ void LVM::VirtualMachine::RunFromFile(const std::string &filename)
 	...command...
 	*/
 	std::fstream file;
-	file.open(filename,std::ios::in|std::ios::binary);
-	m_CommandContainer = LoadCommandsFromFile(file);
+	file.open( filename, std::ios::in | std::ios::binary );
+	m_CommandContainer = LoadCommandsFromFile( file );
 	file.close();
 	Run();
 }
@@ -116,14 +117,14 @@ void LVM::VirtualMachine::WaitUntilAllThreadEnd()
 	}
 }
 
-void LVM::VirtualMachine::AddThread(uint64_t start_command_index)
+void LVM::VirtualMachine::AddThread( uint64_t start_command_index )
 {
-	Thread* thread = new Thread();
-	thread->Run(start_command_index, *this);
+	Thread *thread = new Thread();
+	thread->Run( start_command_index, *this );
 }
 
-void LVM::VirtualMachine::SetCommandRunIndex(uint64_t index)
+void LVM::VirtualMachine::SetCommandRunIndex( uint64_t index )
 {
-	std::lock_guard<std::mutex> locker(m_Mutex);
+	std::lock_guard<std::mutex> locker( m_Mutex );
 	m_Thread[std::this_thread::get_id()]->m_CommandRunIndex = index;
 }

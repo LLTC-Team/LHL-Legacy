@@ -15,7 +15,7 @@ limitations under the License.
 */
 #include "LVM/stdafx.h"
 
-void LVM::ThrowError(const std::string &str)
+void LVM::ThrowError( const std::string &str )
 {
 	std::cout << str << std::endl;
 	abort();

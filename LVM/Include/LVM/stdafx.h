@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 #pragma once
+
 #include <iostream>
 #include <string>
 #include <vector>
@@ -32,5 +33,5 @@ namespace LVM
 	typedef uint8_t Byte;
 	typedef uint64_t SizeType;
 
-	void ThrowError(const std::string& str);
+	void ThrowError( const std::string &str );
 }

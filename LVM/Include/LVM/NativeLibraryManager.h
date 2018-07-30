@@ -14,13 +14,16 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 #pragma once
+
 #include "stdafx.h"
 
 // include related dynamic loading header file
 #ifdef _WIN32
 #include <Windows.h>
 #else
+
 #include <dlfcn.h>
+
 #endif
 
 // define dynamic library's type in c/cpp
@@ -60,15 +63,19 @@ limitations under the License.
 
 namespace LVM
 {
-	class NativeLibraryManager
-	{
-	public:
-		explicit NativeLibraryManager(const std::string& folder);
-		~NativeLibraryManager();
-		void* getNativeFunction(const std::string& library_name, const std::string& function_name);
-	private:
-		LIB_TYPE loadLibrary(const std::string& name);
-		std::string m_Folder;
-		std::map<std::string, LIB_TYPE> m_Libraries;
-	};
+    class NativeLibraryManager
+    {
+    public:
+        explicit NativeLibraryManager(const std::string &folder);
+
+        ~NativeLibraryManager();
+
+        void *GetNativeFunction(const std::string &library_name, const std::string &function_name);
+
+    private:
+        LIB_TYPE LoadLibrary(const std::string &name);
+
+        std::string m_Folder;
+        std::map<std::string, LIB_TYPE> m_Libraries;
+    };
 }

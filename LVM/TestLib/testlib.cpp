@@ -2,8 +2,9 @@
 
 extern "C" {
 
-TEST_DLL_EXPORT void greet() {
-    std::cout << "hello world" << std::endl;
+TEST_DLL_EXPORT void greet()
+{
+	std::cout << "hello world" << std::endl;
 }
 
 }

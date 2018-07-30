@@ -14,15 +14,18 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 #pragma once
+
 #include "stdafx.h"
 
 namespace LVM
 {
 	class VirtualMachine;
+
 	class CommandTypeManager;
+
 	struct Command;
 
-	using CommandFunctionType = std::function<void(const Command&, VirtualMachine &)>;
+	using CommandFunctionType = std::function<void( const Command &, VirtualMachine & )>;
 
 	using ArgumentModeType = bool;
 
@@ -34,38 +37,46 @@ namespace LVM
 	*/
 	struct CommandType
 	{
-		CommandType(const std::string &type_name = "NullCommandType", Byte index = 0, const std::vector<ArgumentModeType>& argument_mode = {}, const CommandFunctionType &func = [](const Command&, VirtualMachine &) -> void {});
+		CommandType( const std::string &type_name = "NullCommandType", Byte index = 0,
+					 const std::vector<ArgumentModeType> &argument_mode = {},
+					 const CommandFunctionType &func = []( const Command &, VirtualMachine & ) -> void {} );
+
 		std::string m_Name;
 		Byte m_Index;
 		std::vector<ArgumentModeType> m_ArgumentMode;
 		CommandFunctionType m_RunFunction;
 	};
 
-	void NewCommandType(const CommandType& command_type);
+	void NewCommandType( const CommandType &command_type );
 
-	CommandTypeManager& GetCommandTypeManager();
+	CommandTypeManager &GetCommandTypeManager();
 
 	class CommandTypeManager
 	{
 	public:
 		static const unsigned short MaxCommandTypeIndex = 256;
 
-		friend CommandTypeManager& GetCommandTypeManager();
+		friend CommandTypeManager &GetCommandTypeManager();
 
-		void InsertCommandType(const CommandType& command_type);
-		const CommandType* GetCommandTypeByName(const std::string& name);
-		const CommandType* GetCommandTypeByIndex(Byte index);
+		void InsertCommandType( const CommandType &command_type );
+
+		const CommandType *GetCommandTypeByName( const std::string &name );
+
+		const CommandType *GetCommandTypeByIndex( Byte index );
+
 	private:
 		CommandTypeManager();
 
 		std::map<std::string, CommandType> m_Content;
-		std::array<const CommandType*, MaxCommandTypeIndex> m_IndexList;
+		std::array<const CommandType *, MaxCommandTypeIndex> m_IndexList;
 	};
 
 	struct DefineCommandType
 	{
-		DefineCommandType(Byte index, const std::string& name, const std::vector<ArgumentModeType>& argument_mode = {}, CommandFunctionType func = [](const Command&, VirtualMachine &) -> void {});
-		const CommandType* m_pCommandType;
+		DefineCommandType( Byte index, const std::string &name, const std::vector<ArgumentModeType> &argument_mode = {},
+						   CommandFunctionType func = []( const Command &, VirtualMachine & ) -> void {} );
+
+		const CommandType *m_pCommandType;
 	};
 
 	/*
@@ -73,31 +84,34 @@ namespace LVM
 	*/
 	struct Argument
 	{
-		Byte* m_pContent;
+		Byte *m_pContent;
 		SizeType m_Size;
 
 		Argument() = delete;
-		Argument(void* pointer, SizeType size);
+
+		Argument( void *pointer, SizeType size );
+
 		template<typename T>
-		Argument(T* ptr)
+		Argument( T *ptr )
 		{
 			if (ptr)
 			{
-				m_pContent = reinterpret_cast<Byte*>(ptr);
-				m_Size = sizeof(T);
-			}
-			else
-				ThrowError("the ptr can not be nullptr");
+				m_pContent = reinterpret_cast<Byte *>(ptr);
+				m_Size = sizeof( T );
+			} else
+				ThrowError( "the ptr can not be nullptr" );
 		}
-		Argument(const Argument& arg);
+
+		Argument( const Argument &arg );
+
 		~Argument();
 
-		Argument& operator = (const Argument& arg);
+		Argument &operator=( const Argument &arg );
 
 		template<typename T>
-		T& As()const
+		T &As() const
 		{
-			return *(reinterpret_cast<T*>(m_pContent));
+			return *( reinterpret_cast<T *>(m_pContent));
 		}
 	};
 
@@ -105,37 +119,42 @@ namespace LVM
 	Load Argument From File.
 	file must open by std::ios::in|std::ios::binary
 	*/
-	Argument LoadArgumentFromFile(std::fstream& file);
+	Argument LoadArgumentFromFile( std::fstream &file );
+
 	/*
 	Save Argument To File
 	file must open by std::ios::out|std::ios::binary
 	*/
-	void SaveArgumentToFile(std::fstream & file, const Argument& arg);
+	void SaveArgumentToFile( std::fstream &file, const Argument &arg );
 
 	/*
 	Command 指令
 	*/
 	struct Command
 	{
-		const CommandType* m_pType;
+		const CommandType *m_pType;
 		std::vector<Argument> m_Argument;
 
 		Command() = delete;
-		Command(const CommandType &type, const std::vector<Argument> &args);
-		Command(const Command& c);
+
+		Command( const CommandType &type, const std::vector<Argument> &args );
+
+		Command( const Command &c );
 	};
+
 	/*
 	Load Command From File.
 	file must open by std::ios::in|std::ios::binary
 	*/
-	Command LoadCommandFromFile(std::fstream& file);
+	Command LoadCommandFromFile( std::fstream &file );
+
 	/*
 	Save Command To File
 	file must open by std::ios::out|std::ios::binary
 	*/
-	void SaveCommandToFile(std::fstream & file, const Command& cmd);
+	void SaveCommandToFile( std::fstream &file, const Command &cmd );
 
-	std::vector<Command> LoadCommandsFromFile(std::fstream& file);
+	std::vector<Command> LoadCommandsFromFile( std::fstream &file );
 
-	void SaveCommandsToFile(std::fstream& file, const std::vector<Command>& commands);
+	void SaveCommandsToFile( std::fstream &file, const std::vector<Command> &commands );
 }
