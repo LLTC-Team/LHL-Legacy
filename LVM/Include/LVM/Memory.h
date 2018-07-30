@@ -81,12 +81,12 @@ namespace LVM
 		AddressType GetPageSize();
 
 	private:
-		Byte *GetContent( AddressType address, SizeType size = 1 );
+		Byte *GetMemoryContent( AddressType address, SizeType size = 1 );
 
 		template<typename T>
-		T &GetContent( AddressType address )
+		T &GetMemoryContent( AddressType address )
 		{
-			return *( reinterpret_cast<T *>(GetContent( address, sizeof( T ))));
+			return *( reinterpret_cast<T *>(GetMemoryContent( address, sizeof( T ))));
 		}
 
 		Byte *GetLinkContent( AddressType address );

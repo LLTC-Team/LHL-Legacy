@@ -61,7 +61,7 @@ LVM::MemoryManager::MemoryManager( AddressType size )
 	m_PageSize = size;
 }
 
-LVM::Byte *LVM::MemoryManager::GetContent( AddressType address, SizeType size )
+LVM::Byte *LVM::MemoryManager::GetMemoryContent( AddressType address, SizeType size )
 {
 	uint32_t index = address / m_PageSize;
 	if (( address + size - 1 ) / m_PageSize != index)        //size safe check
@@ -118,7 +118,7 @@ LVM::Byte *LVM::MemoryManager::GetContent( const std::vector<MemoryAddressArgume
 				if (if_link)
 					address = GetLinkContent<AddressType>( address );
 				else
-					address = GetContent<AddressType>( address );
+					address = GetMemoryContent<AddressType>( address );
 				break;
 			case MemoryAddressArgumentType::Memory:
 				if_link = false;
@@ -134,7 +134,7 @@ LVM::Byte *LVM::MemoryManager::GetContent( const std::vector<MemoryAddressArgume
 	if (if_link)
 		re = GetLinkContent( address );
 	else
-		re = GetContent( address, size );
+		re = GetMemoryContent( address, size );
 	return re;
 }
 
