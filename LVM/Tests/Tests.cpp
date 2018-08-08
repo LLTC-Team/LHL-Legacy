@@ -151,7 +151,13 @@ TEST_CASE( "Test Math Command", "[LVMTest][Command]" )
 					Command{ *IntDivCommand.m_pCommandType,
 							 { MemoryAddressArgumentToArgument( { MemoryAddressArgument( 20 ) } ),
 							   MemoryAddressArgumentToArgument( { MemoryAddressArgument( 0 ) } ),
-							   MemoryAddressArgumentToArgument( { MemoryAddressArgument( 4 ) } ) }}
+							   MemoryAddressArgumentToArgument( { MemoryAddressArgument( 4 ) } ) }},
+					Command{ *IntShiftLogicalLeftCommand.m_pCommandType,
+							  {
+							   MemoryAddressArgumentToArgument( {MemoryAddressArgument( 24 )} ),
+							   MemoryAddressArgumentToArgument( {MemoryAddressArgument( 0 )} ),
+							   MemoryAddressArgumentToArgument( {MemoryAddressArgument( 4 )} )
+							  }}		   
 			};
 	SaveCommandsToFile( file, commands );
 	file.close();
@@ -161,6 +167,9 @@ TEST_CASE( "Test Math Command", "[LVMTest][Command]" )
 	REQUIRE( vm.GetMemoryManager().GetContent<int32_t>( { MemoryAddressArgument( 12 ) } ) == 3 );
 	REQUIRE( vm.GetMemoryManager().GetContent<int32_t>( { MemoryAddressArgument( 16 ) } ) == 18 );
 	REQUIRE( vm.GetMemoryManager().GetContent<int32_t>( { MemoryAddressArgument( 20 ) } ) == 2 );
+	REQUIRE( vm.GetMemoryManager().GetContent<int32_t>( { MemoryAddressArgument( 24 ) } ) == 48 );
+
+	std::cout << "math command test success" << std::endl;
 }
 
 TEST_CASE( "Test NativeLibraryManager", "[LVMTest][NativeFunction]" )
