@@ -54,13 +54,6 @@ limitations under the License.
 #define DL_PREFIX "lib"
 #endif
 
-// define __declspec for windows
-#ifdef _WIN32
-#define TEST_DLL_EXPORT __declspec(dllexport)
-#else
-#define TEST_DLL_EXPORT
-#endif
-
 namespace LVM
 {
     class NativeLibraryManager
@@ -73,7 +66,7 @@ namespace LVM
         void *GetNativeFunction(const std::string &library_name, const std::string &function_name);
 
     private:
-        LIB_TYPE LoadLibrary(const std::string &name);
+        LIB_TYPE LoadNativeLibrary( const std::string &name );
 
         std::string m_Folder;
         std::map<std::string, LIB_TYPE> m_Libraries;

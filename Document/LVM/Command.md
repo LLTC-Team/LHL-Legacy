@@ -11,6 +11,7 @@
 * [IntSubCommand](#IntSubCommand)
 * [IntMulCommand](#IntMulCommand)
 * [IntDivCommand](#IntDivCommand)
+* [IntShiftLogicalLeft](#IntShiftlogicalLeftCommand)
 
 ## NullCommand
 &emsp;&emsp;空指令  
@@ -110,6 +111,17 @@
 &emsp;&emsp;整数相除指令  
 &emsp;&emsp;`command name:idiv`  
 &emsp;&emsp;`index:9`
+
+|参数序号|类型|描述|
+|:-|-|:-|
+|1|`MemoryAddress`|存放结果的内存地址|
+|2|`MemoryAddress`|参数1的地址|
+|3|`MemoryAddress`|参数2的地址|
+
+## IntShiftLogicalLeftCommand
+&emsp;&emsp;整数左移指令  
+&emsp;&emsp;`command name:ishl`  
+&emsp;&emsp;`index:10`
 
 |参数序号|类型|描述|
 |:-|-|:-|
