@@ -38,7 +38,7 @@ def searchLibrary(directory):
 
 
 libraryCount += searchLibrary(from_path)
-if system == "Windows:":
+if system == "Windows":
     libraryCount += searchLibrary(from_path + "/Debug")
     libraryCount += searchLibrary(from_path + "/Release")
 
