@@ -120,7 +120,7 @@
 
 ## IntShiftLogicalLeftCommand
 &emsp;&emsp;整数左移指令  
-&emsp;&emsp;`command name:ishr`  
+&emsp;&emsp;`command name:ishl`  
 &emsp;&emsp;`index:10`
 
 |参数序号|类型|描述|
