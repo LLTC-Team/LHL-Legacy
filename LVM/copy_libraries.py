@@ -21,12 +21,11 @@ else:
     print("Unsupported system platform")
     sys.exit(1)
 
-libraryCount = 0
 for file in os.listdir(from_path):
     if file.endswith(suffix):
         path = os.path.normpath(os.path.join(from_path, file))
         print("Found dynamic library file: %s" % path)
-        shutil.copy2(from_path, to_path)
+        shutil.copy2(path, to_path)
         libraryCount += 1
 
 if libraryCount == 0:
