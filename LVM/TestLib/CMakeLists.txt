@@ -10,7 +10,7 @@ if ($ENV{APPVEYOR})
     add_custom_command(
             TARGET TestLib POST_BUILD
             COMMAND ${PYTHON} -V
-            COMMAND ${PYTHON} ${LVM_SOURCE_DIR}/copy_libraries.py ${CMAKE_CURRENT_BINARY_DIR}$ENV{CONFIGURATION} ${LVM_BINARY_DIR}$ENV{CONFIGURATION}
+            COMMAND ${PYTHON} ${LVM_SOURCE_DIR}/copy_libraries.py ${CMAKE_CURRENT_BINARY_DIR}/$ENV{CONFIGURATION} ${LVM_BINARY_DIR}/$ENV{CONFIGURATION}
     )
 else ()
     add_custom_command(
