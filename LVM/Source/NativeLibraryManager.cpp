@@ -55,7 +55,7 @@ LVM::NativeLibraryManager::~NativeLibraryManager()
 	}
 }
 
-LIB_TYPE LVM::NativeLibraryManager::LoadLibrary( const std::string &name )
+LIB_TYPE LVM::NativeLibraryManager::LoadNativeLibrary( const std::string &name )
 {
 	std::string filename = m_Folder + DL_PREFIX + name + DL_SUFFIX;
 	LIB_TYPE lib_ref = nullptr;
@@ -79,7 +79,7 @@ void *LVM::NativeLibraryManager::GetNativeFunction( const std::string &library_n
 	LIB_TYPE library = nullptr;
 	if (m_Libraries.count( library_name ) == 0)
 	{
-		m_Libraries[library_name] = ( library = LoadLibrary( library_name ));
+		m_Libraries[library_name] = ( library = LoadNativeLibrary( library_name ));
 	} else
 	{
 		library = m_Libraries[library_name];

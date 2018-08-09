@@ -66,7 +66,7 @@ namespace LVM
         void *GetNativeFunction(const std::string &library_name, const std::string &function_name);
 
     private:
-        LIB_TYPE LoadLibrary(const std::string &name);
+        LIB_TYPE LoadNativeLibrary( const std::string &name );
 
         std::string m_Folder;
         std::map<std::string, LIB_TYPE> m_Libraries;
