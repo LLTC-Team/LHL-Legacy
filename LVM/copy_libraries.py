@@ -23,7 +23,9 @@ else:
 
 
 def searchLibrary(directory):
+    print("Searching %s" % directory)
     if not os.path.isdir(directory):
+        print("%s is not a directory")
         return 0
     count = 0
     for file in os.listdir(directory):
@@ -37,8 +39,8 @@ def searchLibrary(directory):
 
 libraryCount += searchLibrary(from_path)
 if system == "Windows:":
-    libraryCount += searchLibrary(from_path + "\\Debug")
-    libraryCount += searchLibrary(from_path + "\\Release")
+    libraryCount += searchLibrary(from_path + "/Debug")
+    libraryCount += searchLibrary(from_path + "/Release")
 
 if libraryCount == 0:
     print("No native library were found")
