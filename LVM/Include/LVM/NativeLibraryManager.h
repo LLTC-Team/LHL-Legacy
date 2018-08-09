@@ -54,13 +54,6 @@ limitations under the License.
 #define DL_PREFIX "lib"
 #endif
 
-// define __declspec for windows
-#ifdef _WIN32
-#define TEST_DLL_EXPORT __declspec(dllexport)
-#else
-#define TEST_DLL_EXPORT
-#endif
-
 namespace LVM
 {
     class NativeLibraryManager
