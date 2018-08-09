@@ -21,12 +21,24 @@ else:
     print("Unsupported system platform")
     sys.exit(1)
 
-for file in os.listdir(from_path):
-    if file.endswith(suffix):
-        path = os.path.normpath(os.path.join(from_path, file))
-        print("Found dynamic library file: %s" % path)
-        shutil.copy2(path, to_path)
-        libraryCount += 1
+
+def searchLibrary(directory):
+    if not os.path.isdir(directory):
+        return 0
+    count = 0
+    for file in os.listdir(directory):
+        if file.endswith(suffix):
+            path = os.path.normpath(os.path.join(directory, file))
+            print("Found dynamic library file: %s" % path)
+            shutil.copy2(path, to_path)
+            count += 1
+    return count
+
+
+libraryCount += searchLibrary(from_path)
+if system == "Windows:":
+    libraryCount += searchLibrary(from_path + "\\Debug")
+    libraryCount += searchLibrary(from_path + "\\Release")
 
 if libraryCount == 0:
     print("No native library were found")
