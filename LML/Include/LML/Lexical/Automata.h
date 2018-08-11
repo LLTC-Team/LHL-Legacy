@@ -34,7 +34,7 @@ namespace LML::Lexical
 		virtual bool Accept( const char c ) = 0;
 	};
 
-	class SingleChar : TransitionPattern
+	class SingleChar : public TransitionPattern
 	{
 		friend class TransitionPatternManager;
 
@@ -49,7 +49,7 @@ namespace LML::Lexical
 		const char acceptableChar;
 	};
 
-	class Range : TransitionPattern
+	class Range : public TransitionPattern
 	{
 		friend class TransitionPatternManager;
 
@@ -65,7 +65,7 @@ namespace LML::Lexical
 		const bool compMode;
 	};
 
-	class Epsilon : TransitionPattern
+	class Epsilon : public TransitionPattern
 	{
 	public:
 		Epsilon() = default;
@@ -80,13 +80,13 @@ namespace LML::Lexical
 	public:
 		TransitionPatternManager() = default;
 
-		~TransitionPatternManager() = default;
+		~TransitionPatternManager();
 
-		SingleChar *GetSingleCharParttern( const char c );
+		SingleChar *GetSingleCharPattern( const char c );
 
-		Range *GetRangeCharParttern( std::vector<std::pair<char, char>> ranges, bool isComplement );
+		Range *GetRangeCharPattern( std::vector<std::pair<char, char>> ranges, bool isComplement );
 
-		Epsilon *GetEpsilonParttern();
+		Epsilon *GetEpsilonPattern() const;
 
 	private:
 		std::vector<SingleChar *> SinglePool;
@@ -94,13 +94,66 @@ namespace LML::Lexical
 		Epsilon *const _EPSILON = new Epsilon();
 	};
 
+	extern const TransitionPatternManager TPManager = TransitionPatternManager();
+
+	class NFAState;
+
+	using NFAS_TT = std::map<TransitionPattern *, std::set<NFAState *>>; // NFA State Transition Table
 	class NFAState
 	{
 	public:
-		NFAState( const std::map<TransitionPattern *, std::set<NFAState *>> transition );
+		NFAState() = default;
+
+		NFAState( const NFAS_TT transition );
+
+		~NFAState() = default;
+
+		NFAS_TT &GetTransitionTable();
 
 	private:
-		const std::map<TransitionPattern, std::set<NFAState *>> transition;
+		NFAS_TT transition;
 	};
 
+	class DFAState;
+
+	using DFAS_TT = std::map<TransitionPattern *, DFAState *>; // DFA State Transition Table
+	class DFAState
+	{
+	public:
+		DFAState() = default;
+
+		DFAState( const std::map<TransitionPattern *, DFAState *> transition );
+
+		~DFAState() = default;
+
+		DFAS_TT &GetTransitionTable();
+
+	private:
+		DFAS_TT transition;
+	};
+
+	class NFA
+	{
+		// NOTE: the following NFA operation functions' arguments should be one of the NFAs, whose terminal state has no transition
+
+		friend NFA *NFA_Cat( NFA *m, NFA *n );
+
+		friend NFA *NFA_Or( NFA *m, NFA *n );
+
+		friend NFA *NFA_Kleene( NFA *m );
+
+	public:
+		NFA();
+
+		NFA( NFAState *start, NFAState *terminal );
+
+		~NFA() = default;
+
+		NFAState *GetStartState();
+
+		NFAState *GetTerminalState();
+
+	private:
+		NFAState *start, *terminal;
+	};
 }

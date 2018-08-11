@@ -60,7 +60,20 @@ bool Range::Accept( const char c )
 	return compMode;
 }
 
-SingleChar *TransitionPatternManager::GetSingleCharParttern( const char c )
+TransitionPatternManager::~TransitionPatternManager()
+{
+	for (auto single:SinglePool)
+	{
+		delete single;
+	}
+	for (auto range:RangePool)
+	{
+		delete range;
+	}
+	delete _EPSILON;
+}
+
+SingleChar *TransitionPatternManager::GetSingleCharPattern( const char c )
 {
 	for (auto single : SinglePool)
 	{
@@ -69,10 +82,12 @@ SingleChar *TransitionPatternManager::GetSingleCharParttern( const char c )
 			return single;
 		}
 	}
-	return SinglePool.emplace_back( c );
+	auto ptr = new SingleChar( c );
+	SinglePool.push_back( ptr );
+	return ptr;
 }
 
-Range *TransitionPatternManager::GetRangeCharParttern( std::vector<std::pair<char, char>> ranges, bool isComplement )
+Range *TransitionPatternManager::GetRangeCharPattern( std::vector<std::pair<char, char>> ranges, bool isComplement )
 {
 	// Simply ranges
 	// Time complexity O(N·log(N) + N) while N = |ranges|
@@ -102,10 +117,79 @@ Range *TransitionPatternManager::GetRangeCharParttern( std::vector<std::pair<cha
 	}
 
 	// Construct new object
-	return RangePool.emplace_back( newRanges, isComplement );
+	auto ptr = new Range( newRanges, isComplement );
+	RangePool.push_back( ptr );
+	return ptr;
 }
 
-Epsilon *TransitionPatternManager::GetEpsilonParttern()
+Epsilon *TransitionPatternManager::GetEpsilonPattern() const
 {
 	return _EPSILON;
+}
+
+NFAState::NFAState( const std::map<TransitionPattern *, std::set<NFAState *>> transition )
+		: transition( transition ) {}
+
+
+NFAS_TT &NFAState::GetTransitionTable()
+{
+	return transition;
+}
+
+DFAState::DFAState( const std::map<TransitionPattern *, DFAState *> transition )
+		: transition( transition ) {}
+
+DFAS_TT &DFAState::GetTransitionTable()
+{
+	return transition;
+}
+
+NFA::NFA() : start(), terminal()
+{
+	start->GetTransitionTable()[TPManager.GetEpsilonPattern()].insert( terminal );
+}
+
+NFA::NFA( NFAState *start, NFAState *terminal ) : start( start ), terminal( terminal ) {}
+
+NFAState *NFA::GetStartState()
+{
+	return start;
+}
+
+NFAState *NFA::GetTerminalState()
+{
+	return terminal;
+}
+
+NFA *LML::Lexical::NFA_Cat( NFA *m, NFA *n )
+{
+	auto *result = new NFA( m->GetStartState(), m->GetTerminalState());
+	result->GetTerminalState()->GetTransitionTable() = n->GetStartState()->GetTransitionTable();
+	result->terminal = n->terminal;
+	return result;
+}
+
+NFA *LML::Lexical::NFA_Or( NFA *m, NFA *n )
+{
+	auto *newStart = new NFAState( {{ TPManager.GetEpsilonPattern(), { m->GetStartState() }},
+									{ TPManager.GetEpsilonPattern(), { n->GetStartState() }}} );
+
+	auto *newTerminal = new NFAState();
+	m->GetTerminalState()->GetTransitionTable()[TPManager.GetEpsilonPattern()].insert( newTerminal );
+	n->GetTerminalState()->GetTransitionTable()[TPManager.GetEpsilonPattern()].insert( newTerminal );
+
+	return new NFA( newStart, newTerminal );
+}
+
+NFA *LML::Lexical::NFA_Kleene( NFA *m )
+{
+	auto *newTerminal = new NFAState();
+	auto *newStart = new NFAState( {{ TPManager.GetEpsilonPattern(), { m->GetStartState() }},
+									{ TPManager.GetEpsilonPattern(), { newTerminal }}} );
+
+	auto &epsilonTransitions = m->GetTerminalState()->GetTransitionTable()[TPManager.GetEpsilonPattern()];
+	epsilonTransitions.insert( m->GetStartState());
+	epsilonTransitions.insert( newTerminal );
+
+	return new NFA( newStart, newTerminal );
 }
