@@ -19,6 +19,8 @@ limitations under the License.
 
 namespace LML::Lexical
 {
+	class TransitionPatternManager;
+
 	class TransitionPattern
 	{
 	public:
@@ -29,33 +31,38 @@ namespace LML::Lexical
 
 		virtual const Type GetType() = 0;
 
-		virtual bool Accept( const char32_t c ) = 0;
+		virtual bool Accept( const char c ) = 0;
 	};
 
 	class SingleChar : TransitionPattern
 	{
+		friend class TransitionPatternManager;
+
 	public:
-		SingleChar( const char32_t c );
+		SingleChar( const char c );
 
 		const Type GetType() override;
 
-		bool Accept( const char32_t c ) override;
+		bool Accept( const char c ) override;
 
 	private:
-		const char32_t acceptableChar;
+		const char acceptableChar;
 	};
 
 	class Range : TransitionPattern
 	{
+		friend class TransitionPatternManager;
+
 	public:
-		Range( std::initializer_list<std::pair<char32_t, char32_t>> ranges );
+		Range( std::vector<std::pair<char, char>> ranges, bool isComplement );
 
 		const Type GetType() override;
 
-		bool Accept( const char32_t c ) override;
+		bool Accept( const char c ) override;
 
 	private:
-		const std::vector<std::pair<char32_t, char32_t >> ranges;
+		const std::vector<std::pair<char, char >> ranges;
+		const bool compMode;
 	};
 
 	class Epsilon : TransitionPattern
@@ -65,15 +72,32 @@ namespace LML::Lexical
 
 		const Type GetType() override;
 
-		bool Accept( const char32_t c ) override;
+		bool Accept( const char c ) override;
 	};
 
-	extern const Epsilon EPSILON_PATTERN = Epsilon();
+	class TransitionPatternManager
+	{
+	public:
+		TransitionPatternManager() = default;
+
+		~TransitionPatternManager() = default;
+
+		SingleChar *GetSingleCharParttern( const char c );
+
+		Range *GetRangeCharParttern( std::vector<std::pair<char, char>> ranges, bool isComplement );
+
+		Epsilon *GetEpsilonParttern();
+
+	private:
+		std::vector<SingleChar *> SinglePool;
+		std::vector<Range *> RangePool;
+		Epsilon *const _EPSILON = new Epsilon();
+	};
 
 	class NFAState
 	{
 	public:
-		NFAState( const std::map<TransitionPattern, std::set<NFAState *>> transition );
+		NFAState( const std::map<TransitionPattern *, std::set<NFAState *>> transition );
 
 	private:
 		const std::map<TransitionPattern, std::set<NFAState *>> transition;
