@@ -78,7 +78,7 @@ namespace LML::Lexical
 	class TransitionPatternManager
 	{
 	public:
-		TransitionPatternManager() = default;
+		TransitionPatternManager();
 
 		~TransitionPatternManager();
 
@@ -86,19 +86,19 @@ namespace LML::Lexical
 
 		Range *GetRangeCharPattern( std::vector<std::pair<char, char>> ranges, bool isComplement );
 
-		Epsilon *GetEpsilonPattern() const;
+		Epsilon *GetEpsilonPattern();
 
 	private:
 		std::vector<SingleChar *> SinglePool;
 		std::vector<Range *> RangePool;
-		Epsilon *const _EPSILON = new Epsilon();
+		Epsilon *const _EPSILON;
 	};
 
-	extern const TransitionPatternManager TPManager = TransitionPatternManager();
+	TransitionPatternManager &GetTPManager();
 
 	class NFAState;
 
-	using NFAS_TT = std::map<TransitionPattern *, std::set<NFAState *>>; // NFA State Transition Table
+	using NFAS_TT = std::map<TransitionPattern *, std::set<int32_t>>; // NFA State Transition Table
 	class NFAState
 	{
 	public:
@@ -114,46 +114,48 @@ namespace LML::Lexical
 		NFAS_TT transition;
 	};
 
-	class DFAState;
-
-	using DFAS_TT = std::map<TransitionPattern *, DFAState *>; // DFA State Transition Table
-	class DFAState
-	{
-	public:
-		DFAState() = default;
-
-		DFAState( const std::map<TransitionPattern *, DFAState *> transition );
-
-		~DFAState() = default;
-
-		DFAS_TT &GetTransitionTable();
-
-	private:
-		DFAS_TT transition;
-	};
-
 	class NFA
 	{
-		// NOTE: the following NFA operation functions' arguments should be one of the NFAs, whose terminal state has no transition
-
-		friend NFA *NFA_Cat( NFA *m, NFA *n );
-
-		friend NFA *NFA_Or( NFA *m, NFA *n );
-
-		friend NFA *NFA_Kleene( NFA *m );
-
 	public:
 		NFA();
 
-		NFA( NFAState *start, NFAState *terminal );
+		NFA( const NFA &other );
 
-		~NFA() = default;
+		~NFA();
 
-		NFAState *GetStartState();
+		NFA &operator=( const NFA &other );
 
-		NFAState *GetTerminalState();
+		int32_t GetStartState();
+
+		std::set<int32_t> GetTerminalStates();
+
+		void AddTerminal( int32_t id );
+
+		void RemoveTerminal( int32_t id );
+
+		NFAState *GetState( int32_t id );
+
+		int32_t NewState();
+
+		int32_t NewState( NFAS_TT tTable );
+
+		int32_t GetSize();
+
+		std::vector<int32_t> EpsilonClosure( int32_t start );
+
+		std::vector<int32_t> EpsilonClosure( const std::vector<int32_t> &starts );
+
+		std::vector<int32_t> Move( const std::vector<int32_t> &starts, char c );
+
+		bool Match( const std::string &str );
 
 	private:
-		NFAState *start, *terminal;
+		int32_t Size, Start;
+		std::set<int32_t> Terminals;
+		std::vector<NFAState *> States;
 	};
+
+	const NFA ConstructSingleCharNFA( const char c );
+
+	const NFA ConstructPureStringNFA( const std::string &string );
 }
