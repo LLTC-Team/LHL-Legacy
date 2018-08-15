@@ -1,5 +1,7 @@
 #include <utility>
 
+#include <utility>
+
 /*
 Copyright 2018 creatorlxd
 
@@ -138,140 +140,80 @@ TransitionPatternManager &LML::Lexical::GetTPManager()
 	return _TPManager;
 }
 
-NFAState::NFAState( const std::map<TransitionPattern *, std::set<int32_t>> transition )
-		: transition( transition ) {}
+NFAState::NFAState( const NFAS_TT &transition ) : transition( transition ) {}
 
 NFAS_TT &NFAState::GetTransitionTable()
 {
 	return transition;
 }
 
-NFA::NFA() : Size( 1 ), Start( 0 ), Terminals( { 0 } ), States( { new NFAState() } ) {}
-
-NFA::NFA( const LML::Lexical::NFA &other ) : Size( other.Size ), Start( other.Start ),
-											 Terminals( other.Terminals ),
-											 States( other.States ) {}
-
-NFA::~NFA()
+std::shared_ptr<NFAState> LML::Lexical::NewNFAState()
 {
-	for (auto ptr : States)
-	{
-		delete ptr;
-	}
+	return std::make_shared<NFAState>();
 }
 
-NFA &NFA::operator=( const LML::Lexical::NFA &other )
+std::shared_ptr<NFAState> LML::Lexical::NewNFAState( NFAS_TT tt )
 {
-	if (this != &other)
-	{
-		Size = other.Size;
-		Start = other.Start;
-		Terminals = other.Terminals;
-		States = other.States;
-	}
-	return *this;
+	return std::make_shared<NFAState>( tt );
 }
 
-int32_t NFA::GetStartState()
+NFA::NFA() : Start( NewNFAState()), Terminals( { Start } ) {}
+
+NFA::NFA( const NFAStatePointer start, const NFAStateSet &terminals ) : Start( start ), Terminals( terminals ) {}
+
+NFAStatePointer NFA::GetStartState()
 {
 	return Start;
 }
 
-std::set<int32_t> NFA::GetTerminalStates()
+NFAStateSet &NFA::GetTerminalStates()
 {
 	return Terminals;
 }
 
-void NFA::AddTerminal( int32_t id )
+NFAStateSet LML::Lexical::EpsilonClosure( NFAStatePointer start )
 {
-	Terminals.insert( id );
+	return EpsilonClosure( NFAStateSet{ std::move( start ) } );
 }
 
-void NFA::RemoveTerminal( int32_t id )
-{
-	Terminals.erase( id );
-}
-
-NFAState *NFA::GetState( int32_t id )
-{
-	if (id >= 0 && id < Size)
-	{
-		return States[id];
-	} else
-	{
-		return nullptr;
-	}
-}
-
-int32_t NFA::NewState()
-{
-	int32_t id = Size;
-	++Size;
-	States.push_back( new NFAState());
-	return id;
-}
-
-int32_t NFA::NewState( NFAS_TT tTable )
-{
-	int32_t id = Size;
-	++Size;
-	States.push_back( new NFAState( std::move( tTable )));
-	return id;
-}
-
-int32_t NFA::GetSize()
-{
-	return Size;
-}
-
-std::vector<int32_t> NFA::EpsilonClosure( int32_t start )
-{
-	return EpsilonClosure( std::vector<int32_t>( { start } ));
-}
-
-std::vector<int32_t> NFA::EpsilonClosure( const std::vector<int32_t> &starts )
+NFAStateSet LML::Lexical::EpsilonClosure( const NFAStateSet &starts )
 {
 	// Basically a BFS algorithm
-	std::vector<int32_t> que( starts );
-	std::vector<bool> vis( static_cast<unsigned long>(Size), false );
-	for (auto start:starts)
-	{
-		vis[start] = true;
-	}
+	NFAStateSet result( starts );
+	std::vector<NFAStatePointer> que( starts.cbegin(), starts.cend());
 	for (int i = 0; i < que.size(); i++)
 	{
-		auto sid = que[i];
-		auto state = States[sid];
-		for (auto nxt : state->GetTransitionTable()[GetTPManager().GetEpsilonPattern()])
+		auto &ptr = que[i];
+		for (auto &nxt : ptr->GetTransitionTable()[GetTPManager().GetEpsilonPattern()])
 		{
-			if (!vis[nxt])
+			if (result.count( nxt ) == 0)
 			{
+				result.insert( nxt );
 				que.push_back( nxt );
 			}
 		}
-		vis[sid] = true;
 	}
-	return que;
+	return result;
 }
 
-std::vector<int32_t> NFA::Move( const std::vector<int32_t> &starts, char c )
+NFAStateSet LML::Lexical::Move( const NFAStateSet &starts, char c )
 {
-	std::set<int32_t> result;
+	NFAStateSet result;
 	auto pattern = GetTPManager().GetSingleCharPattern( c );
-	for (auto start: starts)
+	for (auto &state : starts)
 	{
-		if (States[start]->GetTransitionTable().count( pattern ) > 0)
+		if (state->GetTransitionTable().count( pattern ) > 0)
 		{
-			auto nxts = States[start]->GetTransitionTable()[pattern];
-			result.insert( nxts.cbegin(), nxts.cend());
+			auto nxt = state->GetTransitionTable()[pattern];
+			result.insert( nxt.cbegin(), nxt.cend());
 		}
 	}
-	return std::vector<int32_t>( result.cbegin(), result.cend());
+	return result;
 }
 
 bool NFA::Match( const std::string &str )
 {
-	std::vector<int32_t> states = EpsilonClosure( Start );
+	NFAStateSet states = EpsilonClosure( Start );
 	for (char c : str)
 	{
 		states = EpsilonClosure( Move( states, c ));
@@ -280,7 +222,7 @@ bool NFA::Match( const std::string &str )
 			return false;
 		}
 	}
-	for (auto s : states)
+	for (auto &s : states)
 	{
 		if (Terminals.count( s ) > 0)
 		{
@@ -292,25 +234,19 @@ bool NFA::Match( const std::string &str )
 
 const NFA LML::Lexical::ConstructSingleCharNFA( const char c )
 {
-	NFA result;
-	result.RemoveTerminal( 0 );
-	auto tid = result.NewState();
-	result.AddTerminal( tid );
-	result.GetState( 0 )->GetTransitionTable()[GetTPManager().GetSingleCharPattern( c )] = { tid };
-	return result;
+	NFAStatePointer terminal = NewNFAState();
+	NFAStatePointer start = NewNFAState( {{ GetTPManager().GetSingleCharPattern( c ), { terminal }}} );
+	return NFA( start, { terminal } );
 }
 
 const NFA LML::Lexical::ConstructPureStringNFA( const std::string &string )
 {
-	NFA result;
-	result.RemoveTerminal( 0 );
-	auto tid = 0;
-	for (char c : string)
+	NFAStatePointer start = NewNFAState(), now = start;
+	for (auto c:string)
 	{
-		auto pid = tid;
-		tid = result.NewState();
-		result.GetState( pid )->GetTransitionTable()[GetTPManager().GetSingleCharPattern( c )] = { tid };;
+		NFAStatePointer ptr = NewNFAState();
+		now->GetTransitionTable()[GetTPManager().GetSingleCharPattern( c )] = { ptr };
+		std::swap( now, ptr );
 	}
-	result.AddTerminal( tid );
-	return result;
+	return NFA( start, { now } );
 }
