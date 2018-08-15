@@ -256,11 +256,22 @@ const NFA LML::Lexical::NFAOr( LML::Lexical::NFA &m, LML::Lexical::NFA &n )
 	NFAStatePointer start = NewNFAState(
 			{{ GetTPManager().GetEpsilonPattern(), { m.GetStartState(), n.GetStartState() }}} );
 	NFAStatePointer terminal = NewNFAState();
-	for (auto &ts : m.GetTerminalStates()) {
+	for (auto &ts : m.GetTerminalStates())
+	{
 		ts->GetTransitionTable()[GetTPManager().GetEpsilonPattern()].insert( terminal );
 	}
-	for (auto &ts : n.GetTerminalStates()) {
+	for (auto &ts : n.GetTerminalStates())
+	{
 		ts->GetTransitionTable()[GetTPManager().GetEpsilonPattern()].insert( terminal );
 	}
 	return NFA( start, { terminal } );
+}
+
+const NFA LML::Lexical::NFACat( LML::Lexical::NFA &m, LML::Lexical::NFA &n )
+{
+	for (auto &ts : m.GetTerminalStates())
+	{
+		ts->GetTransitionTable()[GetTPManager().GetEpsilonPattern()].insert( n.GetStartState());
+	}
+	return NFA( m.GetStartState(), n.GetTerminalStates());
 }

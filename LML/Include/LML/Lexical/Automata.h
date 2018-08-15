@@ -151,4 +151,6 @@ namespace LML::Lexical
 	const NFA ConstructPureStringNFA( const std::string &string );
 
 	const NFA NFAOr( NFA &m, NFA &n );
+
+	const NFA NFACat( NFA &m, NFA &n );
 }

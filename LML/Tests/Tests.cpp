@@ -61,3 +61,19 @@ TEST_CASE( "Test NFA Or", "[LML][Lexical][Automata][NFA]" )
 	UNMATCH( "csfasdfasfsadf" );
 	UNMATCH( "131" );
 }
+
+TEST_CASE( "Test NFA Cat", "[LML][Lexical][Automata][NFA]" )
+{
+	LML::Lexical::NFA nfa1 = LML::Lexical::ConstructPureStringNFA( "hello" );
+	LML::Lexical::NFA nfa2 = LML::Lexical::ConstructPureStringNFA( "world" );
+	LML::Lexical::NFA nfa = LML::Lexical::NFACat( nfa1, nfa2 );
+
+	MATCH( "helloworld" );
+
+	UNMATCH( "hello world" );
+	UNMATCH( "" );
+	UNMATCH( "hello" );
+	UNMATCH( "world" );
+	UNMATCH( "hello creatorlxd" );
+	UNMATCH( "hello xsun2001" );
+}
