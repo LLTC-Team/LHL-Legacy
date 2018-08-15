@@ -275,3 +275,16 @@ const NFA LML::Lexical::NFACat( LML::Lexical::NFA &m, LML::Lexical::NFA &n )
 	}
 	return NFA( m.GetStartState(), n.GetTerminalStates());
 }
+
+const NFA LML::Lexical::NFAKleene( LML::Lexical::NFA &m )
+{
+	NFAStatePointer terminal = NewNFAState();
+	for (auto &ts : m.GetTerminalStates())
+	{
+		auto &s = ts->GetTransitionTable()[GetTPManager().GetEpsilonPattern()];
+		s.insert( terminal );
+		s.insert( m.GetStartState());
+	}
+	NFAStatePointer start = NewNFAState( {{ GetTPManager().GetEpsilonPattern(), { m.GetStartState(), terminal }}} );
+	return NFA( start, { terminal } );
+}

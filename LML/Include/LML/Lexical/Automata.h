@@ -153,4 +153,6 @@ namespace LML::Lexical
 	const NFA NFAOr( NFA &m, NFA &n );
 
 	const NFA NFACat( NFA &m, NFA &n );
+
+	const NFA NFAKleene( NFA &m );
 }
