@@ -250,3 +250,17 @@ const NFA LML::Lexical::ConstructPureStringNFA( const std::string &string )
 	}
 	return NFA( start, { now } );
 }
+
+const NFA LML::Lexical::NFAOr( LML::Lexical::NFA &m, LML::Lexical::NFA &n )
+{
+	NFAStatePointer start = NewNFAState(
+			{{ GetTPManager().GetEpsilonPattern(), { m.GetStartState(), n.GetStartState() }}} );
+	NFAStatePointer terminal = NewNFAState();
+	for (auto &ts : m.GetTerminalStates()) {
+		ts->GetTransitionTable()[GetTPManager().GetEpsilonPattern()].insert( terminal );
+	}
+	for (auto &ts : n.GetTerminalStates()) {
+		ts->GetTransitionTable()[GetTPManager().GetEpsilonPattern()].insert( terminal );
+	}
+	return NFA( start, { terminal } );
+}

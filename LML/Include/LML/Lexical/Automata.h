@@ -16,6 +16,7 @@ limitations under the License.
 
 #include "LML/stdafx.h"
 #include <set>
+#include <memory>
 
 namespace LML::Lexical
 {
@@ -148,4 +149,6 @@ namespace LML::Lexical
 	const NFA ConstructSingleCharNFA( const char c );
 
 	const NFA ConstructPureStringNFA( const std::string &string );
+
+	const NFA NFAOr( NFA &m, NFA &n );
 }

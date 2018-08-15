@@ -4,38 +4,60 @@
 #include "catch.hpp"
 #include "LML/Lexical/Automata.h"
 
+#define MATCH( S ) REQUIRE( nfa.Match( S ))
+#define UNMATCH( S ) REQUIRE_FALSE( nfa.Match(S))
+
 TEST_CASE( "Test NFA that only matches one char", "[LML][Lexical][Automata][NFA]" )
 {
 	LML::Lexical::NFA nfa = LML::Lexical::ConstructSingleCharNFA( 'a' );
 
-	REQUIRE( nfa.Match( "a" ));
+	MATCH( "a" );
 
-	REQUIRE_FALSE( nfa.Match( "b" ));
-	REQUIRE_FALSE( nfa.Match( "c" ));
-	REQUIRE_FALSE( nfa.Match( "d" ));
-	REQUIRE_FALSE( nfa.Match( "e" ));
-	REQUIRE_FALSE( nfa.Match( "1" ));
-	REQUIRE_FALSE( nfa.Match( "2" ));
-	REQUIRE_FALSE( nfa.Match( "0" ));
-	REQUIRE_FALSE( nfa.Match( "" ));
-	REQUIRE_FALSE( nfa.Match( "1231" ));
-	REQUIRE_FALSE( nfa.Match( "afsdfa" ));
+	UNMATCH( "b" );
+	UNMATCH( "c" );
+	UNMATCH( "d" );
+	UNMATCH( "e" );
+	UNMATCH( "1" );
+	UNMATCH( "2" );
+	UNMATCH( "0" );
+	UNMATCH( "" );
+	UNMATCH( "1231" );
+	UNMATCH( "afsdfa" );
 }
 
 TEST_CASE( "Test NFA that matches a string", "[LML][Lexical][Automata][NFA]" )
 {
-	LML::Lexical::NFA nfa = LML::Lexical::ConstructPureStringNFA("aabbccdd");
+	LML::Lexical::NFA nfa = LML::Lexical::ConstructPureStringNFA( "aabbccdd" );
 
-	REQUIRE(nfa.Match("aabbccdd"));
+	MATCH( "aabbccdd" );
 
-	REQUIRE_FALSE(nfa.Match("a"));
-	REQUIRE_FALSE(nfa.Match("aa"));
-	REQUIRE_FALSE(nfa.Match("dd"));
-	REQUIRE_FALSE(nfa.Match("cc"));
-	REQUIRE_FALSE(nfa.Match("aasdfadsdsafad"));
-	REQUIRE_FALSE(nfa.Match("111111111111111111"));
-	REQUIRE_FALSE(nfa.Match(""));
-	REQUIRE_FALSE(nfa.Match("a132sa1f3as1f"));
-	REQUIRE_FALSE(nfa.Match("afsdjs"));
-	REQUIRE_FALSE(nfa.Match("00"));
+	UNMATCH( "a" );
+	UNMATCH( "aa" );
+	UNMATCH( "dd" );
+	UNMATCH( "cc" );
+	UNMATCH( "aasdfadsdsafad" );
+	UNMATCH( "111111111111111111" );
+	UNMATCH( "" );
+	UNMATCH( "a132sa1f3as1f" );
+	UNMATCH( "afsdjs" );
+	UNMATCH( "00" );
+}
+
+TEST_CASE( "Test NFA Or", "[LML][Lexical][Automata][NFA]" )
+{
+	LML::Lexical::NFA nfa1 = LML::Lexical::ConstructSingleCharNFA( 'a' );
+	LML::Lexical::NFA nfa2 = LML::Lexical::ConstructSingleCharNFA( 'b' );
+	LML::Lexical::NFA nfa = LML::Lexical::NFAOr( nfa1, nfa2 );
+
+	MATCH( "a" );
+	MATCH( "b" );
+
+	UNMATCH( "c" );
+	UNMATCH( "A" );
+	UNMATCH( "B" );
+	UNMATCH( "" );
+	UNMATCH( "143412" );
+	UNMATCH( "adfs" );
+	UNMATCH( "csfasdfasfsadf" );
+	UNMATCH( "131" );
 }
