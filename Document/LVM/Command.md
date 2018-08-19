@@ -119,9 +119,20 @@
 |3|`MemoryAddress`|参数2的地址|
 
 ## IntShiftLogicalLeftCommand
-&emsp;&emsp;整数左移指令  
+&emsp;&emsp;整数左移(逻辑)指令  
 &emsp;&emsp;`command name:ishl`  
 &emsp;&emsp;`index:10`
+
+|参数序号|类型|描述|
+|:-|-|:-|
+|1|`MemoryAddress`|存放结果的内存地址|
+|2|`MemoryAddress`|参数1的地址|
+|3|`MemoryAddress`|参数2的地址|
+
+## IntShiftArithmeticRightCommand
+&emsp;&emsp;整数算术右移指令  
+&emsp;&emsp;`command name:isal`  
+&emsp;&emsp;`index:11`
 
 |参数序号|类型|描述|
 |:-|-|:-|
