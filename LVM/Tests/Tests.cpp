@@ -127,38 +127,38 @@ TEST_CASE( "Test MemoryManager Link", "[LVMTest][MemoryManager][Command]" )
 TEST_CASE( "Test Math Command", "[LVMTest][Command]" )
 {
 	fstream file( "test_math.lll", ios::out | ios::binary );
-	std::vector<Command> commands
-			{
-					Command{ *AssignCommand.m_pCommandType,
-							 { MemoryAddressArgumentToArgument( { MemoryAddressArgument( 0 ) } ),
-							   Argument( new int32_t( 6 )) }},
-					Command{ *AssignCommand.m_pCommandType,
-							 { MemoryAddressArgumentToArgument( { MemoryAddressArgument( 4 ) } ),
-							   Argument( new int32_t( 3 )) }},
-					Command{ *IntAddCommand.m_pCommandType,
-							 { MemoryAddressArgumentToArgument( { MemoryAddressArgument( 8 ) } ),
-							   MemoryAddressArgumentToArgument( { MemoryAddressArgument( 0 ) } ),
-							   MemoryAddressArgumentToArgument(
-									   { MemoryAddressArgument( 4 ) } ) }},
-					Command{ *IntSubCommand.m_pCommandType,
-							 { MemoryAddressArgumentToArgument( { MemoryAddressArgument( 12 ) } ),
-							   MemoryAddressArgumentToArgument( { MemoryAddressArgument( 0 ) } ),
-							   MemoryAddressArgumentToArgument( { MemoryAddressArgument( 4 ) } ) }},
-					Command{ *IntMulCommand.m_pCommandType,
-							 { MemoryAddressArgumentToArgument( { MemoryAddressArgument( 16 ) } ),
-							   MemoryAddressArgumentToArgument( { MemoryAddressArgument( 0 ) } ),
-							   MemoryAddressArgumentToArgument( { MemoryAddressArgument( 4 ) } ) }},
-					Command{ *IntDivCommand.m_pCommandType,
-							 { MemoryAddressArgumentToArgument( { MemoryAddressArgument( 20 ) } ),
-							   MemoryAddressArgumentToArgument( { MemoryAddressArgument( 0 ) } ),
-							   MemoryAddressArgumentToArgument( { MemoryAddressArgument( 4 ) } ) }},
-					Command{ *IntShiftLogicalLeftCommand.m_pCommandType,
-							  {
-							   MemoryAddressArgumentToArgument( {MemoryAddressArgument( 24 )} ),
-							   MemoryAddressArgumentToArgument( {MemoryAddressArgument( 0 )} ),
-							   MemoryAddressArgumentToArgument( {MemoryAddressArgument( 4 )} )
-							  }}		   
-			};
+	std::vector<Command> commands{
+		Command{*AssignCommand.m_pCommandType,
+				{MemoryAddressArgumentToArgument({MemoryAddressArgument(0)}),
+				 Argument(new int32_t(6))}},
+		Command{*AssignCommand.m_pCommandType,
+				{MemoryAddressArgumentToArgument({MemoryAddressArgument(4)}),
+				 Argument(new int32_t(3))}},
+		Command{*IntAddCommand.m_pCommandType,
+				{MemoryAddressArgumentToArgument({MemoryAddressArgument(8)}),
+				 MemoryAddressArgumentToArgument({MemoryAddressArgument(0)}),
+				 MemoryAddressArgumentToArgument(
+					 {MemoryAddressArgument(4)})}},
+		Command{*IntSubCommand.m_pCommandType,
+				{MemoryAddressArgumentToArgument({MemoryAddressArgument(12)}),
+				 MemoryAddressArgumentToArgument({MemoryAddressArgument(0)}),
+				 MemoryAddressArgumentToArgument({MemoryAddressArgument(4)})}},
+		Command{*IntMulCommand.m_pCommandType,
+				{MemoryAddressArgumentToArgument({MemoryAddressArgument(16)}),
+				 MemoryAddressArgumentToArgument({MemoryAddressArgument(0)}),
+				 MemoryAddressArgumentToArgument({MemoryAddressArgument(4)})}},
+		Command{*IntDivCommand.m_pCommandType,
+				{MemoryAddressArgumentToArgument({MemoryAddressArgument(20)}),
+				 MemoryAddressArgumentToArgument({MemoryAddressArgument(0)}),
+				 MemoryAddressArgumentToArgument({MemoryAddressArgument(4)})}},
+		Command{*IntShiftLogicalLeftCommand.m_pCommandType,
+				{MemoryAddressArgumentToArgument({MemoryAddressArgument(24)}),
+				 MemoryAddressArgumentToArgument({MemoryAddressArgument(0)}),
+				 MemoryAddressArgumentToArgument({MemoryAddressArgument(4)})}},
+		Command{*IntShiftArithmeticRightCommand.m_pCommandType,
+				{MemoryAddressArgumentToArgument({MemoryAddressArgument(28)}),
+				 MemoryAddressArgumentToArgument({MemoryAddressArgument(0)}),
+				 MemoryAddressArgumentToArgument({MemoryAddressArgument(4)})}}};
 	SaveCommandsToFile( file, commands );
 	file.close();
 	VirtualMachine vm;
@@ -168,6 +168,7 @@ TEST_CASE( "Test Math Command", "[LVMTest][Command]" )
 	REQUIRE( vm.GetMemoryManager().GetContent<int32_t>( { MemoryAddressArgument( 16 ) } ) == 18 );
 	REQUIRE( vm.GetMemoryManager().GetContent<int32_t>( { MemoryAddressArgument( 20 ) } ) == 2 );
 	REQUIRE( vm.GetMemoryManager().GetContent<int32_t>( { MemoryAddressArgument( 24 ) } ) == 48 );
+	REQUIRE( vm.GetMemoryManager().GetContent<int32_t>( { MemoryAddressArgument( 28 ) } ) == 0 );
 
 	std::cout << "math command test success" << std::endl;
 }
