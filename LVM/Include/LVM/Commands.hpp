@@ -130,7 +130,7 @@ extern inline const LVM::DefineCommandType IntShiftLogicalLeftCommand(10,"ishl",
 /*
 isar(dst,arg1,arg2)
 */
-extern inline const LVM::DefineCommandType IntShiftArithmeticRightCommand(11, "isar", {true, true, true}, 
+extern inline const LVM::DefineCommandType IntShiftArithmeticRightCommand(11, "isar", {true, true, true},
 	[](const LVM::Command& command,LVM::VirtualMachine& vm)
 {
 	vm.GetMemoryManager().GetContent<int32_t>(ArgumentToMemoryAddressArgument(command.m_Argument[0])) = vm.GetMemoryManager().GetContent<int32_t>(ArgumentToMemoryAddressArgument(command.m_Argument[1])) >> vm.GetMemoryManager().GetContent<int32_t>(ArgumentToMemoryAddressArgument(command.m_Argument[2]));
