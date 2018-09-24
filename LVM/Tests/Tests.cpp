@@ -158,6 +158,13 @@ TEST_CASE( "Test Math Command", "[LVMTest][Command]" )
 		Command{*IntShiftArithmeticRightCommand.m_pCommandType,
 				{MemoryAddressArgumentToArgument({MemoryAddressArgument(28)}),
 				 MemoryAddressArgumentToArgument({MemoryAddressArgument(0)}),
+				 MemoryAddressArgumentToArgument({MemoryAddressArgument(4)})}},
+		Command{*AssignCommand.m_pCommandType,
+				{MemoryAddressArgumentToArgument({MemoryAddressArgument(1024)}),
+				 Argument(new int32_t(-100))}},
+		Command{*IntShiftLogicalRightCommand.m_pCommandType,
+				{MemoryAddressArgumentToArgument({MemoryAddressArgument(32)}),
+				 MemoryAddressArgumentToArgument({MemoryAddressArgument(1024)}),
 				 MemoryAddressArgumentToArgument({MemoryAddressArgument(4)})}}};
 	SaveCommandsToFile( file, commands );
 	file.close();
@@ -169,6 +176,7 @@ TEST_CASE( "Test Math Command", "[LVMTest][Command]" )
 	REQUIRE( vm.GetMemoryManager().GetContent<int32_t>( { MemoryAddressArgument( 20 ) } ) == 2 );
 	REQUIRE( vm.GetMemoryManager().GetContent<int32_t>( { MemoryAddressArgument( 24 ) } ) == 48 );
 	REQUIRE( vm.GetMemoryManager().GetContent<int32_t>( { MemoryAddressArgument( 28 ) } ) == 0 );
+	REQUIRE( vm.GetMemoryManager().GetContent<uint32_t>( { MemoryAddressArgument( 32 ) } ) == 536870899 );
 
 	std::cout << "math command test success" << std::endl;
 }
