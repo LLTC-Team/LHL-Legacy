@@ -176,7 +176,7 @@ TEST_CASE( "Test Math Command", "[LVMTest][Command]" )
 	REQUIRE( vm.GetMemoryManager().GetContent<int32_t>( { MemoryAddressArgument( 20 ) } ) == 2 );
 	REQUIRE( vm.GetMemoryManager().GetContent<int32_t>( { MemoryAddressArgument( 24 ) } ) == 48 );
 	REQUIRE( vm.GetMemoryManager().GetContent<int32_t>( { MemoryAddressArgument( 28 ) } ) == 0 );
-	REQUIRE( vm.GetMemoryManager().GetContent<uint32_t>( { MemoryAddressArgument( 32 ) } ) == 536870899 );
+	REQUIRE( vm.GetMemoryManager().GetContent<int32_t>( { MemoryAddressArgument( 32 ) } ) == 536870899 );
 
 	std::cout << "math command test success" << std::endl;
 }
