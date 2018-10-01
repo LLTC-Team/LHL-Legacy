@@ -14,6 +14,7 @@
 * [IntShiftLogicalLeft](#IntShiftlogicalLeftCommand)
 * [IntShiftArithmeticRightCommand](#IntShiftArithmeticRightCommand)
 * [IntShiftLogicalRightCommand](#IntShiftLogicalRightCommand)
+* [IntAndCommand](#IntAndCommand)
 
 ## NullCommand
 &emsp;&emsp;空指令  
@@ -143,9 +144,20 @@
 |3|`MemoryAddress`|参数2的地址|
 
 ## IntShiftLogicalRightCommand
-&emsp;&emsp;整数逻辑右移指令
-&emsp;&emsp;`command name:ishr`
+&emsp;&emsp;整数逻辑右移指令  
+&emsp;&emsp;`command name:ishr`  
 &emsp;&emsp;`index:12`
+
+|参数序号|类型|描述|
+|:-|-|:-|
+|1|`MemoryAddress`|存放结果的内存地址|
+|2|`MemoryAddress`|参数1的地址|
+|3|`MemoryAddress`|参数2的地址|
+
+## IntAndCommand
+&emsp;&emsp;整数与指令  
+&emsp;&emsp;`command name:iand`  
+&emsp;&emsp;`index:13`
 
 |参数序号|类型|描述|
 |:-|-|:-|

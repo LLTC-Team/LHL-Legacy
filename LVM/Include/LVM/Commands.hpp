@@ -146,3 +146,13 @@ extern inline const LVM::DefineCommandType IntShiftLogicalRightCommand(12, "ishr
 	vm.GetMemoryManager().GetContent<uint32_t>(ArgumentToMemoryAddressArgument(command.m_Argument[0])) = vm.GetMemoryManager().GetContent<uint32_t>(ArgumentToMemoryAddressArgument(command.m_Argument[1])) >> vm.GetMemoryManager().GetContent<uint32_t>(ArgumentToMemoryAddressArgument(command.m_Argument[2]));
 }
 );
+
+/*
+iand(dst,arg1,arg2)
+*/
+extern inline const LVM::DefineCommandType IntAndCommand(13, "iand", {true, true, true},
+	[](const LVM::Command& command,LVM::VirtualMachine& vm)
+{
+	vm.GetMemoryManager().GetContent<int32_t>(ArgumentToMemoryAddressArgument(command.m_Argument[0])) = vm.GetMemoryManager().GetContent<int32_t>(ArgumentToMemoryAddressArgument(command.m_Argument[1])) & vm.GetMemoryManager().GetContent<int32_t>(ArgumentToMemoryAddressArgument(command.m_Argument[2]));
+}
+);
