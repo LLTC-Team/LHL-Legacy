@@ -164,3 +164,35 @@
 |1|`MemoryAddress`|存放结果的内存地址|
 |2|`MemoryAddress`|参数1的地址|
 |3|`MemoryAddress`|参数2的地址|
+
+## IntOrCommand
+&emsp;&emsp;整数或指令  
+&emsp;&emsp;`command name:ior`  
+&emsp;&emsp;`index:14`
+
+|参数序号|类型|描述|
+|:-|-|:-|
+|1|`MemoryAddress`|存放结果的内存地址|
+|2|`MemoryAddress`|参数1的地址|
+|3|`MemoryAddress`|参数2的地址|
+
+## IntXorCommand
+&emsp;&emsp;整数异或指令  
+&emsp;&emsp;`command name:ixor`  
+&emsp;&emsp;`index:15`
+
+|参数序号|类型|描述|
+|:-|-|:-|
+|1|`MemoryAddress`|存放结果的内存地址|
+|2|`MemoryAddress`|参数1的地址|
+|3|`MemoryAddress`|参数2的地址|
+
+## IntNotCommand
+&emsp;&emsp;整数取非指令  
+&emsp;&emsp;`command name:inot`  
+&emsp;&emsp;`index:16`
+
+|参数序号|类型|描述|
+|:-|-|:-|
+|1|`MemoryAddress`|存放结果的内存地址|
+|2|`MemoryAddress`|参数1的地址|

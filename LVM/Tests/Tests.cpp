@@ -169,8 +169,18 @@ TEST_CASE( "Test Math Command", "[LVMTest][Command]" )
 		Command{*IntAndCommand.m_pCommandType,
 				{MemoryAddressArgumentToArgument({MemoryAddressArgument(36)}),
 				 MemoryAddressArgumentToArgument({MemoryAddressArgument(0)}),
-				 MemoryAddressArgumentToArgument({MemoryAddressArgument(4)})}
-				}};
+				 MemoryAddressArgumentToArgument({MemoryAddressArgument(4)})}},
+		Command{*IntOrCommand.m_pCommandType,
+				{MemoryAddressArgumentToArgument({MemoryAddressArgument(40)}),
+				 MemoryAddressArgumentToArgument({MemoryAddressArgument(0)}),
+				 MemoryAddressArgumentToArgument({MemoryAddressArgument(4)})}},
+		Command{*IntXorCommand.m_pCommandType,
+				{MemoryAddressArgumentToArgument({MemoryAddressArgument(44)}),
+				 MemoryAddressArgumentToArgument({MemoryAddressArgument(0)}),
+				 MemoryAddressArgumentToArgument({MemoryAddressArgument(4)})}},
+		Command{*IntNotCommand.m_pCommandType,
+				{MemoryAddressArgumentToArgument({MemoryAddressArgument(48)}),
+				 MemoryAddressArgumentToArgument({MemoryAddressArgument(0)})}}};
 	SaveCommandsToFile( file, commands );
 	file.close();
 	VirtualMachine vm;
@@ -183,6 +193,9 @@ TEST_CASE( "Test Math Command", "[LVMTest][Command]" )
 	REQUIRE( vm.GetMemoryManager().GetContent<int32_t>( { MemoryAddressArgument( 28 ) } ) == 0 );
 	REQUIRE( vm.GetMemoryManager().GetContent<int32_t>( { MemoryAddressArgument( 32 ) } ) == 536870899 );
 	REQUIRE( vm.GetMemoryManager().GetContent<int32_t>( { MemoryAddressArgument( 36 ) } ) == 2 );
+	REQUIRE( vm.GetMemoryManager().GetContent<int32_t>( { MemoryAddressArgument( 40 ) } ) == 7 );
+	REQUIRE( vm.GetMemoryManager().GetContent<int32_t>( { MemoryAddressArgument( 44 ) } ) == 5 );
+	REQUIRE( vm.GetMemoryManager().GetContent<int32_t>( { MemoryAddressArgument( 48 ) } ) == -7 );
 
 	std::cout << "math command test success" << std::endl;
 }

@@ -156,3 +156,33 @@ extern inline const LVM::DefineCommandType IntAndCommand(13, "iand", {true, true
 	vm.GetMemoryManager().GetContent<int32_t>(ArgumentToMemoryAddressArgument(command.m_Argument[0])) = vm.GetMemoryManager().GetContent<int32_t>(ArgumentToMemoryAddressArgument(command.m_Argument[1])) & vm.GetMemoryManager().GetContent<int32_t>(ArgumentToMemoryAddressArgument(command.m_Argument[2]));
 }
 );
+
+/*
+ior(dst,arg1,arg2)
+*/
+extern inline const LVM::DefineCommandType IntOrCommand(14, "ior", {true, true, true},
+	[](const LVM::Command& command,LVM::VirtualMachine& vm)
+{
+	vm.GetMemoryManager().GetContent<int32_t>(ArgumentToMemoryAddressArgument(command.m_Argument[0])) = vm.GetMemoryManager().GetContent<int32_t>(ArgumentToMemoryAddressArgument(command.m_Argument[1])) | vm.GetMemoryManager().GetContent<int32_t>(ArgumentToMemoryAddressArgument(command.m_Argument[2]));
+}
+);
+
+/*
+ixor(dst,arg1,arg2)
+*/
+extern inline const LVM::DefineCommandType IntXorCommand(15, "ixor", {true, true, true},
+	[](const LVM::Command& command,LVM::VirtualMachine& vm)
+{
+	vm.GetMemoryManager().GetContent<int32_t>(ArgumentToMemoryAddressArgument(command.m_Argument[0])) = vm.GetMemoryManager().GetContent<int32_t>(ArgumentToMemoryAddressArgument(command.m_Argument[1])) ^ vm.GetMemoryManager().GetContent<int32_t>(ArgumentToMemoryAddressArgument(command.m_Argument[2]));
+}
+);
+
+/*
+inot(dst,arg1)
+*/
+extern inline const LVM::DefineCommandType IntNotCommand(16, "inot", {true, true},
+	[](const LVM::Command& command,LVM::VirtualMachine& vm)
+{
+	vm.GetMemoryManager().GetContent<int32_t>(ArgumentToMemoryAddressArgument(command.m_Argument[0])) = ~vm.GetMemoryManager().GetContent<int32_t>(ArgumentToMemoryAddressArgument(command.m_Argument[1]));
+}
+);
