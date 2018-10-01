@@ -98,3 +98,92 @@ TEST_CASE( "Test NFA Kleene", "[LML][Lexical][Automata][NFA]" )
 	UNMATCH("bca");
 	UNMATCH("aajsdlflaf");
 }
+
+TEST_CASE("Test Regex to NFA 1", "[LML][Lexical][Automata][NFA]")
+{
+	LML::Lexical::NFA nfa = LML::Lexical::ConstructNFAFromRegex("aabbccdd");
+
+	MATCH( "aabbccdd" );
+
+	UNMATCH( "a" );
+	UNMATCH( "aa" );
+	UNMATCH( "dd" );
+	UNMATCH( "cc" );
+	UNMATCH( "aasdfadsdsafad" );
+	UNMATCH( "111111111111111111" );
+	UNMATCH( "" );
+	UNMATCH( "a132sa1f3as1f" );
+	UNMATCH( "afsdjs" );
+	UNMATCH( "00" );
+}
+
+TEST_CASE("Test Regex to NFA 2", "[LML][Lexical][Automata][NFA]")
+{
+    LML::Lexical::NFA nfa = LML::Lexical::ConstructNFAFromRegex("a|b");
+    
+    MATCH( "a" );
+    MATCH( "b" );
+    
+    UNMATCH( "c" );
+    UNMATCH( "A" );
+    UNMATCH( "B" );
+    UNMATCH( "" );
+    UNMATCH( "143412" );
+    UNMATCH( "adfs" );
+    UNMATCH( "csfasdfasfsadf" );
+    UNMATCH( "131" );
+}
+
+TEST_CASE( "Test Regex to NFA 3", "[LML][Lexical][Automata][NFA]" )
+{
+    LML::Lexical::NFA nfa = LML::Lexical::ConstructNFAFromRegex("(abc)*");
+    
+    MATCH("");
+    MATCH("abc");
+    MATCH("abcabc");
+    MATCH("abcabcabc");
+    MATCH("abcabcabcabc");
+    MATCH("abcabcabcabcabc");
+    
+    UNMATCH("a");
+    UNMATCH("ab");
+    UNMATCH("ac");
+    UNMATCH("abca");
+    UNMATCH("bac");
+    UNMATCH("bca");
+    UNMATCH("aajsdlflaf");
+}
+
+TEST_CASE( "Test Regex to NFA 4", "[LML][Lexical][Automata][NFA]" )
+{
+    LML::Lexical::NFA nfa = LML::Lexical::ConstructNFAFromRegex("\\**");
+    
+    MATCH("");
+    MATCH("*");
+    MATCH("**");
+    MATCH("******");
+    MATCH("*********************");
+    
+    UNMATCH("ada");
+    UNMATCH("af");
+    UNMATCH("affasfsf");
+    UNMATCH("aggwgewgda");
+}
+
+TEST_CASE( "Test Regex to NFA 5", "[LML][Lexical][Automata][NFA]" )
+{
+    LML::Lexical::NFA nfa = LML::Lexical::ConstructNFAFromRegex("(aa|bb)*((ab|ba)(aa|bb)*(ab|ba)(aa|bb)*)*");
+    // This Regex is from Compilers: Principles, Techniques and Tools
+    // It can match any string of even-numbered a and even-numbered b
+    
+    MATCH("aabb");
+    MATCH("aaaaaaaaaabbbbbbbbbb");
+    MATCH("abbaabbaaabbaabbbbaabbaaabba");
+    MATCH("aaaabbaabbababbbababababbb");
+    MATCH("aabbaabbabbaaabbabbababbababababbababbbabbabababababba");
+    
+    UNMATCH("cplusplus");
+    UNMATCH("a");
+    UNMATCH("aabaa");
+    UNMATCH("abbabababababbbabababababababababbaababaa");
+}

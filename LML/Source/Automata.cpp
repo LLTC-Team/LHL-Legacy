@@ -1,7 +1,3 @@
-#include <utility>
-
-#include <utility>
-
 /*
 Copyright 2018 creatorlxd
 
@@ -19,7 +15,9 @@ limitations under the License.
 */
 
 #include <LML/Lexical/Automata.h>
+#include <LML/Lexical/LexicalError.h>
 #include <queue>
+#include <list>
 
 using namespace LML::Lexical;
 
@@ -287,4 +285,119 @@ const NFA LML::Lexical::NFAKleene( LML::Lexical::NFA &m )
 	}
 	NFAStatePointer start = NewNFAState( {{ GetTPManager().GetEpsilonPattern(), { m.GetStartState(), terminal }}} );
 	return NFA( start, { terminal } );
+}
+
+#define THROW_ERROR( reason ) throw InvalidRegex( reason, i, regex )
+
+const NFA LML::Lexical::ConstructNFAFromRegex( const std::string &regex )
+{
+    if(regex.length() == 0){
+        return NFA();
+    }
+    
+	// Step 1: Handle OR ('|') operation
+    int lpc = 0;
+	for (int i = 0; i < regex.length(); i++)
+	{
+		if (regex[i] == '\\')
+		{
+			++i;
+			continue;
+		}
+        if(regex[i] == '('){
+            ++lpc;
+        }
+        if(regex[i] == ')'){
+            --lpc;
+        }
+		if (regex[i] == '|' && lpc == 0)
+		{
+			// Upper level OR found
+			NFA nfa1 = ConstructNFAFromRegex( regex.substr( 0, i )), nfa2 = ConstructNFAFromRegex( regex.substr( i + 1 ));
+			NFA nfa = NFAOr( nfa1, nfa2 );
+			return nfa;
+		}
+	}
+
+	// Step 2: Transform every char to NFA, handle parentheses and process escape char ('\')
+	std::list<NFA> nfa_list;
+	for (int i = 0; i < regex.length(); i++)
+	{
+		if (regex[i] == ')')
+		{
+			// right parentheses should not appear here
+			THROW_ERROR( "Mismatched Parentheses" );
+		}
+		if (regex[i] == '(')
+		{
+			// left parentheses found
+			int lpc = 1;   // left parentheses count
+			for (int j = i + 1; j < regex.length(); j++)
+			{
+				if (regex[j] == '\\')
+				{
+					// escape char found
+					++j;
+					continue;
+				}
+				if (regex[j] == '(')
+				{
+					++lpc;
+				}
+				if (regex[j] == ')')
+				{
+					--lpc;
+					if (lpc == 0)
+					{
+						// parentheses matched
+						NFA nfa = ConstructNFAFromRegex( regex.substr( i + 1, j - i - 1));
+						nfa_list.push_back( nfa );
+						i = j;
+						break;
+					}
+				}
+			}
+			if (lpc != 0)
+			{
+				// more left parentheses count than right
+				THROW_ERROR( "Mismatched Parentheses" );
+			}
+			continue;
+		}
+		if (regex[i] == '*')
+		{
+			// handle Kleene closure
+			if (nfa_list.empty())
+			{
+				// no char to kleene
+				THROW_ERROR( "Invalid Kleene closure" );
+			}
+			auto last = nfa_list.end();
+            --last;
+			*last = NFAKleene( *last );
+			continue;
+		}
+		if (regex[i] == '\\')
+		{
+			// escape char found
+			if (i == regex.length() - 1)
+			{
+				// cannot find char to escape
+				THROW_ERROR( "Bad Escape Char" );
+			}
+			++i;  // move index to next position
+		}
+		nfa_list.push_back( ConstructSingleCharNFA( regex[i] ));
+	}
+
+	// Step 3: Connect NFA
+	auto it = nfa_list.begin();
+	NFA nfa = *it;
+	for (++it; it != nfa_list.end(); ++it)
+	{
+		nfa = NFACat( nfa, *it );
+	}
+
+	// Finished
+	return nfa;
 }
