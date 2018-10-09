@@ -1,8 +1,8 @@
-*/
+/*
 
 !Catch/
-!ci-script
-!Document
+!ci-script/
+!Document/
 !LML/
 !LVM/
 !.gitignore
@@ -10,4 +10,4 @@
 !appveyor.yml
 !CMakeLists.txt
 !LICENSE
-!README.mdß
+!README.md
