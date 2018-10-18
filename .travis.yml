@@ -8,6 +8,7 @@ matrix:
       env:
         - MATRIX_EVAL="chmod +x ./linux-gcc.sh && ./linux-gcc.sh"
         - TOOLCHAIN="CC=gcc-7 CXX=g++-7"
+        - EXT_ARGS="-DBUILD_DOC=TRUE"
     - os: linux
       dist: trusty
       sudo: required
@@ -34,7 +35,7 @@ before_install:
 script:
     - mkdir build
     - cd build
-    - eval "${TOOLCHAIN} cmake .."
+    - eval "${TOOLCHAIN} cmake ${EXT_ARGS} .."
     - make
     - cd LML && ./LML_TEST && cd ..
     - cd LVM && ./LVM_TEST && cd ..
