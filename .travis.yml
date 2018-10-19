@@ -17,6 +17,7 @@ matrix:
         - MATRIX_EVAL="chmod +x ./linux-clang.sh && ./linux-clang.sh"
         - TOOLCHAIN="LD_LIBRARY_PATH=/usr/local/clang_6.0.0/lib/ CC=/usr/local/clang_6.0.0/bin/clang CXX=/usr/local/clang_6.0.0/bin/clang++"
         - LD_LIBRARY_PATH=/usr/local/clang_6.0.0/lib/
+        - PATH="$HOME/cmake/bin:$PATH"
     - os: osx
       osx_image: xcode9.2
       env:
