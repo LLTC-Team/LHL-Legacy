@@ -3,3 +3,6 @@
 brew update
 rm '/usr/local/include/c++'
 brew install gcc
+
+# Update CMake
+brew upgrade cmake
