@@ -8,7 +8,7 @@ matrix:
       env:
         - MATRIX_EVAL="chmod +x ./linux-gcc.sh && ./linux-gcc.sh"
         - TOOLCHAIN="CC=gcc-7 CXX=g++-7"
-        - EXT_ARGS="-DBUILD_DOC=TRUE"
+        - BUILD_DOC="TRUE"
         - PATH="$HOME/cmake/bin:$PATH"
     - os: linux
       dist: trusty
@@ -37,7 +37,8 @@ before_install:
 script:
     - mkdir build
     - cd build
-    - eval "${TOOLCHAIN} cmake ${EXT_ARGS} .."
-    - make
+    - if [ $BUILD_DOC = TRUE ]; then eval "${TOOLCHAIN} cmake -DBUILD_DOC=TRUE .."; else eval "${TOOLCHAIN} cmake .."; fi
+    - make -j4
+    - if [ $BUILD_DOC = TRUE ]; then make doxygen; fi
     - cd LML && ./LML_TEST && cd ..
     - cd LVM && ./LVM_TEST && cd ..
