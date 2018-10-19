@@ -9,6 +9,7 @@ matrix:
         - MATRIX_EVAL="chmod +x ./linux-gcc.sh && ./linux-gcc.sh"
         - TOOLCHAIN="CC=gcc-7 CXX=g++-7"
         - EXT_ARGS="-DBUILD_DOC=TRUE"
+        - PATH="$HOME/cmake/bin:$PATH"
     - os: linux
       dist: trusty
       sudo: required
