@@ -8,4 +8,4 @@ tar xf clang+llvm-6.0.0-x86_64-linux-gnu-ubuntu-14.04.tar.xz
 sudo mv clang+llvm-6.0.0-x86_64-linux-gnu-ubuntu-14.04/ /usr/local/clang_6.0.0
 
 chmod +x ./install-cmake.sh
-sudo ./install-cmake.sh
+./install-cmake.sh

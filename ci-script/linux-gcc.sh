@@ -8,4 +8,4 @@ sudo apt-get install -y gcc-7 g++-7
 sudo apt-get install -y graphviz doxygen
 
 chmod +x ./install-cmake.sh
-sudo ./install-cmake.sh
+./install-cmake.sh
