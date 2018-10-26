@@ -27,44 +27,57 @@ namespace LML::Lexical
 		~NFA();
 
 		/**
-		 * Get the head index of the linked list, which stores all the status that status `s` can move to with char `c`.
-		 * @param s The beginning status number
-		 * @param c The char used to transfer
-		 * @return The head index of the linked list
-		 */
-		int GetTransitionHeadIndex( int s, char c );
-
-		/**
-		 * Get the next index in the linked list
-		 * @param index The previous index
-		 * @return The next index
-		 */
-		int NextIndex( int index );
-
-		/**
-		 * Get the number of the status stored in the explicit index of the linked list.
-		 * @param index The index of the linked list
-		 * @return The number of the status
-		 */
-		int GetMovement( int index );
-
-		/**
-		 * Get the count of status
-		 * @return Status count
-		 */
-		int GetSize();
-
-		/**
 		 * Try to match the str with the pattern of this NFA
 		 * @param str The string to match
 		 * @return Whether str is matched or not
 		 */
-		bool Match(const std::string str);
+		bool Match( const std::string str );
 
 	private:
-		std::vector<int> mov, nxt;
-		int **tran;
+		int *trans, *head, *nxt;
 		int size;
+	};
+
+	/**
+	 * The class used to build NFA
+	 */
+	class NFABuilder
+	{
+	public:
+		/**
+		 * Construct a new NFABuilder
+		 */
+		NFABuilder();
+
+		/**
+		 * The Deconstruct
+		 */
+		~NFABuilder();
+
+		/**
+		 * Add a transition path
+		 * @param from transition starting point
+		 * @param c the char accepted. Use 0 as Epsilon
+		 * @param to transition ending point
+		 */
+		void AddTransition( int from, char c, int to );
+
+		/**
+		 * Add a new State
+		 * @return the id of the new state
+		 */
+		int NewState();
+
+		/**
+		 * Get the number of the states
+		 * @return number of the states
+		 */
+		int GetSize();
+
+	private:
+		std::vector<int *> trans;
+		std::vector<int> dest, nxt;
+		int size, current;
 	};
 }
 
