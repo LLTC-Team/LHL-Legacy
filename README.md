@@ -20,6 +20,10 @@
 
 <!-- /TOC -->
 
+## 项目迁移警告
+
+### 本项目将不会继续进行维护。本项目中的代码将会逐步迁移至[@LLTC Team](https://github.com/LLTC-Team)中的子项目中进行下一步的开发。
+
 ## Overview
 
 ### LHL
